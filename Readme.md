@@ -13,3 +13,11 @@
 Todo:
 
 > Create the above mentioned Pages
+
+Routes: 
+/login
+/logout
+/stock
+/labourpayment
+/products
+/entry
