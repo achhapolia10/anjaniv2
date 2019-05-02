@@ -35,6 +35,9 @@ func main() {
 	router.GET("/products", routes.GetProducts)
 	router.GET("/products/new", routes.GetNewProduct)
 	router.POST("/products/new", routes.PostNewProduct)
+	router.GET("/products/delete/:id", routes.GetDeleteProducts)
+	router.GET("/products/edit/:id", routes.GetEditProduct)
+	router.POST("/products/edit/:id", routes.PostEditProduct)
 
 	//Stock routes are defined
 	router.GET("/stock", routes.GetStock)

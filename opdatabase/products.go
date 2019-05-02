@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"strings"
 
 	"github.com/achhapolia10/anjaniv2/model"
 )
@@ -33,9 +34,10 @@ func CreateProductTable() {
 
 //AddProduct adds a new Product to table products
 func AddProduct(p model.Product) {
+	p.Name = strings.ToUpper(p.Name)
 	query := "insert into products " +
 		"(name,packetQuantity,boxQuantity,price,oboxes,opackets)" +
-		"values	(?,?,?,?,?,?)"
+		"values	(?,?,?,?,?,?);"
 	r, err := db.Exec(query, p.Name, p.PacketQuantity, p.BoxQuantity, p.Price, p.OpeningBoxes, p.OpeningPackets)
 	if err != nil {
 		log.Fatal(err)
@@ -48,7 +50,7 @@ func AddProduct(p model.Product) {
 //SelectProduct get products from the database
 func SelectProduct() ([]model.Product, bool) {
 	var p []model.Product
-	query := `SELECT * FROM products`
+	query := `SELECT * FROM products;`
 	r, err := db.Query(query)
 	if err != nil {
 		fmt.Println("Can't get the products from the product table")
@@ -66,16 +68,57 @@ func SelectProduct() ([]model.Product, bool) {
 	return p, true
 }
 
+//SelectProductID get a single product form the database
+func SelectProductID(id int) (model.Product, bool) {
+	var product model.Product
+	query := `SELECT * FROM products WHERE productID=?;`
+	r, err := db.Query(query, id)
+	if err != nil {
+		fmt.Println("Can't get the products from the product table")
+		log.Fatal(err)
+		return product, false
+	}
+	if r.Next() {
+		r.Scan(&(product.ID), &(product.Name), &(product.PacketQuantity), &(product.BoxQuantity),
+			&(product.Price), &(product.OpeningBoxes), &(product.OpeningPackets))
+	}
+	return product, true
+}
+
+//EditProduct eidt the produt at a given id
+func EditProduct(id int, p model.Product) bool {
+	if id != p.ID {
+		fmt.Println("Illegal Edit Product Operation")
+		return false
+	}
+	p.Name = strings.ToUpper(p.Name)
+	query := `UPDATE products SET
+			name=? ,
+			packetQuantity=?,
+			boxQuantity=?,
+			price=? 
+			WHERE productID=?;`
+	_, err := db.Exec(query, p.Name, p.PacketQuantity, p.BoxQuantity, p.Price, id)
+	if err != nil {
+		fmt.Println("Error in edititng product ")
+		log.Fatal(err)
+		return false
+	}
+	fmt.Println("Edited Product at id ", id)
+	return true
+}
+
 //DeleteProduct deletes the product of the given id from table products
 func DeleteProduct(productID int) bool {
 	query := `DELETE FROM products
-				WHERE productID= ?`
+				WHERE productID= ?;`
 	_, err := db.Exec(query, productID)
 	if err != nil {
 		fmt.Println("Errror in Deleting a product from database")
 		log.Fatal(err)
 		return false
 	} else {
+		fmt.Println("Delted Product from id ", productID)
 		return true
 	}
 }

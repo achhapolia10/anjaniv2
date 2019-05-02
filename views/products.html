@@ -7,6 +7,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
     <title>Products</title>
 </head>
 <body>
@@ -30,9 +31,9 @@
         <table id="productTable" class="table">
             <thead>
                 <th>Name </th> 
+                <th>Opening Stock</th>
                 <th>Box</th>
                 <th>Packet</th>
-                <th>Opening Stock</th>
                 <th>Edit</th>
                 <th>Remove</th>
             </thead>
@@ -40,15 +41,83 @@
                 {{range .}}
                     <tr>
                         <td>{{.Name}}</td>
+                        <td><b>{{.OpeningBoxes}}</b> Boxes <b>{{.OpeningPackets}}</b> Packets</td>
                         <td>{{.BoxQuantity}}</td>
                         <td>{{.PacketQuantity}}</td>
-                        <td><b>{{.OpeningBoxes}}</b> Boxes <b>{{.OpeningPackets}}</b> Packets</td>
-                        <td>Add</td>
-                        <td>Remove</td>
+                        <td>
+                            <button class="btn btn-warning" type="button" data-toggle="modal" 
+                            data-target="#editModal" data-id= {{.ID}} data-name="{{.Name}}">
+                                Edit
+                            </button>
+                        </td>
+                        <td>
+                            <button class="btn btn-danger" type="button" data-toggle="modal"
+                            data-target="#deleteModal" data-id={{.ID}} data-name="{{.Name}}">
+                                Delete
+                            </button>
+                        </td>
                     </tr>
                 {{end}}
             </tbody>
         </table>
     </div>
-    
+
+    <!--
+        Edit Modal
+    -->
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        Do you want to edit <b><span id="productName"></span></b>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+        <a id="editButtonAnchor"><button type="button" class="btn btn-success">Edit</button></a>
+      </div>
+    </div>
+  </div>
+</div>
+    <!--
+        Delete Modal
+    -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="delteModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        Do you want to delete <b><span id="productName"></span>?</b>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+        <a id="deleteButtonAnchor"><button type="button" class="btn btn-success">Delete</button></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <script>
+        $('#editModal').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var id = button.data('id')
+  var name = button.data('name') // Extract info from data-* attributes
+  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+  var modal = $(this)
+  modal.find('#productName').text(name)
+  document.getElementById("editButtonAnchor").setAttribute("href","/products/edit/"+id)
+})
+        $('#deleteModal').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var id = button.data('id')
+  var name = button.data('name') // Extract info from data-* attributes
+  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+  var modal = $(this)
+  modal.find('#productName').text(name)
+  document.getElementById("deleteButtonAnchor").setAttribute("href","/products/delete/"+id)
+})
+
+
+    </script>
 </body>
