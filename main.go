@@ -6,6 +6,8 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/achhapolia10/anjaniv2/opdatabase"
+
 	"github.com/achhapolia10/anjaniv2/routes"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/julienschmidt/httprouter"
@@ -19,12 +21,8 @@ func Index(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
 func main() {
 	router := httprouter.New()
 
-	// db, err := sql.Open("mysql", "root:ilijksms1999@/anjani_test")
-	// err1 := db.Ping()
-	// if err1 != nil {
-	// 	log.Fatal(err)
-	// }
-
+	opdatabase.ConnectDatabase()
+	opdatabase.CreateProductTable()
 	//Index route is defined
 	router.GET("/", routes.GetIndex)
 
@@ -36,6 +34,7 @@ func main() {
 	//Products routes are defined
 	router.GET("/products", routes.GetProducts)
 	router.GET("/products/new", routes.GetNewProduct)
+	router.POST("/products/new", routes.PostNewProduct)
 
 	//Stock routes are defined
 	router.GET("/stock", routes.GetStock)

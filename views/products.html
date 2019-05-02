@@ -13,6 +13,7 @@
     
     {{template "navbar"}}
     <div class="container">
+        
         <div class= "row">
             <div class="col">
                 <h3 style="margin:5px; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif">Products</h3>
@@ -36,7 +37,16 @@
                 <th>Remove</th>
             </thead>
             <tbody>
-
+                {{range .}}
+                    <tr>
+                        <td>{{.Name}}</td>
+                        <td>{{.BoxQuantity}}</td>
+                        <td>{{.PacketQuantity}}</td>
+                        <td><b>{{.OpeningBoxes}}</b> Boxes <b>{{.OpeningPackets}}</b> Packets</td>
+                        <td>Add</td>
+                        <td>Remove</td>
+                    </tr>
+                {{end}}
             </tbody>
         </table>
     </div>
