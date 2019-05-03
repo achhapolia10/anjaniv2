@@ -19,13 +19,16 @@ func Index(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
 }
 
 func main() {
+	var publicDir http.Dir
+	publicDir = "./public/"
+
 	router := httprouter.New()
 
 	opdatabase.ConnectDatabase()
 	opdatabase.CreateProductTable()
-	//Index route is defined
-	router.GET("/", routes.GetIndex)
+	router.ServeFiles("/public/*filepath", publicDir)
 
+	router.GET("/", routes.GetIndex)
 	//Login routes are defined
 	router.GET("/login", routes.GetLogin)
 	router.POST("/login", routes.PostLogin)
