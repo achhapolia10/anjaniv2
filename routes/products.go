@@ -33,10 +33,10 @@ func GetDeleteProducts(w http.ResponseWriter, req *http.Request, p httprouter.Pa
 	} else {
 		i, err := strconv.Atoi(id)
 		if err != nil {
-			fmt.Print("Id to Delelte is not Proper")
+			fmt.Print("Id to Delete is not Proper")
 			log.Fatal(err)
 		} else {
-			res := opdatabase.DeleteProduct(i)
+			res := opdatabase.DeleteProduct(int64(i))
 			if !res {
 				fmt.Println("Error in Deleting Product")
 			}

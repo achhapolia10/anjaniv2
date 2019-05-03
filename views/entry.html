@@ -5,6 +5,7 @@
     <script src="http://localhost:4001/public/js/jquery-3.4.1.min.js"></script>
     <script src="http://localhost:4001/public/js/bootstrap.min.js"></script>
     <script src="http://localhost:4001/public/js/tooltip.min.js"></script>
+    <script src="http://localhost:4001/public/js/entry.js"></script>
     <link rel="stylesheet" href="http://localhost:4001/public/css/bootstrap.min.css">
 
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -35,5 +36,27 @@
                 </div>
             </div> 
         </form>
+        <div class="row">
+            <div class="col-md-3" style="margin-top:2%">
+                <form name="entryForm" onsubmit="onEntryFormSubmit();" method="dialog">
+                    <div class="form-group">
+                        <label for="labour-name">Labour Name:</label>
+                        <input class="form-control" id="labour-name"
+                        type="text" required name="labour-name" placeholder="Labour Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="box-no">Boxes:</label>
+                        <input class="form-control" id="box-no"
+                        type="number" required name="box-no" placeholder="No. of Boxes">
+                    </div>
+                    <div class="form-group">
+                        <label for="packet-no">Boxes:</label>
+                        <input class="form-control" id="packet-no"
+                        type="number" required name="packet-no" placeholder="No. of Packets">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
     </div>
 </body>

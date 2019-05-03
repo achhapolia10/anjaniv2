@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"strconv"
 	"strings"
 
 	"github.com/achhapolia10/anjaniv2/model"
@@ -44,6 +45,11 @@ func AddProduct(p model.Product) {
 	} else {
 		id, _ := r.LastInsertId()
 		log.Printf("Added product at index: %v", id)
+		r1 := CreateProductJournal(id)
+		r2 := CreateProductStock(id)
+		if !(r1 && r2) {
+			DeleteProduct(id)
+		}
 	}
 }
 
@@ -109,7 +115,7 @@ func EditProduct(id int, p model.Product) bool {
 }
 
 //DeleteProduct deletes the product of the given id from table products
-func DeleteProduct(productID int) bool {
+func DeleteProduct(productID int64) bool {
 	query := `DELETE FROM products
 				WHERE productID= ?;`
 	_, err := db.Exec(query, productID)
@@ -117,10 +123,12 @@ func DeleteProduct(productID int) bool {
 		fmt.Println("Errror in Deleting a product from database")
 		log.Fatal(err)
 		return false
-	} else {
-		fmt.Println("Delted Product from id ", productID)
-		return true
 	}
+	fmt.Println("Delted Product from id ", productID)
+	DeleteProductJournal(productID)
+	DeleteProductStock(productID)
+	return true
+
 }
 
 //ConnectDatabase connects to database Server at the start of the server
@@ -130,8 +138,70 @@ func ConnectDatabase() {
 	db, err = sql.Open("mysql", "root:ilijksms1999@/anjani_test")
 	err1 := db.Ping()
 	if err1 != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 	fmt.Println("Database Server connected")
 
+}
+
+//CreateProductJournal creates a journal Table for each product [id]journal
+func CreateProductJournal(id int64) bool {
+	query := "CREATE TABLE " + strconv.FormatInt(id, 10) + "_journal(" +
+		`id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+			labour VARCHAR(50) NOT NULL DEFAULT 'ANSHU',
+			date VARCHAR(50) NOT NULL DEFAULT '10/01/1999',
+			 box INT NOT NULL,
+			packet INT NOT NULL);`
+	_, err := db.Exec(query)
+	if err != nil {
+		log.Println(err)
+		fmt.Println("Error creating Journal Table for the product with id:", id)
+		return false
+	}
+	fmt.Println("Created a Journal Table for the product with id:", id)
+	return true
+}
+
+//DeleteProductJournal deletes a journal Table for each product [id]journal
+func DeleteProductJournal(id int64) bool {
+	query := "DROP TABLE " + strconv.FormatInt(id, 10) + "_journal;"
+	_, err := db.Exec(query)
+	if err != nil {
+		log.Println(err)
+		fmt.Print("Error in Deleting Journal Table for the product with id:", id)
+		return false
+	}
+	fmt.Println("Deleted a Journal Table for the product with id:", id)
+	return true
+}
+
+//CreateProductStock creates a Stock Table for each product [id]stock
+func CreateProductStock(id int64) bool {
+	query := "CREATE TABLE " + strconv.FormatInt(id, 10) + "_stock(" +
+		`id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+		date VARCHAR(50) ,
+		boxIn INT NOT NULL,
+		packetIn INT NOT NULL,
+		boxOut INT NOT NULL,
+		packetOut INT NOT NULL);`
+	_, err := db.Exec(query)
+	if err != nil {
+		log.Println(err)
+		fmt.Println("Error creating Stock Table for the product with id:", id)
+		return false
+	}
+	fmt.Println("Created a Stock Table for the product with id:", id)
+	return true
+}
+
+//DeleteProductStock deletes a Stock Table for each product [id]stock
+func DeleteProductStock(id int64) bool {
+	query := "DROP TABLE " + strconv.FormatInt(id, 10) + "_stock;"
+	_, err := db.Exec(query)
+	if err != nil {
+		fmt.Print("Error in Deleting Stock Table for the product with id:", id)
+		return false
+	}
+	fmt.Println("Deleted a Stock Table for the product with id:", id)
+	return true
 }
