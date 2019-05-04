@@ -133,7 +133,7 @@ func DeleteProduct(productID int64) bool {
 
 //CreateProductJournal creates a journal Table for each product [id]journal
 func CreateProductJournal(id int64) bool {
-	query := "CREATE TABLE " + strconv.FormatInt(id, 10) + "_journal(" +
+	query := "CREATE TABLE " + strconv.FormatInt(id, 10) + "journal(" +
 		`id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 			labour VARCHAR(50) NOT NULL DEFAULT 'ANSHU',
 			date VARCHAR(50) NOT NULL DEFAULT '10/01/1999',
@@ -151,7 +151,7 @@ func CreateProductJournal(id int64) bool {
 
 //DeleteProductJournal deletes a journal Table for each product [id]journal
 func DeleteProductJournal(id int64) bool {
-	query := "DROP TABLE " + strconv.FormatInt(id, 10) + "_journal;"
+	query := "DROP TABLE " + strconv.FormatInt(id, 10) + "journal;"
 	_, err := db.Exec(query)
 	if err != nil {
 		log.Println(err)
@@ -164,7 +164,7 @@ func DeleteProductJournal(id int64) bool {
 
 //CreateProductStock creates a Stock Table for each product [id]stock
 func CreateProductStock(id int64) bool {
-	query := "CREATE TABLE " + strconv.FormatInt(id, 10) + "_stock(" +
+	query := "CREATE TABLE " + strconv.FormatInt(id, 10) + "stock(" +
 		`id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 		date VARCHAR(50) ,
 		boxIn INT NOT NULL,
@@ -183,7 +183,7 @@ func CreateProductStock(id int64) bool {
 
 //DeleteProductStock deletes a Stock Table for each product [id]stock
 func DeleteProductStock(id int64) bool {
-	query := "DROP TABLE " + strconv.FormatInt(id, 10) + "_stock;"
+	query := "DROP TABLE " + strconv.FormatInt(id, 10) + "stock;"
 	_, err := db.Exec(query)
 	if err != nil {
 		log.Println(err)

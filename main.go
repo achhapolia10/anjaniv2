@@ -51,6 +51,8 @@ func main() {
 	//Entry routes are defined
 	router.GET("/entry", routes.GetEntry)
 	router.POST("/entry/new", routes.PostEntryNew)
+	router.GET("/entry/getall", routes.GetJournalEntriesAll)
+	router.POST("/entry/delete", routes.PostDeleteJournalEntry)
 
 	fmt.Println("Starting Server on Port: 4001")
 	log.Println(http.ListenAndServe(":4001", router))

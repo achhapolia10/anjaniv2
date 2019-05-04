@@ -31,12 +31,12 @@ function onEntryFormSubmit(){
             type:"POST",
             url:"/entry/new?labour="+labour+"\&box="+box+"\&packet="+packet+
             "\&date="+date+"&product="+ product,
-            success:function(s){console.log("success from ");
-        console.log(s)},
+            success:function(s){createEntryTable()},
             error:function(){console.log("faluire from server")}
         })
     }   
     clearEntryForm();
+    
 }
 
 function clearEntryForm(){
@@ -50,5 +50,41 @@ function clearEntryForm(){
 }
 
 function createEntryTable(){
-    console.log("Entry table will be created ")
+    $("#journal-table").html('')
+    var date = document.getElementById("date-picker").value
+    var product = document.getElementById("product-picker").value 
+    $.ajax({
+        type:"GET",
+        url:"/entry/getall?date="+date+"\&id="+product,
+        success:function(p){
+            let entries= JSON.parse(p)
+            if(entries)
+            entries.forEach(entry => {
+                $("#journal-table").append('<tr><td>'+entry.labour+'</td><td>'+entry.box+'</td>'+
+                '<td>'+entry.packet+
+                '</td><td><button onclick="RemoveEntry('+entry.id+','+entry.product.id+')" '+
+                'class="btn btn-danger">Remove</button>')
+            
+            });
+        },
+        error: function(){
+            console.log("error in getiing jounral data")
+        }
+    })
 }
+
+function RemoveEntry(id, productID){
+    console.log(id,productID)
+    $.ajax({
+        type:"post",
+        url:"/entry/delete?productid="+productID+"\&id="+id,
+        success:function(p){
+            console.log("product Deleted")
+            createEntryTable();
+        },
+        error: function(){
+            console.log("error in getiing jounral data")
+        }
+    })
+}
+

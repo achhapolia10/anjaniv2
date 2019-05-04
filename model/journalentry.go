@@ -5,12 +5,12 @@ type Labour string
 
 //JournalEntry for Journal Entries
 type JournalEntry struct {
-	ID      int
-	Labour  Labour
-	Date    string
-	Boxes   int
-	Packets int
-	Product *Product
+	ID      int      `json:"id"`
+	Labour  Labour   `json:"labour"`
+	Date    string   `json:"date"`
+	Boxes   int      `json:"box"`
+	Packets int      `json:"packet"`
+	Product *Product `json:"product"`
 }
 
 //BalanceEntry balances the boxes and packets

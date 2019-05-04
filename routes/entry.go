@@ -2,12 +2,10 @@ package routes
 
 import (
 	"encoding/json"
-	"fmt"
 	"html/template"
 	"io"
 	"log"
 	"net/http"
-	"os"
 	"strconv"
 
 	"github.com/achhapolia10/anjaniv2/model"
@@ -61,6 +59,43 @@ func PostEntryNew(w http.ResponseWriter, req *http.Request, _ httprouter.Params)
 		log.Println(err)
 	}
 	io.WriteString(w, string(p))
-	os.Stdout.Write(p)
+}
 
+//GetJournalEntriesAll Gets Journal Entry for a Product on a particular Date and Send Response
+//Route /getall method GET
+func GetJournalEntriesAll(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
+	q := req.URL.Query()
+	date := q["date"][0]
+	id, err := strconv.Atoi(q["id"][0])
+	if err != nil {
+		log.Println("Error in GETJournal Entries all")
+		log.Println(err)
+	}
+	je, res := opdatabase.SelectJournalEntry(date, id)
+	if res {
+		p, err := json.Marshal(je)
+		if err != nil {
+			log.Println("Error in GetJournalEntries all in Marshalling")
+			log.Println(err)
+		}
+		io.WriteString(w, string(p))
+	}
+}
+
+//PostDeleteJournalEntry Deletes a Journal Entry
+// route /entry/delete?id=?&productid=? method POST
+func PostDeleteJournalEntry(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
+	q := req.URL.Query()
+	id, _ := strconv.Atoi(q["id"][0])
+	productid, _ := strconv.Atoi(q["productid"][0])
+	opdatabase.DeleteJournalEntry(productid, id)
+	res := Response{
+		301,
+		Response{20, ", "},
+	}
+	p, err := json.Marshal(res)
+	if err != nil {
+		log.Println(err)
+	}
+	io.WriteString(w, string(p))
 }
