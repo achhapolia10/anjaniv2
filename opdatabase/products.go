@@ -23,7 +23,7 @@ func CreateProductTable() {
 		oboxes INT NOT NULL,
 		opackets INT NOT NULL);`
 
-	fmt.Print("Creating Product Table : ")
+	fmt.Println("Creating Product Table : ")
 	_, err := db.Exec(query)
 	if err != nil {
 		fmt.Println("Product Table already exists")
@@ -41,7 +41,7 @@ func AddProduct(p model.Product) {
 		"values	(?,?,?,?,?,?);"
 	r, err := db.Exec(query, p.Name, p.PacketQuantity, p.BoxQuantity, p.Price, p.OpeningBoxes, p.OpeningPackets)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	} else {
 		id, _ := r.LastInsertId()
 		log.Printf("Added product at index: %v", id)
@@ -60,7 +60,7 @@ func SelectProduct() ([]model.Product, bool) {
 	r, err := db.Query(query)
 	if err != nil {
 		fmt.Println("Can't get the products from the product table")
-		log.Fatal(err)
+		log.Println(err)
 		return p, false
 	}
 	for r.Next() {
@@ -81,7 +81,7 @@ func SelectProductID(id int) (model.Product, bool) {
 	r, err := db.Query(query, id)
 	if err != nil {
 		fmt.Println("Can't get the products from the product table")
-		log.Fatal(err)
+		log.Println(err)
 		return product, false
 	}
 	if r.Next() {
@@ -107,7 +107,7 @@ func EditProduct(id int, p model.Product) bool {
 	_, err := db.Exec(query, p.Name, p.PacketQuantity, p.BoxQuantity, p.Price, id)
 	if err != nil {
 		fmt.Println("Error in edititng product ")
-		log.Fatal(err)
+		log.Println(err)
 		return false
 	}
 	fmt.Println("Edited Product at id ", id)
@@ -121,7 +121,7 @@ func DeleteProduct(productID int64) bool {
 	_, err := db.Exec(query, productID)
 	if err != nil {
 		fmt.Println("Errror in Deleting a product from database")
-		log.Fatal(err)
+		log.Println(err)
 		return false
 	}
 	fmt.Println("Delted Product from id ", productID)
@@ -142,10 +142,10 @@ func CreateProductJournal(id int64) bool {
 	_, err := db.Exec(query)
 	if err != nil {
 		log.Println(err)
-		fmt.Println("Error creating Journal Table for the product with id:", id)
+		log.Println("Error creating Journal Table for the product with id:", id)
 		return false
 	}
-	fmt.Println("Created a Journal Table for the product with id:", id)
+	log.Println("Created a Journal Table for the product with id:", id)
 	return true
 }
 
@@ -155,10 +155,10 @@ func DeleteProductJournal(id int64) bool {
 	_, err := db.Exec(query)
 	if err != nil {
 		log.Println(err)
-		fmt.Print("Error in Deleting Journal Table for the product with id:", id)
+		log.Println("Error in Deleting Journal Table for the product with id:", id)
 		return false
 	}
-	fmt.Println("Deleted a Journal Table for the product with id:", id)
+	log.Println("Deleted a Journal Table for the product with id:", id)
 	return true
 }
 
@@ -174,10 +174,10 @@ func CreateProductStock(id int64) bool {
 	_, err := db.Exec(query)
 	if err != nil {
 		log.Println(err)
-		fmt.Println("Error creating Stock Table for the product with id:", id)
+		log.Println("Error creating Stock Table for the product with id:", id)
 		return false
 	}
-	fmt.Println("Created a Stock Table for the product with id:", id)
+	log.Println("Created a Stock Table for the product with id:", id)
 	return true
 }
 
@@ -186,9 +186,10 @@ func DeleteProductStock(id int64) bool {
 	query := "DROP TABLE " + strconv.FormatInt(id, 10) + "_stock;"
 	_, err := db.Exec(query)
 	if err != nil {
-		fmt.Print("Error in Deleting Stock Table for the product with id:", id)
+		log.Println(err)
+		log.Println("Error in Deleting Stock Table for the product with id:", id)
 		return false
 	}
-	fmt.Println("Deleted a Stock Table for the product with id:", id)
+	log.Println("Deleted a Stock Table for the product with id:", id)
 	return true
 }

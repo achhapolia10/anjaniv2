@@ -8,6 +8,9 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
+
+	"github.com/achhapolia10/anjaniv2/model"
 
 	"github.com/achhapolia10/anjaniv2/opdatabase"
 
@@ -24,7 +27,7 @@ type Response struct {
 func GetEntry(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
 	p, res := opdatabase.SelectProduct()
 	if !res {
-		fmt.Print("Error in querying all products in Entries")
+		log.Println("Error in querying all products in Entries")
 	} else {
 		t := template.Must(template.ParseGlob("views/components/*.comp"))
 		t.ParseFiles("views/entry.html")
@@ -34,17 +37,28 @@ func GetEntry(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
 
 //PostEntryNew Handler for route /new method POST
 func PostEntryNew(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
-
-	a := req.URL.Query()
-	fmt.Print(a)
-
+	q := req.URL.Query()
+	box, _ := strconv.Atoi(q["box"][0])
+	packet, _ := strconv.Atoi(q["packet"][0])
+	id, _ := strconv.Atoi(q["product"][0])
+	je := model.JournalEntry{
+		0,
+		model.Labour(q["labour"][0]),
+		q["date"][0],
+		box,
+		packet,
+		&model.Product{
+			id, "", 0, 0, 0, 0, 0,
+		},
+	}
+	opdatabase.NewJournalEntry(je)
 	res := Response{
 		301,
 		Response{20, ", "},
 	}
 	p, err := json.Marshal(res)
 	if err != nil {
-		log.Print(err)
+		log.Println(err)
 	}
 	io.WriteString(w, string(p))
 	os.Stdout.Write(p)

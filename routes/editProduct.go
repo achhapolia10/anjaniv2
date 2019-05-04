@@ -17,13 +17,13 @@ import (
 func GetEditProduct(w http.ResponseWriter, req *http.Request, p httprouter.Params) {
 	id := p.ByName("id")
 	if id == "" {
-		fmt.Print("No id Given")
+		fmt.Println("No id Given")
 		http.Redirect(w, req, "/products", 301)
 	} else {
 		i, err := strconv.Atoi(id)
 		if err != nil {
-			fmt.Print("Id to Edit is not Proper")
-			log.Fatal(err)
+			fmt.Println("Id to Edit is not Proper")
+			log.Println(err)
 		} else {
 			p, res := opdatabase.SelectProductID(i)
 			if !res {
@@ -44,17 +44,17 @@ func GetEditProduct(w http.ResponseWriter, req *http.Request, p httprouter.Param
 func PostEditProduct(w http.ResponseWriter, req *http.Request, params httprouter.Params) {
 	id := params.ByName("id")
 	if id == "" {
-		fmt.Print("No id Given")
+		fmt.Println("No id Given")
 		http.Redirect(w, req, "/products", 301)
 	} else {
 		i, err := strconv.Atoi(id)
 		if err != nil {
-			fmt.Print("Id to Edit is not Proper")
-			log.Fatal(err)
+			fmt.Println("Id to Edit is not Proper")
+			log.Println(err)
 		} else {
 			err = req.ParseForm()
 			if err != nil {
-				log.Fatal(err)
+				log.Println(err)
 			}
 			var n string
 			var p, b, op, ob int
@@ -70,9 +70,9 @@ func PostEditProduct(w http.ResponseWriter, req *http.Request, params httprouter
 			}
 			result := opdatabase.EditProduct(i, product)
 			if result {
-				fmt.Print("Product Edited")
+				log.Println("Product Edited")
 			} else {
-				fmt.Print("Product Not Edited")
+				log.Println("Product Not Edited")
 			}
 			http.Redirect(w, req, "/products", 301)
 

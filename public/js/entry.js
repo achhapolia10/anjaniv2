@@ -17,7 +17,11 @@ function isDateProductPicked(){
 }
 
 function onEntryFormSubmit(){
-    clearEntryForm();
+    var labour = document.getElementById("labour-name").value.toUpperCase()
+    var box = document.getElementById("box-no").value
+    var packet=document.getElementById("packet-no").value
+    var date = document.getElementById("date-picker").value
+    var product = document.getElementById("product-picker").value
     var res=isDateProductPicked()
     if(!res){
         alert("Pick Date and Product")
@@ -25,12 +29,14 @@ function onEntryFormSubmit(){
         console.log("Entry to be Made")
         $.ajax({
             type:"POST",
-            url:"/entry/new?name=anshu",
+            url:"/entry/new?labour="+labour+"\&box="+box+"\&packet="+packet+
+            "\&date="+date+"&product="+ product,
             success:function(s){console.log("success from ");
         console.log(s)},
             error:function(){console.log("faluire from server")}
         })
     }   
+    clearEntryForm();
 }
 
 function clearEntryForm(){

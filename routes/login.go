@@ -12,7 +12,7 @@ import (
 func GetLogin(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
 	t, err := template.ParseFiles("views/login.html")
 	if err != nil {
-		log.Fatalln(err)
+		log.Printlnln(err)
 	}
 	t.Execute(w, "")
 }

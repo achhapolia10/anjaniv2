@@ -26,7 +26,7 @@ func GetNewProduct(w http.ResponseWriter, req *http.Request, _ httprouter.Params
 func PostNewProduct(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
 	err := req.ParseForm()
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 	var n string
 	var p, b, op, ob int
