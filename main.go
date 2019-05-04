@@ -50,6 +50,7 @@ func main() {
 
 	//Entry routes are defined
 	router.GET("/entry", routes.GetEntry)
+	router.POST("/entry/new", routes.PostEntryNew)
 
 	fmt.Println("Starting Server on Port: 4001")
 	log.Fatal(http.ListenAndServe(":4001", router))
