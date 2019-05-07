@@ -17,6 +17,7 @@ type JournalEntry struct {
 func (e *JournalEntry) BalanceEntry() {
 	p := e.Product
 	e.Boxes = e.Boxes + e.Packets%p.BoxQuantity
+	e.Packets = e.Packets / p.BoxQuantity
 }
 
 //CalculateTotalUnit Calculate the total Unit

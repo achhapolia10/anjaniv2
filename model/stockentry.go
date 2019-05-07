@@ -9,3 +9,5 @@ type StockEntry struct {
 	BoxesOut   int    `json:"boxes-out"`
 	PacketsOut int    `json:"packets-out"`
 }
+
+//Balance Balances a  Stock Entry
