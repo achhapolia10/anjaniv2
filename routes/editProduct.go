@@ -78,4 +78,5 @@ func PostEditProduct(w http.ResponseWriter, req *http.Request, params httprouter
 
 		}
 	}
+
 }

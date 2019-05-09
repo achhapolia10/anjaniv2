@@ -45,9 +45,7 @@ func PostEntryNew(w http.ResponseWriter, req *http.Request, _ httprouter.Params)
 		q["date"][0],
 		box,
 		packet,
-		&model.Product{
-			id, "", 0, 0, 0, 0, 0,
-		},
+		id,
 	}
 	opdatabase.NewJournalEntry(je)
 	res := Response{
@@ -59,6 +57,7 @@ func PostEntryNew(w http.ResponseWriter, req *http.Request, _ httprouter.Params)
 		log.Println(err)
 	}
 	io.WriteString(w, string(p))
+
 }
 
 //GetJournalEntriesAll Gets Journal Entry for a Product on a particular Date and Send Response

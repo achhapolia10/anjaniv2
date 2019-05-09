@@ -8,6 +8,5 @@ type StockEntry struct {
 	PacketsIn  int    `json:"packets-in"`
 	BoxesOut   int    `json:"boxes-out"`
 	PacketsOut int    `json:"packets-out"`
+	ProductID  int    `json:"product-id"`
 }
-
-//Balance Balances a  Stock Entry

@@ -9,7 +9,7 @@ import (
 
 //NewJournalEntry Creates a new Entry in the given products Journal
 func NewJournalEntry(je model.JournalEntry) {
-	id := strconv.Itoa(je.Product.ID)
+	id := strconv.Itoa(je.ProductID)
 	query := "INSERT INTO " + id + "journal (labour,date,box,packet) VALUES(?,?,?,?);"
 	_, err := db.Exec(query, je.Labour, je.Date, je.Boxes, je.Packets)
 	if err != nil {
@@ -37,9 +37,7 @@ func SelectJournalEntry(date string, productID int) ([]model.JournalEntry, bool)
 			log.Println(err)
 			return je, false
 		}
-		e.Product = &model.Product{
-			productID, "", 0, 0, 0, 0, 0,
-		}
+		e.ProductID = productID
 		je = append(je, e)
 	}
 	return je, true
@@ -62,9 +60,7 @@ func SelectJournalEntryByID(id int, productID int) (model.JournalEntry, bool) {
 			return je, false
 		}
 	}
-	je.Product = &model.Product{
-		productID, "", 0, 0, 0, 0, 0,
-	}
+	je.ProductID = productID
 	return je, true
 }
 
