@@ -7,17 +7,17 @@ import (
 
 //StockEntry Structure to store StockEntries
 type StockEntry struct {
-	ID         int    `json:"id"`
-	Date       string `json:"date"`
-	BoxesIn    int    `json:"boxes-in"`
-	PacketsIn  int    `json:"packets-in"`
-	BoxesOut   int    `json:"boxes-out"`
-	PacketsOut int    `json:"packets-out"`
-	ProductID  int    `json:"product-id"`
+	ID        int    `json:"id"`
+	Date      string `json:"date"`
+	BoxIn     int    `json:"box-in"`
+	PacketIn  int    `json:"packets-in"`
+	BoxOut    int    `json:"boxes-out"`
+	PacketOut int    `json:"packet-out"`
+	ProductID int    `json:"product-id"`
 }
 
-//SelectStockEntries select all stockentries for a given database
-func SelectStockEntries(productID int) ([]StockEntry, bool) {
+//SelectStockEntry select all stockentries for a given database
+func SelectStockEntry(productID int) ([]StockEntry, bool) {
 	var s []StockEntry
 	query := `SELECT * FROM ` + strconv.Itoa(productID) + `stock;`
 	R, err := db.Query(query)
@@ -28,7 +28,7 @@ func SelectStockEntries(productID int) ([]StockEntry, bool) {
 	}
 	for R.Next() {
 		var se StockEntry
-		err = R.Scan(&(se.ID), &(se.Date), &(se.BoxesIn), &(se.PacketsIn), &(se.BoxesOut), &(se.PacketsOut))
+		err = R.Scan(&(se.ID), &(se.Date), &(se.BoxIn), &(se.PacketIn), &(se.BoxOut), &(se.PacketOut))
 		if err != nil {
 			log.Println("Error in Scanning a stock entry of Product:", productID)
 			log.Println(err)
@@ -50,7 +50,7 @@ func SelectStockEntryDate(date string, productID int) (StockEntry, bool) {
 		return se, false
 	}
 	if R.Next() {
-		err = R.Scan(&(se.ID), &(se.Date), &(se.BoxesIn), &(se.PacketsIn), &(se.BoxesOut), &(se.PacketsOut))
+		err = R.Scan(&(se.ID), &(se.Date), &(se.BoxIn), &(se.PacketIn), &(se.BoxOut), &(se.PacketOut))
 		if err != nil {
 			log.Println("Error in Scanning a stock entry of Product:", productID)
 			log.Println(err)
@@ -81,7 +81,7 @@ func AddStockEntryDate(date string, productID int) (int, bool) {
 //Returns a bool
 func UpdateStockEntry(productID int, se StockEntry) bool {
 	query := "UPDATE " + strconv.Itoa(productID) + "stock SET boxIn= ? ,packetIn= ? , boxOut= ? , packetOut= ? WHERE date= ? ;"
-	_, err := db.Exec(query, se.BoxesIn, se.PacketsIn, se.BoxesOut, se.PacketsOut, se.Date)
+	_, err := db.Exec(query, se.BoxIn, se.PacketIn, se.BoxOut, se.PacketOut, se.Date)
 	if err != nil {
 		log.Println("Error in creating a stock entry of Product: ", productID)
 		log.Println(err)

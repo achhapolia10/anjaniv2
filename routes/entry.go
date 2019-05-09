@@ -23,7 +23,7 @@ type Response struct {
 
 //GetEntry Handler for route / method GET
 func GetEntry(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
-	//TODO p, res(is a bool) := get all products and pass it to template
+	p, res := model.GetAllProduct()
 	if !res {
 		log.Println("Error in querying all products in Entries")
 	} else {
@@ -39,15 +39,15 @@ func PostEntryNew(w http.ResponseWriter, req *http.Request, _ httprouter.Params)
 	box, _ := strconv.Atoi(q["box"][0])
 	packet, _ := strconv.Atoi(q["packet"][0])
 	id, _ := strconv.Atoi(q["product"][0])
-	je := model.JournalEntry{
+	je := opdatabase.JournalEntry{
 		0,
-		model.Labour(q["labour"][0]),
+		q["labour"][0],
 		q["date"][0],
 		box,
 		packet,
 		id,
 	}
-	//TODO:Create a Journal Entry
+	opdatabase.NewJournalEntry(je)
 	res := Response{
 		301,
 		Response{20, ", "},
@@ -65,29 +65,30 @@ func PostEntryNew(w http.ResponseWriter, req *http.Request, _ httprouter.Params)
 func GetJournalEntriesAll(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
 	q := req.URL.Query()
 	date := q["date"][0]
-	id, err := strconv.Atoi(q["id"][0])
+	productID, err := strconv.Atoi(q["id"][0])
 	if err != nil {
 		log.Println("Error in GETJournal Entries all")
 		log.Println(err)
 	}
-	je, res := opdatabase.SelectJournalEntry(date, id)
+	je, res := model.GetAllJournalEntry(date, productID)
 	if res {
 		p, err := json.Marshal(je)
 		if err != nil {
 			log.Println("Error in GetJournalEntries all in Marshalling")
 			log.Println(err)
 		}
+		log.Println(string(p))
 		io.WriteString(w, string(p))
 	}
 }
 
 //PostDeleteJournalEntry Deletes a Journal Entry
-// route /entry/delete?id=?&productid=? method POST
+// route /entry/delete?id=?&productID=? method POST
 func PostDeleteJournalEntry(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
 	q := req.URL.Query()
 	id, _ := strconv.Atoi(q["id"][0])
-	productid, _ := strconv.Atoi(q["productid"][0])
-	//TODO : Delete a Journal Entry
+	productID, _ := strconv.Atoi(q["productID"][0])
+	model.DeleteJournalEntry(id, productID)
 	res := Response{
 		301,
 		Response{20, ", "},

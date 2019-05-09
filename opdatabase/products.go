@@ -15,15 +15,15 @@ type Product struct {
 	PacketQuantity int     `json:"packet"`
 	BoxQuantity    int     `json:"box"`
 	Price          float64 `json:"price"`
-	OpeningBoxes   int     `json:"oboxes"`
-	OpeningPackets int     `json:"opackets"`
+	OpeningBox     int     `json:"oboxes"`
+	OpeningPacket  int     `json:"opackets"`
 }
 
 var db *sql.DB
 
 //CreateProductTable creates a product table if it's not already created
 func CreateProductTable() {
-	query := `create table products(
+	query := `create table product(
 		productID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 		name VARCHAR(50) NOT NULL, 
 		packetQuantity SMALLINT NOT NULL,
@@ -45,10 +45,10 @@ func CreateProductTable() {
 //AddProduct adds a new Product to table products
 func AddProduct(p Product) {
 	p.Name = strings.ToUpper(p.Name)
-	query := "insert into products " +
+	query := "insert into product " +
 		"(name,packetQuantity,boxQuantity,price,oboxes,opackets)" +
 		"values	(?,?,?,?,?,?);"
-	r, err := db.Exec(query, p.Name, p.PacketQuantity, p.BoxQuantity, p.Price, p.OpeningBoxes, p.OpeningPackets)
+	r, err := db.Exec(query, p.Name, p.PacketQuantity, p.BoxQuantity, p.Price, p.OpeningBox, p.OpeningPacket)
 	if err != nil {
 		log.Println(err)
 	} else {
@@ -57,7 +57,7 @@ func AddProduct(p Product) {
 		r1 := CreateProductJournal(id)
 		r2 := CreateProductStock(id)
 		if !(r1 && r2) {
-			DeleteProduct(id)
+			DeleteProduct(int(id))
 		}
 	}
 }
@@ -65,7 +65,7 @@ func AddProduct(p Product) {
 //SelectProduct get products from the database
 func SelectProduct() ([]Product, bool) {
 	var p []Product
-	query := `SELECT * FROM products;`
+	query := `SELECT * FROM product;`
 	r, err := db.Query(query)
 	if err != nil {
 		fmt.Println("Can't get the products from the product table")
@@ -77,7 +77,7 @@ func SelectProduct() ([]Product, bool) {
 			product Product
 		)
 		r.Scan(&(product.ID), &(product.Name), &(product.PacketQuantity), &(product.BoxQuantity),
-			&(product.Price), &(product.OpeningBoxes), &(product.OpeningPackets))
+			&(product.Price), &(product.OpeningBox), &(product.OpeningPacket))
 		p = append(p, product)
 	}
 	return p, true
@@ -86,7 +86,7 @@ func SelectProduct() ([]Product, bool) {
 //SelectProductID get a single product form the database
 func SelectProductID(id int) (Product, bool) {
 	var product Product
-	query := `SELECT * FROM products WHERE productID=?;`
+	query := `SELECT * FROM product WHERE productID=?;`
 	r, err := db.Query(query, id)
 	if err != nil {
 		fmt.Println("Can't get the products from the product table")
@@ -95,7 +95,7 @@ func SelectProductID(id int) (Product, bool) {
 	}
 	if r.Next() {
 		r.Scan(&(product.ID), &(product.Name), &(product.PacketQuantity), &(product.BoxQuantity),
-			&(product.Price), &(product.OpeningBoxes), &(product.OpeningPackets))
+			&(product.Price), &(product.OpeningBox), &(product.OpeningPacket))
 	}
 	return product, true
 }
@@ -124,7 +124,7 @@ func EditProduct(id int, p Product) bool {
 }
 
 //DeleteProduct deletes the product of the given id from table products
-func DeleteProduct(productID int64) bool {
+func DeleteProduct(productID int) bool {
 	query := `DELETE FROM products
 				WHERE productID= ?;`
 	_, err := db.Exec(query, productID)
@@ -159,8 +159,8 @@ func CreateProductJournal(id int64) bool {
 }
 
 //DeleteProductJournal deletes a journal Table for each product [id]journal
-func DeleteProductJournal(id int64) bool {
-	query := "DROP TABLE " + strconv.FormatInt(id, 10) + "journal;"
+func DeleteProductJournal(id int) bool {
+	query := "DROP TABLE " + strconv.Itoa(id) + "journal;"
 	_, err := db.Exec(query)
 	if err != nil {
 		log.Println(err)
@@ -191,8 +191,8 @@ func CreateProductStock(id int64) bool {
 }
 
 //DeleteProductStock deletes a Stock Table for each product [id]stock
-func DeleteProductStock(id int64) bool {
-	query := "DROP TABLE " + strconv.FormatInt(id, 10) + "stock;"
+func DeleteProductStock(id int) bool {
+	query := "DROP TABLE " + strconv.Itoa(id) + "stock;"
 	_, err := db.Exec(query)
 	if err != nil {
 		log.Println(err)

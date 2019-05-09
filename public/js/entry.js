@@ -59,10 +59,11 @@ function createEntryTable(){
         success:function(p){
             let entries= JSON.parse(p)
             if(entries)
+        
             entries.forEach(entry => {
                 $("#journal-table").append('<tr><td>'+entry.labour+'</td><td>'+entry.box+'</td>'+
                 '<td>'+entry.packet+
-                '</td><td><button onclick="RemoveEntry('+entry.id+','+entry.product.id+')" '+
+                '</td><td><button onclick="RemoveEntry('+entry.id+','+entry.product+')" '+
                 'class="btn btn-danger">Remove</button>')
             
             });
@@ -77,7 +78,7 @@ function RemoveEntry(id, productID){
     console.log(id,productID)
     $.ajax({
         type:"post",
-        url:"/entry/delete?productid="+productID+"\&id="+id,
+        url:"/entry/delete?productID="+productID+"\&id="+id,
         success:function(p){
             console.log("product Deleted")
             createEntryTable();

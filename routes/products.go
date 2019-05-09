@@ -8,6 +8,7 @@ import (
 	"strconv"
 
 	"github.com/achhapolia10/anjaniv2/model"
+	"github.com/achhapolia10/anjaniv2/opdatabase"
 
 	"github.com/julienschmidt/httprouter"
 )
@@ -17,7 +18,7 @@ func GetProducts(w http.ResponseWriter, req *http.Request, _ httprouter.Params) 
 
 	t := template.Must(template.ParseGlob("views/components/*.comp"))
 	t.ParseFiles("views/products.html")
-	//TODO : p, r := opdatabase.SelectProduct()
+	p, r := model.GetAllProduct()
 	if r {
 		t.ExecuteTemplate(w, "products.html", p)
 	}
@@ -36,7 +37,7 @@ func GetDeleteProducts(w http.ResponseWriter, req *http.Request, p httprouter.Pa
 			fmt.Println("Id to Delete is not Proper")
 			log.Println(err)
 		} else {
-			//TODO res := opdatabase.DeleteProduct(int64(i))
+			res := opdatabase.DeleteProduct(i)
 			if !res {
 				fmt.Println("Error in Deleting Product")
 			}
@@ -58,7 +59,7 @@ func GetEditProduct(w http.ResponseWriter, req *http.Request, p httprouter.Param
 			fmt.Println("Id to Edit is not Proper")
 			log.Println(err)
 		} else {
-			//TODO : p, res := opdatabase.SelectProductID(i)
+			p, res := opdatabase.SelectProductID(i)
 			if !res {
 				fmt.Println("Error in Getting Product")
 			} else {
@@ -95,13 +96,13 @@ func PostEditProduct(w http.ResponseWriter, req *http.Request, params httprouter
 			n = req.FormValue("name")
 			p, err = strconv.Atoi(req.FormValue("box"))
 			b, err = strconv.Atoi(req.FormValue("packet"))
-			op, err = strconv.Atoi(req.FormValue("opackets"))
-			ob, err = strconv.Atoi(req.FormValue("oboxes"))
+			op, err = strconv.Atoi(req.FormValue("opacket"))
+			ob, err = strconv.Atoi(req.FormValue("obox"))
 			pr, err = strconv.ParseFloat(req.FormValue("price"), 32)
-			product := model.Product{
+			product := opdatabase.Product{
 				i, n, p, b, pr, ob, op,
 			}
-			//TODO : result := opdatabase.EditProduct(i, product)
+			result := opdatabase.EditProduct(i, product)
 			if result {
 				log.Println("Product Edited")
 			} else {
@@ -135,12 +136,12 @@ func PostNewProduct(w http.ResponseWriter, req *http.Request, _ httprouter.Param
 	n = req.FormValue("name")
 	p, err = strconv.Atoi(req.FormValue("box"))
 	b, err = strconv.Atoi(req.FormValue("packet"))
-	op, err = strconv.Atoi(req.FormValue("opackets"))
-	ob, err = strconv.Atoi(req.FormValue("oboxes"))
+	op, err = strconv.Atoi(req.FormValue("opacket"))
+	ob, err = strconv.Atoi(req.FormValue("obox"))
 	pr, err = strconv.ParseFloat(req.FormValue("price"), 32)
-	product := model.Product{
+	product := opdatabase.Product{
 		0, n, p, b, pr, ob, op,
 	}
-	//TODO : opdatabase.AddProduct(product)
+	opdatabase.AddProduct(product)
 	http.Redirect(w, req, "/products", 301)
 }
