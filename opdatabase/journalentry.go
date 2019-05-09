@@ -3,15 +3,23 @@ package opdatabase
 import (
 	"log"
 	"strconv"
-
-	"github.com/achhapolia10/anjaniv2/model"
 )
 
+//JournalEntry for Journal Entries
+type JournalEntry struct {
+	ID        int    `json:"id"`
+	Labour    string `json:"labour"`
+	Date      string `json:"date"`
+	Box       int    `json:"box"`
+	Packet    int    `json:"packet"`
+	ProductID int    `json:"product"`
+}
+
 //NewJournalEntry Creates a new Entry in the given products Journal
-func NewJournalEntry(je model.JournalEntry) {
+func NewJournalEntry(je JournalEntry) {
 	id := strconv.Itoa(je.ProductID)
 	query := "INSERT INTO " + id + "journal (labour,date,box,packet) VALUES(?,?,?,?);"
-	_, err := db.Exec(query, je.Labour, je.Date, je.Boxes, je.Packets)
+	_, err := db.Exec(query, je.Labour, je.Date, je.Box, je.Packet)
 	if err != nil {
 		log.Println("Error inserting in journal of Product id:", id)
 		log.Println(err)
@@ -20,8 +28,8 @@ func NewJournalEntry(je model.JournalEntry) {
 }
 
 //SelectJournalEntry Selects all entries of a Pariticular Date
-func SelectJournalEntry(date string, productID int) ([]model.JournalEntry, bool) {
-	var je []model.JournalEntry
+func SelectJournalEntry(date string, productID int) ([]JournalEntry, bool) {
+	var je []JournalEntry
 	query := "SELECT * FROM " + strconv.Itoa(productID) + "journal WHERE date='" + date +
 		"' ORDER BY id DESC;"
 	r, err := db.Query(query)
@@ -31,8 +39,8 @@ func SelectJournalEntry(date string, productID int) ([]model.JournalEntry, bool)
 		return je, false
 	}
 	for r.Next() {
-		var e model.JournalEntry
-		err = r.Scan(&(e.ID), &(e.Labour), &(e.Date), &(e.Boxes), &(e.Packets))
+		var e JournalEntry
+		err = r.Scan(&(e.ID), &(e.Labour), &(e.Date), &(e.Box), &(e.Packet))
 		if err != nil {
 			log.Println(err)
 			return je, false
@@ -44,9 +52,9 @@ func SelectJournalEntry(date string, productID int) ([]model.JournalEntry, bool)
 }
 
 //SelectJournalEntryByID Selects a journal entry by id
-func SelectJournalEntryByID(id int, productID int) (model.JournalEntry, bool) {
+func SelectJournalEntryByID(id int, productID int) (JournalEntry, bool) {
 	query := "SELECT * FROM " + strconv.Itoa(productID) + "journal WHERE id=?;"
-	var je model.JournalEntry
+	var je JournalEntry
 	r, err := db.Query(query, id)
 	if err != nil {
 		log.Println(err)
@@ -54,7 +62,7 @@ func SelectJournalEntryByID(id int, productID int) (model.JournalEntry, bool) {
 		return je, false
 	}
 	if r.Next() {
-		err = r.Scan(&(je.ID), &(je.Labour), &(je.Date), &(je.Boxes), &(je.Packets))
+		err = r.Scan(&(je.ID), &(je.Labour), &(je.Date), &(je.Box), &(je.Packet))
 		if err != nil {
 			log.Println(err)
 			return je, false

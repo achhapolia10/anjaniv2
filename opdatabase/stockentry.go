@@ -3,13 +3,22 @@ package opdatabase
 import (
 	"log"
 	"strconv"
-
-	"github.com/achhapolia10/anjaniv2/model"
 )
 
+//StockEntry Structure to store StockEntries
+type StockEntry struct {
+	ID         int    `json:"id"`
+	Date       string `json:"date"`
+	BoxesIn    int    `json:"boxes-in"`
+	PacketsIn  int    `json:"packets-in"`
+	BoxesOut   int    `json:"boxes-out"`
+	PacketsOut int    `json:"packets-out"`
+	ProductID  int    `json:"product-id"`
+}
+
 //SelectStockEntries select all stockentries for a given database
-func SelectStockEntries(productID int) ([]model.StockEntry, bool) {
-	var s []model.StockEntry
+func SelectStockEntries(productID int) ([]StockEntry, bool) {
+	var s []StockEntry
 	query := `SELECT * FROM ` + strconv.Itoa(productID) + `stock;`
 	R, err := db.Query(query)
 	if err != nil {
@@ -18,7 +27,7 @@ func SelectStockEntries(productID int) ([]model.StockEntry, bool) {
 		return s, false
 	}
 	for R.Next() {
-		var se model.StockEntry
+		var se StockEntry
 		err = R.Scan(&(se.ID), &(se.Date), &(se.BoxesIn), &(se.PacketsIn), &(se.BoxesOut), &(se.PacketsOut))
 		if err != nil {
 			log.Println("Error in Scanning a stock entry of Product:", productID)
@@ -31,9 +40,9 @@ func SelectStockEntries(productID int) ([]model.StockEntry, bool) {
 }
 
 //SelectStockEntryDate selects a stockentry of a given date
-func SelectStockEntryDate(date string, productID int) (model.StockEntry, bool) {
+func SelectStockEntryDate(date string, productID int) (StockEntry, bool) {
 	query := `SELECT * FROM ` + strconv.Itoa(productID) + `stock WHERE date=?;`
-	var se model.StockEntry
+	var se StockEntry
 	R, err := db.Query(query, date)
 	if err != nil {
 		log.Println("Error in retrieving data from stock tabke of product:", productID)
@@ -70,7 +79,7 @@ func AddStockEntryDate(date string, productID int) (int, bool) {
 
 //UpdateStockEntry Updates the stock entry at a particular date for a productID
 //Returns a bool
-func UpdateStockEntry(productID int, se model.StockEntry) bool {
+func UpdateStockEntry(productID int, se StockEntry) bool {
 	query := "UPDATE " + strconv.Itoa(productID) + "stock SET boxIn= ? ,packetIn= ? , boxOut= ? , packetOut= ? WHERE date= ? ;"
 	_, err := db.Exec(query, se.BoxesIn, se.PacketsIn, se.BoxesOut, se.PacketsOut, se.Date)
 	if err != nil {

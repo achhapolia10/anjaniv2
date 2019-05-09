@@ -23,7 +23,7 @@ type Response struct {
 
 //GetEntry Handler for route / method GET
 func GetEntry(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
-	//p, res := get all products and pass it to template
+	//TODO p, res(is a bool) := get all products and pass it to template
 	if !res {
 		log.Println("Error in querying all products in Entries")
 	} else {
@@ -87,7 +87,7 @@ func PostDeleteJournalEntry(w http.ResponseWriter, req *http.Request, _ httprout
 	q := req.URL.Query()
 	id, _ := strconv.Atoi(q["id"][0])
 	productid, _ := strconv.Atoi(q["productid"][0])
-	opdatabase.DeleteJournalEntry(productid, id)
+	//TODO : Delete a Journal Entry
 	res := Response{
 		301,
 		Response{20, ", "},

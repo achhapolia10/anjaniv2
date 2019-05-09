@@ -6,9 +6,18 @@ import (
 	"log"
 	"strconv"
 	"strings"
-
-	"github.com/achhapolia10/anjaniv2/model"
 )
+
+//Product Model for the Products in Database
+type Product struct {
+	ID             int     `json:"id"`
+	Name           string  `json:"name"`
+	PacketQuantity int     `json:"packet"`
+	BoxQuantity    int     `json:"box"`
+	Price          float64 `json:"price"`
+	OpeningBoxes   int     `json:"oboxes"`
+	OpeningPackets int     `json:"opackets"`
+}
 
 var db *sql.DB
 
@@ -34,7 +43,7 @@ func CreateProductTable() {
 }
 
 //AddProduct adds a new Product to table products
-func AddProduct(p model.Product) {
+func AddProduct(p Product) {
 	p.Name = strings.ToUpper(p.Name)
 	query := "insert into products " +
 		"(name,packetQuantity,boxQuantity,price,oboxes,opackets)" +
@@ -54,8 +63,8 @@ func AddProduct(p model.Product) {
 }
 
 //SelectProduct get products from the database
-func SelectProduct() ([]model.Product, bool) {
-	var p []model.Product
+func SelectProduct() ([]Product, bool) {
+	var p []Product
 	query := `SELECT * FROM products;`
 	r, err := db.Query(query)
 	if err != nil {
@@ -65,7 +74,7 @@ func SelectProduct() ([]model.Product, bool) {
 	}
 	for r.Next() {
 		var (
-			product model.Product
+			product Product
 		)
 		r.Scan(&(product.ID), &(product.Name), &(product.PacketQuantity), &(product.BoxQuantity),
 			&(product.Price), &(product.OpeningBoxes), &(product.OpeningPackets))
@@ -75,8 +84,8 @@ func SelectProduct() ([]model.Product, bool) {
 }
 
 //SelectProductID get a single product form the database
-func SelectProductID(id int) (model.Product, bool) {
-	var product model.Product
+func SelectProductID(id int) (Product, bool) {
+	var product Product
 	query := `SELECT * FROM products WHERE productID=?;`
 	r, err := db.Query(query, id)
 	if err != nil {
@@ -92,7 +101,7 @@ func SelectProductID(id int) (model.Product, bool) {
 }
 
 //EditProduct eidt the produt at a given id
-func EditProduct(id int, p model.Product) bool {
+func EditProduct(id int, p Product) bool {
 	if id != p.ID {
 		fmt.Println("Illegal Edit Product Operation")
 		return false
