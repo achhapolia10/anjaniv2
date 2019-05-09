@@ -23,7 +23,7 @@ type Response struct {
 
 //GetEntry Handler for route / method GET
 func GetEntry(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
-	p, res := opdatabase.SelectProduct()
+	//p, res := get all products and pass it to template
 	if !res {
 		log.Println("Error in querying all products in Entries")
 	} else {
@@ -47,7 +47,7 @@ func PostEntryNew(w http.ResponseWriter, req *http.Request, _ httprouter.Params)
 		packet,
 		id,
 	}
-	opdatabase.NewJournalEntry(je)
+	//TODO:Create a Journal Entry
 	res := Response{
 		301,
 		Response{20, ", "},
