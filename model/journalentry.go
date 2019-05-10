@@ -22,3 +22,8 @@ func GetAllJournalEntry(date string, productID int) ([]opdatabase.JournalEntry, 
 func DeleteJournalEntry(id int, productID int) {
 	opdatabase.DeleteJournalEntry(productID, id)
 }
+
+//CreateJournalEntry Creates a new Journal Entry
+func CreateJournalEntry(je opdatabase.JournalEntry) {
+	opdatabase.NewJournalEntry(je)
+}

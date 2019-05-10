@@ -57,7 +57,10 @@ func SelectStockEntryDate(date string, productID int) (StockEntry, bool) {
 			return se, false
 		}
 	} else {
-		AddStockEntryDate(date, productID)
+		id, _ := AddStockEntryDate(date, productID)
+		se = StockEntry{
+			id, date, 0, 0, 0, 0, productID,
+		}
 	}
 	return se, true
 }

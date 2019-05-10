@@ -17,6 +17,7 @@ type Product struct {
 	Price          float64 `json:"price"`
 	OpeningBox     int     `json:"oboxes"`
 	OpeningPacket  int     `json:"opackets"`
+	Group          int     `json:"group"`
 }
 
 var db *sql.DB
@@ -26,6 +27,7 @@ func CreateProductTable() {
 	query := `create table product(
 		productID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 		name VARCHAR(50) NOT NULL, 
+		groupid INT NOT NULL,
 		packetQuantity SMALLINT NOT NULL,
 		boxQuantity SMALLINT NOT NULL,
 		price DECIMAL(4,2) NOT NULL,
@@ -46,9 +48,9 @@ func CreateProductTable() {
 func AddProduct(p Product) {
 	p.Name = strings.ToUpper(p.Name)
 	query := "insert into product " +
-		"(name,packetQuantity,boxQuantity,price,oboxes,opackets)" +
-		"values	(?,?,?,?,?,?);"
-	r, err := db.Exec(query, p.Name, p.PacketQuantity, p.BoxQuantity, p.Price, p.OpeningBox, p.OpeningPacket)
+		"(name,packetQuantity,boxQuantity,price,oboxes,opackets,groupid)" +
+		"values	(?,?,?,?,?,?,?);"
+	r, err := db.Exec(query, p.Name, p.PacketQuantity, p.BoxQuantity, p.Price, p.OpeningBox, p.OpeningPacket, p.Group)
 	if err != nil {
 		log.Println(err)
 	} else {
@@ -100,6 +102,24 @@ func SelectProductID(id int) (Product, bool) {
 	return product, true
 }
 
+//SelectProductByGroup Selects all Product of a particular Group
+func SelectProductByGroup(g Group) []Product {
+	var products []Product
+	query := `SELECT * FROM product WHERE groupid=?;`
+	r, err := db.Query(query, g.id)
+	if err != nil {
+		fmt.Println("Can't get the products from the product table")
+		log.Println(err)
+	}
+	for r.Next() {
+		var product Product
+		r.Scan(&(product.ID), &(product.Name), &(product.PacketQuantity), &(product.BoxQuantity),
+			&(product.Price), &(product.OpeningBox), &(product.OpeningPacket))
+		products = append(products, product)
+	}
+	return products
+}
+
 //EditProduct eidt the produt at a given id
 func EditProduct(id int, p Product) bool {
 	if id != p.ID {
@@ -138,6 +158,16 @@ func DeleteProduct(productID int) bool {
 	DeleteProductStock(productID)
 	return true
 
+}
+
+//DeleteProductByGroup Deletes a Product by a group
+func DeleteProductByGroup(g Group) {
+	p := SelectProductByGroup(g)
+	if len(p) > 0 {
+		for _, product := range p {
+			DeleteProduct(product.ID)
+		}
+	}
 }
 
 //CreateProductJournal creates a journal Table for each product [id]journal

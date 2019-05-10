@@ -47,7 +47,7 @@ func PostEntryNew(w http.ResponseWriter, req *http.Request, _ httprouter.Params)
 		packet,
 		id,
 	}
-	opdatabase.NewJournalEntry(je)
+	model.CreateJournalEntry(je)
 	res := Response{
 		301,
 		Response{20, ", "},
