@@ -10,12 +10,7 @@
 |Exit           |
 
 
-Todo:
 
-- [ ] Create Functions for Stock Entries and perform various actions for stock entries
-- [ ] Create a Page for Dispatch
-- [ ] Add a Global Variable for Products and create Functions
-- [ ] Use Mutex to prevent simeltaneous use of database
 
 Routes: 
 /login

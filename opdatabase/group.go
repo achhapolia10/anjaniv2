@@ -1,6 +1,8 @@
 package opdatabase
 
-import "log"
+import (
+	"log"
+)
 
 //Groups for Different Products
 //Can be creatd by user
@@ -13,10 +15,9 @@ type Group struct {
 
 //CreateGroupTable creates a new Group table
 func CreateGroupTable() {
-	query := `CREATE TABLE group(
+	query := `CREATE TABLE gtable(
 		id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-		name VARCHAR(50) NOT NULL
-	);`
+		name VARCHAR(50) NOT NULL);`
 	_, err := db.Exec(query)
 	if err != nil {
 		log.Println("Error in creating Group Table")
@@ -26,7 +27,7 @@ func CreateGroupTable() {
 
 //CreateGroup create a new Group
 func CreateGroup(g Group) {
-	query := `INSERT INTO group (name) VALUES( ? );`
+	query := `INSERT INTO gtable (name) VALUES( ? );`
 	_, err := db.Exec(query, g.name)
 	if err != nil {
 		log.Println("error in creating an entry in Group table")
@@ -34,9 +35,30 @@ func CreateGroup(g Group) {
 	}
 }
 
+//SelectGroup selects all group
+func SelectGroup() ([]Group, bool) {
+	var g []Group
+	query := `SELECT * FROM gtable;`
+	r, err := db.Query(query)
+	if err != nil {
+		log.Print(err)
+		return g, false
+	}
+	for r.Next() {
+		var group Group
+		err = r.Scan(&(group.id), &(group.name))
+		if err != nil {
+			log.Print(err)
+			return g, false
+		}
+		g = append(g, group)
+	}
+	return g, true
+}
+
 //EditGroup Edits a Group
 func EditGroup(g Group) {
-	query := `UPDATE group SET name= ? WHERE  id= ?`
+	query := `UPDATE gtable SET name= ? WHERE  id= ?`
 	_, err := db.Exec(query, g.name, g.id)
 	if err != nil {
 		log.Println("Error Updating  an Entry in Group Table")
@@ -46,7 +68,7 @@ func EditGroup(g Group) {
 
 //DeleteGroup Deletes a Group
 func DeleteGroup(g Group) {
-	query := `DELETE FROM group WHERE id= ?; `
+	query := `DELETE FROM gtable WHERE id= ?; `
 	_, err := db.Exec(query, g.id)
 	if err != nil {
 		log.Println("Error iin deleting an entry in Group Table")

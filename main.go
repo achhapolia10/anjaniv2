@@ -25,6 +25,7 @@ func main() {
 	router := httprouter.New()
 
 	opdatabase.ConnectDatabase()
+	opdatabase.CreateGroupTable()
 	opdatabase.CreateProductTable()
 	router.ServeFiles("/public/*filepath", publicDir)
 
@@ -34,6 +35,11 @@ func main() {
 	router.POST("/login", routes.PostLogin)
 	router.GET("/logout", routes.GetLogin)
 
+	//Groupds reoutes are  defined
+	router.GET("/groups", routes.GetGroup)
+	router.POST("/groups/new", routes.PostGroupNew)
+	router.POST("/groups/edit", routes.PostGroupEdit)
+	router.POST("/groups/delete", routes.PostGroupDelete)
 	//Products routes are defined
 	router.GET("/products", routes.GetProducts)
 	router.GET("/products/new", routes.GetNewProduct)

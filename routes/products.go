@@ -93,14 +93,14 @@ func PostEditProduct(w http.ResponseWriter, req *http.Request, params httprouter
 			var n string
 			var p, b, op, ob int
 			var pr float64
-			n = req.FormValue("name")
+			n = req.FormValue("product")
 			p, err = strconv.Atoi(req.FormValue("box"))
 			b, err = strconv.Atoi(req.FormValue("packet"))
 			op, err = strconv.Atoi(req.FormValue("opacket"))
 			ob, err = strconv.Atoi(req.FormValue("obox"))
 			pr, err = strconv.ParseFloat(req.FormValue("price"), 32)
 			product := opdatabase.Product{
-				i, n, p, b, pr, ob, op,
+				i, n, p, b, pr, ob, op, 0, //Need to be done
 			}
 			result := opdatabase.EditProduct(i, product)
 			if result {
@@ -133,14 +133,14 @@ func PostNewProduct(w http.ResponseWriter, req *http.Request, _ httprouter.Param
 	var n string
 	var p, b, op, ob int
 	var pr float64
-	n = req.FormValue("name")
+	n = req.FormValue("product")
 	p, err = strconv.Atoi(req.FormValue("box"))
 	b, err = strconv.Atoi(req.FormValue("packet"))
 	op, err = strconv.Atoi(req.FormValue("opacket"))
 	ob, err = strconv.Atoi(req.FormValue("obox"))
 	pr, err = strconv.ParseFloat(req.FormValue("price"), 32)
 	product := opdatabase.Product{
-		0, n, p, b, pr, ob, op,
+		0, n, p, b, pr, ob, op, 0, //need to be done
 	}
 	opdatabase.AddProduct(product)
 	http.Redirect(w, req, "/products", 301)

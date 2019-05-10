@@ -9,6 +9,12 @@ func NewGroup(g opdatabase.Group) {
 	opdatabase.CreateGroup(g)
 }
 
+//GetGroups gets all Groups
+func GetGroups() ([]opdatabase.Group, bool) {
+	g, res := opdatabase.SelectGroup()
+	return g, res
+}
+
 //EditGroup Edits a Group
 func EditGroup(g opdatabase.Group) {
 	opdatabase.EditGroup(g)
