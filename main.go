@@ -38,8 +38,8 @@ func main() {
 	//Groupds reoutes are  defined
 	router.GET("/groups", routes.GetGroup)
 	router.POST("/groups/new", routes.PostGroupNew)
-	router.POST("/groups/edit", routes.PostGroupEdit)
-	router.POST("/groups/delete", routes.PostGroupDelete)
+	router.POST("/groups/edit/:id", routes.PostGroupEdit)
+	router.POST("/groups/delete/:id", routes.PostGroupDelete)
 	//Products routes are defined
 	router.GET("/products", routes.GetProducts)
 	router.GET("/products/new", routes.GetNewProduct)

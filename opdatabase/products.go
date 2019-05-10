@@ -106,7 +106,7 @@ func SelectProductID(id int) (Product, bool) {
 func SelectProductByGroup(g Group) []Product {
 	var products []Product
 	query := `SELECT * FROM product WHERE groupid=?;`
-	r, err := db.Query(query, g.id)
+	r, err := db.Query(query, g.Id)
 	if err != nil {
 		fmt.Println("Can't get the products from the product table")
 		log.Println(err)

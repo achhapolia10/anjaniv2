@@ -9,8 +9,8 @@ import (
 
 //Group Struct
 type Group struct {
-	id   int
-	name string
+	Id   int
+	Name string
 }
 
 //CreateGroupTable creates a new Group table
@@ -28,7 +28,7 @@ func CreateGroupTable() {
 //CreateGroup create a new Group
 func CreateGroup(g Group) {
 	query := `INSERT INTO gtable (name) VALUES( ? );`
-	_, err := db.Exec(query, g.name)
+	_, err := db.Exec(query, g.Name)
 	if err != nil {
 		log.Println("error in creating an entry in Group table")
 		log.Println(err)
@@ -46,7 +46,7 @@ func SelectGroup() ([]Group, bool) {
 	}
 	for r.Next() {
 		var group Group
-		err = r.Scan(&(group.id), &(group.name))
+		err = r.Scan(&(group.Id), &(group.Name))
 		if err != nil {
 			log.Print(err)
 			return g, false
@@ -59,7 +59,7 @@ func SelectGroup() ([]Group, bool) {
 //EditGroup Edits a Group
 func EditGroup(g Group) {
 	query := `UPDATE gtable SET name= ? WHERE  id= ?`
-	_, err := db.Exec(query, g.name, g.id)
+	_, err := db.Exec(query, g.Name, g.Id)
 	if err != nil {
 		log.Println("Error Updating  an Entry in Group Table")
 		log.Println(err)
@@ -69,7 +69,7 @@ func EditGroup(g Group) {
 //DeleteGroup Deletes a Group
 func DeleteGroup(g Group) {
 	query := `DELETE FROM gtable WHERE id= ?; `
-	_, err := db.Exec(query, g.id)
+	_, err := db.Exec(query, g.Id)
 	if err != nil {
 		log.Println("Error iin deleting an entry in Group Table")
 		log.Println(err)

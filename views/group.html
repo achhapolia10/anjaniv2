@@ -24,9 +24,8 @@
         </div>
         <div class="row">
             <div class="col">
-                <a href="/group/new">
-                    <button id="newGroupButton" class="btn btn-primary" style="margin: 20px">New</button>
-                </a>
+                    <button id="newGroupButton" class="btn btn-primary" style="margin: 20px" type="button" 
+                    data-toggle="modal" data-target="#newModal">New</button>
             </div>
         </div>
         
@@ -40,17 +39,17 @@
             <tbody>
                 {{range .}}
                     <tr>
-                        <td>{{.id}}</td>
-                        <td>{{.name}}</td>
+                        <td>{{.Id}}</td>
+                        <td>{{.Name}}</td>
                         <td>
                             <button class="btn btn-warning" type="button" data-toggle="modal" 
-                            data-target="#editModal" data-id= {{.id}} data-name="{{.name}}">
+                            data-target="#editModal" data-id= {{.Id}} data-name="{{.Name}}">
                                 Edit
                             </button>
                         </td>
                         <td>
                             <button class="btn btn-danger" type="button" data-toggle="modal"
-                            data-target="#deleteModal" data-id={{.id}} data-name="{{.name}}">
+                            data-target="#deleteModal" data-id={{.Id}} data-name="{{.Name}}">
                                 Delete
                             </button>
                         </td>
@@ -61,18 +60,44 @@
     </div>
 
     <!--
-        Edit Modal
+        New Modal
     -->
-    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal fade" id="newModal" tabindex="-1" role="dialog" aria-labelledby="newModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
+      <form name= new-group-form action="/groups/new" method="POST">
       <div class="modal-body">
-        Do you want to edit <b><span id="groupName"></span></b>
+        <div class="form-group">
+          <label for="group-name" >Group name</label>
+          <input class="form-control" type="text" name="group-name-form" placeholder="Group" required>
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-        <a id="editButtonAnchor"><button type="button" class="btn btn-success">Edit</button></a>
+        <button type="submit" class="btn btn-success">Submit</button>
       </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!--
+        Edit Modal
+    -->
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="newModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <form name= "edit-group-form" id="edit-group-form"  method="POST">
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="group-name" >Group name</label>
+          <input class="form-control" type="text" id="group-name-form"  name="group-name-form" placeholder="Group" required>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+        <button type="submit" class="btn btn-success">Submit</button>
+      </div>
+      </form>
     </div>
   </div>
 </div>
@@ -96,14 +121,18 @@
 
     <script>
         $('#editModal').on('show.bs.modal', function (event) {
+          var editForm = document.getElementById("edit-group-form")
+  var groupControl =document.getElementById("group-name-form")
+  groupControl.focus()
   var button = $(event.relatedTarget) // Button that triggered the modal
   var id = button.data('id')
   var name = button.data('name') // Extract info from data-* attributes
   // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
   // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+  editForm.setAttribute("action","/groups/edit/"+id)
   var modal = $(this)
-  modal.find('#groupName').text(name)
-  document.getElementById("editButtonAnchor").setAttribute("href","/group/edit/"+id)
+  groupControl.value=name
+  
 })
         $('#deleteModal').on('show.bs.modal', function (event) {
   var button = $(event.relatedTarget) // Button that triggered the modal
@@ -113,7 +142,6 @@
   // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
   var modal = $(this)
   modal.find('#groupName').text(name)
-  document.getElementById("deleteButtonAnchor").setAttribute("href","/group/delete/"+id)
 })
 
 
