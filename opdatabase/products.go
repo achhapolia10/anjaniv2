@@ -78,7 +78,7 @@ func SelectProduct() ([]Product, bool) {
 		var (
 			product Product
 		)
-		r.Scan(&(product.ID), &(product.Name), &(product.PacketQuantity), &(product.BoxQuantity),
+		r.Scan(&(product.ID), &(product.Name), &(product.Group), &(product.PacketQuantity), &(product.BoxQuantity),
 			&(product.Price), &(product.OpeningBox), &(product.OpeningPacket))
 		p = append(p, product)
 	}
@@ -96,7 +96,7 @@ func SelectProductID(id int) (Product, bool) {
 		return product, false
 	}
 	if r.Next() {
-		r.Scan(&(product.ID), &(product.Name), &(product.PacketQuantity), &(product.BoxQuantity),
+		r.Scan(&(product.ID), &(product.Name), &(product.Group), &(product.PacketQuantity), &(product.BoxQuantity),
 			&(product.Price), &(product.OpeningBox), &(product.OpeningPacket))
 	}
 	return product, true
@@ -113,7 +113,7 @@ func SelectProductByGroup(g Group) []Product {
 	}
 	for r.Next() {
 		var product Product
-		r.Scan(&(product.ID), &(product.Name), &(product.PacketQuantity), &(product.BoxQuantity),
+		r.Scan(&(product.ID), &(product.Name), &(product.Group), &(product.PacketQuantity), &(product.BoxQuantity),
 			&(product.Price), &(product.OpeningBox), &(product.OpeningPacket))
 		products = append(products, product)
 	}
@@ -127,7 +127,7 @@ func EditProduct(id int, p Product) bool {
 		return false
 	}
 	p.Name = strings.ToUpper(p.Name)
-	query := `UPDATE products SET
+	query := `UPDATE product SET
 			name=? ,
 			packetQuantity=?,
 			boxQuantity=?,
@@ -145,7 +145,7 @@ func EditProduct(id int, p Product) bool {
 
 //DeleteProduct deletes the product of the given id from table products
 func DeleteProduct(productID int) bool {
-	query := `DELETE FROM products
+	query := `DELETE FROM product
 				WHERE productID= ?;`
 	_, err := db.Exec(query, productID)
 	if err != nil {

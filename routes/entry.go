@@ -77,7 +77,6 @@ func GetJournalEntriesAll(w http.ResponseWriter, req *http.Request, _ httprouter
 			log.Println("Error in GetJournalEntries all in Marshalling")
 			log.Println(err)
 		}
-		log.Println(string(p))
 		io.WriteString(w, string(p))
 	}
 }

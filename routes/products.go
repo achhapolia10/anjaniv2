@@ -13,14 +13,28 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
+var groups map[int]string
+
 //GetProducts Handler for route / method GET
 func GetProducts(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
-
+	if !(len(groups) > 0) {
+		groups = make(map[int]string)
+		gs, _ := model.GetGroups()
+		for _, g := range gs {
+			groups[g.Id] = g.Name
+		}
+	}
 	t := template.Must(template.ParseGlob("views/components/*.comp"))
-	t.ParseFiles("views/products.html")
+	t.Funcs(template.FuncMap{
+		"getGroupName": GetGroupName,
+	}).ParseFiles("views/products.html")
+
 	p, r := model.GetAllProduct()
 	if r {
-		t.ExecuteTemplate(w, "products.html", p)
+		err := t.ExecuteTemplate(w, "products.html", p)
+		if err != nil {
+			log.Println(err)
+		}
 	}
 }
 
@@ -65,6 +79,9 @@ func GetEditProduct(w http.ResponseWriter, req *http.Request, p httprouter.Param
 			} else {
 				t := template.Must(template.ParseGlob("views/components/*.comp"))
 				t.ParseFiles("views/editProduct.html")
+				t.Funcs(template.FuncMap{
+					"getGroupName": GetGroupName,
+				})
 				t.ExecuteTemplate(w, "editProduct.html", p)
 
 			}
@@ -120,8 +137,8 @@ func GetNewProduct(w http.ResponseWriter, req *http.Request, _ httprouter.Params
 
 	t := template.Must(template.ParseGlob("views/components/*.comp"))
 	t.ParseFiles("views/newProduct.html")
-
-	t.ExecuteTemplate(w, "newProduct.html", "")
+	g, _ := model.GetGroups()
+	t.ExecuteTemplate(w, "newProduct.html", g)
 }
 
 //PostNewProduct creates a new Product
@@ -131,7 +148,7 @@ func PostNewProduct(w http.ResponseWriter, req *http.Request, _ httprouter.Param
 		log.Println(err)
 	}
 	var n string
-	var p, b, op, ob int
+	var p, b, op, ob, g int
 	var pr float64
 	n = req.FormValue("product")
 	p, err = strconv.Atoi(req.FormValue("box"))
@@ -139,9 +156,15 @@ func PostNewProduct(w http.ResponseWriter, req *http.Request, _ httprouter.Param
 	op, err = strconv.Atoi(req.FormValue("opacket"))
 	ob, err = strconv.Atoi(req.FormValue("obox"))
 	pr, err = strconv.ParseFloat(req.FormValue("price"), 32)
+	g, err = strconv.Atoi(req.FormValue("product-group"))
 	product := opdatabase.Product{
-		0, n, p, b, pr, ob, op, 0, //need to be done
+		0, n, p, b, pr, ob, op, g, //need to be done
 	}
 	opdatabase.AddProduct(product)
 	http.Redirect(w, req, "/products", 301)
+}
+
+//GetGroupName returns name of the group
+func GetGroupName(id int) string {
+	return groups[id]
 }
