@@ -1,3 +1,4 @@
+var labours;
 function onDateChange(){
     date = document.getElementById("date-picker")
     if(isDateProductPicked())
@@ -23,18 +24,23 @@ function onEntryFormSubmit(){
     var date = document.getElementById("date-picker").value
     var product = document.getElementById("product-picker").value
     var res=isDateProductPicked()
-    if(!res){
-        alert("Pick Date and Product")
+    var i= labours.indexOf(labour)
+    if(i<0){
+        if(!res){
+            alert("Pick Date and Product")
+        } else {
+            console.log("Entry to be Made")
+            $.ajax({
+                type:"POST",
+                url:"/entry/new?labour="+labour+"\&box="+box+"\&packet="+packet+
+                "\&date="+date+"&product="+ product,
+                success:function(s){createEntryTable()},
+                error:function(){console.log("faluire from server")}
+            })
+        }
     } else {
-        console.log("Entry to be Made")
-        $.ajax({
-            type:"POST",
-            url:"/entry/new?labour="+labour+"\&box="+box+"\&packet="+packet+
-            "\&date="+date+"&product="+ product,
-            success:function(s){createEntryTable()},
-            error:function(){console.log("faluire from server")}
-        })
-    }   
+        alert("Name Already exist")
+    }
     clearEntryForm();
     
 }
@@ -57,6 +63,7 @@ function createEntryTable(){
         type:"GET",
         url:"/entry/getall?date="+date+"\&id="+product,
         success:function(p){
+            labours=[]
             let entries= JSON.parse(p)
             if(entries)
         
@@ -65,7 +72,7 @@ function createEntryTable(){
                 '<td>'+entry.packet+
                 '</td><td><button onclick="RemoveEntry('+entry.id+','+entry.product+')" '+
                 'class="btn btn-danger">Remove</button>')
-            
+                labours=labours.concat(entry.labour)
             });
         },
         error: function(){

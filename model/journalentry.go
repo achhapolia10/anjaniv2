@@ -20,10 +20,15 @@ func GetAllJournalEntry(date string, productID int) ([]opdatabase.JournalEntry, 
 
 //DeleteJournalEntry Deletes a Journal Entry of an productID with a particuar id
 func DeleteJournalEntry(id int, productID int) {
-	opdatabase.DeleteJournalEntry(productID, id)
+	je, res := opdatabase.SelectJournalEntryByID(id, productID)
+	if res {
+		opdatabase.DeleteJournalEntry(productID, id)
+		JournalDeleteStock(je)
+	}
 }
 
 //CreateJournalEntry Creates a new Journal Entry
 func CreateJournalEntry(je opdatabase.JournalEntry) {
 	opdatabase.NewJournalEntry(je)
+	JournalAddStock(je)
 }
