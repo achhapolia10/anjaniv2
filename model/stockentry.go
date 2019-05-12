@@ -23,7 +23,7 @@ func JournalAddStock(je opdatabase.JournalEntry) bool {
 func JournalDeleteStock(je opdatabase.JournalEntry) bool {
 	s, res := opdatabase.SelectStockEntryDate(je.Date, je.ProductID)
 	if !res {
-		log.Printf("Error in reading Stock Entry in Addstock() on Date: ", je.Date)
+		log.Println("Error in reading Stock Entry in Addstock() on Date: ", je.Date)
 		return false
 	}
 	s.BoxIn = s.BoxIn - je.Box
