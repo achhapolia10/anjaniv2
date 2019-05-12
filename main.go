@@ -62,6 +62,7 @@ func main() {
 
 	//Dispatch routes are defined
 	router.GET("/dispatch", routes.GetDispatch)
+	router.GET("/dispatch/entries", routes.GetDispatchEntries)
 	router.POST("/dispatch/new", routes.PostDispatchNew)
 
 	fmt.Println("Starting Server on Port: 4001")

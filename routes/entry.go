@@ -27,7 +27,7 @@ func GetEntry(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
 	if !res {
 		log.Println("Error in querying all products in Entries")
 	} else {
-		t := template.Must(template.ParseGlob("views/components/*.comp"))
+		t := template.Must(template.ParseGlob("views/components/navbar.comp"))
 		t.ParseFiles("views/entry.html")
 		t.ExecuteTemplate(w, "entry.html", p)
 	}

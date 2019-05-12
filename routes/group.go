@@ -14,7 +14,7 @@ import (
 
 //GetGroup Handler for route / method: GET
 func GetGroup(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	t := template.Must(template.ParseGlob("views/components/*.comp"))
+	t := template.Must(template.ParseGlob("views/components/navbar.comp"))
 	t.ParseFiles("views/group.html")
 	g, _ := model.GetGroups()
 	log.Print(g)

@@ -9,11 +9,11 @@ import (
 type StockEntry struct {
 	ID        int    `json:"id"`
 	Date      string `json:"date"`
-	BoxIn     int    `json:"box-in"`
-	PacketIn  int    `json:"packets-in"`
-	BoxOut    int    `json:"boxes-out"`
-	PacketOut int    `json:"packet-out"`
-	ProductID int    `json:"product-id"`
+	BoxIn     int    `json:"boxin"`
+	PacketIn  int    `json:"packetsin"`
+	BoxOut    int    `json:"boxesout"`
+	PacketOut int    `json:"packetout"`
+	ProductID int    `json:"productid"`
 }
 
 //SelectStockEntry select all stockentries for a given database
@@ -51,9 +51,11 @@ func SelectStockEntryDate(date string, productID int) (StockEntry, bool) {
 	}
 	if R.Next() {
 		err = R.Scan(&(se.ID), &(se.Date), &(se.BoxIn), &(se.PacketIn), &(se.BoxOut), &(se.PacketOut))
+		se.ProductID = productID
 		if err != nil {
 			log.Println("Error in Scanning a stock entry of Product:", productID)
 			log.Println(err)
+			log.Println(se)
 			return se, false
 		}
 	} else {

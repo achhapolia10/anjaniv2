@@ -20,3 +20,15 @@ func GetDispatchEntriesByDate(date string) []opdatabase.StockEntry {
 	}
 	return e
 }
+
+//NewDispatchEntry saves  a new Dispatch Entry
+func NewDispatchEntry(se opdatabase.StockEntry) bool {
+	res := DispatchAddStock(se)
+	return res
+}
+
+//DeleteDispatchEntry deletes a dispatch Entry
+func DeleteDispatchEntry(se opdatabase.StockEntry) bool {
+	res := DispatchDeleteStock(se)
+	return res
+}

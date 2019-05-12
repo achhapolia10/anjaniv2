@@ -17,14 +17,13 @@ var groups map[int]string
 
 //GetProducts Handler for route / method GET
 func GetProducts(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
-	if !(len(groups) > 0) {
-		groups = make(map[int]string)
-		gs, _ := model.GetGroups()
-		for _, g := range gs {
-			groups[g.Id] = g.Name
-		}
+
+	groups = make(map[int]string)
+	gs, _ := model.GetGroups()
+	for _, g := range gs {
+		groups[g.Id] = g.Name
 	}
-	t := template.Must(template.ParseGlob("views/components/*.comp"))
+	t := template.Must(template.ParseGlob("views/components/navbar.comp"))
 	t.Funcs(template.FuncMap{
 		"getGroupName": GetGroupName,
 	}).ParseFiles("views/products.html")
