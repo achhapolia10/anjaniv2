@@ -1,17 +1,10 @@
 {{range .}}
-{{if gt .BoxOut  0}}
+{{if shouldPrint .BoxOut .PacketOut}}
 <tr>
     <td>{{getProductName .ProductID}}</td>
     <td>{{.BoxOut}}</td>
     <td>{{.PacketOut}}</td>
-    <td><a href="/dipatch/delete?product={{.ProductID}}&date={{.Date}}"><button class="btn btn-warning">Remove</button></a></td>
-</tr>
-{{else if gt .PacketOut 0}}
-<tr>
-    <td>{{getProductName .ProductID}}</td>
-    <td>{{.BoxOut}}</td>
-    <td>{{.PacketOut}}</td>
-    <td><a href="/dipatch/delete?product={{.ProductID}}&date={{.Date}}"><button class="btn btn-warning">Remove</button></a></td>
+    <td><button class="btn btn-warning" onclick="onRemoveClick({{.ProductID}},{{.Date}});">Remove</button></td>
 </tr>
 {{end}}
 {{end}}

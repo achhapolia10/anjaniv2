@@ -12,6 +12,16 @@ function isDatePicked() {
   return Boolean(date.value);
 }
 
+function onRemoveClick(pid,date){
+  $.ajax({
+    type: "get",
+    url: "/dispatch/delete?date="+date+"&product="+pid,
+    success: function (response) {
+      createDispatchTable()
+    }
+  });
+}
+
 function onDispatchSubmit() {
   if (isDatePicked()) {
     product = document.getElementById("product-name").value.trim();
@@ -19,12 +29,13 @@ function onDispatchSubmit() {
     box = document.getElementById("box").value;
     packet = document.getElementById("packet").value;
     date = document.getElementById("date-picker").value;
+    console.log(date)
     if(i<0){
     $.ajax({
       type: "POST",
       url: "/dispatch/new",
       data: { product: product, box: box, packet: packet, date: date },
-      success: function (response) {
+      success: function (response) {$("#journal-table").html("")
         r = JSON.parse(response)
         if (r.status == 301) {
           createDispatchTable()
@@ -51,6 +62,7 @@ function clearForm() {
 }
 
 function createDispatchTable() {
+  $("#table-body").html("");
   date = document.getElementById("date-picker").value;
   tbody = document.getElementById("table-body")
   se = []
@@ -58,8 +70,6 @@ function createDispatchTable() {
     type: "GET",
     url: "/dispatch/entries?date=" + date,
     success: function (response) {
-          console.log(response)
-          console.log("d")
           $("#table-body").append(response)
     }
   })

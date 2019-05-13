@@ -2,6 +2,7 @@ package routes
 
 import (
 	"encoding/json"
+	"fmt"
 	"html/template"
 	"io"
 	"log"
@@ -32,7 +33,7 @@ func PostDispatchNew(w http.ResponseWriter, req *http.Request, _ httprouter.Para
 	productID, _ := strconv.Atoi(req.FormValue("product"))
 	box, _ := strconv.Atoi(req.FormValue("box"))
 	packet, _ := strconv.Atoi(req.FormValue("packet"))
-	date := req.FormValue("datev")
+	date := req.FormValue("date")
 	se := opdatabase.StockEntry{
 		0, date, 0, 0, box, packet, productID,
 	}
@@ -56,9 +57,30 @@ func GetDispatchEntries(w http.ResponseWriter, req *http.Request, _ httprouter.P
 	t := template.New("dispatch")
 	t.Funcs(template.FuncMap{
 		"getProductName": GetProductName,
+		"shouldPrint":    ShouldPrint,
 	}).ParseFiles("views/components/dispatch.comp")
 	t.ExecuteTemplate(w, "dispatch.comp", s)
 }
+
+//GetDispatchDelete delets an entry for date and product
+func GetDispatchDelete(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
+	date := req.URL.Query().Get("date")
+	productID, _ := strconv.Atoi(req.URL.Query().Get("product"))
+	res := model.DeleteDispatchEntry(date, productID)
+	if res {
+		r := Response{301, ""}
+		p, err := json.Marshal(r)
+		if err != nil {
+			fmt.Println("Errorin Marshalling response in GetDispatchDelete: ", err)
+		}
+		io.WriteString(w, string(p))
+	}
+}
+
+/*
+ *Functions for Function Maps used in templates
+ *
+ */
 
 func initializeProductsMap(p []opdatabase.Product) {
 	products = make(map[int]string)
@@ -70,4 +92,12 @@ func initializeProductsMap(p []opdatabase.Product) {
 //GetProductName returns name of Product for an id
 func GetProductName(id int) string {
 	return products[id]
+}
+
+//ShouldPrint returns name true if a product need to be print
+func ShouldPrint(bo int, po int) bool {
+	if bo == 0 && po == 0 {
+		return false
+	}
+	return true
 }

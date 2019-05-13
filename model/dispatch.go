@@ -16,6 +16,7 @@ func GetDispatchEntriesByDate(date string) []opdatabase.StockEntry {
 			log.Println("Error in GetDispatchEntriesByDate")
 			return e
 		}
+		BalanceStockEntries(&s)
 		e = append(e, s)
 	}
 	return e
@@ -28,7 +29,12 @@ func NewDispatchEntry(se opdatabase.StockEntry) bool {
 }
 
 //DeleteDispatchEntry deletes a dispatch Entry
-func DeleteDispatchEntry(se opdatabase.StockEntry) bool {
-	res := DispatchDeleteStock(se)
+func DeleteDispatchEntry(date string, productID int) bool {
+	s, res := opdatabase.SelectStockEntryDate(date, productID)
+	if res {
+		s.BoxOut = 0
+		s.PacketOut = 0
+		res = opdatabase.UpdateStockEntry(productID, s)
+	}
 	return res
 }

@@ -57,3 +57,23 @@ func DispatchDeleteStock(se opdatabase.StockEntry) bool {
 	opdatabase.UpdateStockEntry(se.ProductID, s)
 	return true
 }
+
+//BalanceStockEntries Balances the stock Entries
+func BalanceStockEntries(se *opdatabase.StockEntry) {
+	boxIn := se.BoxIn
+	packetIn := se.PacketIn
+	boxOut := se.BoxOut
+	packetOut := se.PacketOut
+	product, _ := opdatabase.SelectProductID(se.ProductID)
+	box := product.BoxQuantity
+	unitIn := boxIn*box + packetIn
+	boxIn = unitIn / box
+	packetIn = unitIn % box
+	unitOut := boxOut*box + packetOut
+	boxOut = unitOut / box
+	packetOut = unitOut % box
+	se.BoxIn = boxIn
+	se.PacketIn = packetIn
+	se.BoxOut = boxOut
+	se.PacketOut = packetOut
+}

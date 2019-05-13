@@ -64,6 +64,7 @@ func main() {
 	router.GET("/dispatch", routes.GetDispatch)
 	router.GET("/dispatch/entries", routes.GetDispatchEntries)
 	router.POST("/dispatch/new", routes.PostDispatchNew)
+	router.GET("/dispatch/delete", routes.GetDispatchDelete)
 
 	fmt.Println("Starting Server on Port: 4001")
 	log.Println(http.ListenAndServe(":4001", router))
