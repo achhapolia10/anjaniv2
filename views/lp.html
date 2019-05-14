@@ -5,6 +5,7 @@
     <script src="http://localhost:4001/public/js/jquery-3.4.1.min.js"></script>
     <script src="http://localhost:4001/public/js/bootstrap.min.js"></script>
     <script src="http://localhost:4001/public/js/tooltip.min.js"></script>
+    <script src="http://localhost:4001/public/js/lp.js"></script>
     <link rel="stylesheet" href="http://localhost:4001/public/css/bootstrap.min.css">
 
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -15,9 +16,38 @@
     {{template "navbar"}}
     <div class="container">
         <div class= "row">
-            <div class="col">
-                Hey there This is the Labour Payment
+            <div class="col-md-4">
+                <div class ="form-group">
+                <label for="from-date">From Date</label>
+                <input type="date" class="form-control" required onchange="onFromDateChange();" name="from-date" id="from-date">
+                </div>
             </div>
+            <div class="col-md-2 offset-md-1" >
+                <button onclick="onSubmitClick(event);" class="btn btn-primary">Submit</button>
+            </div>
+            <div class="col-md-4">
+                <div class ="form-group">
+                <label for="to-date">To Date</label>
+                <input type="date" class="form-control" required onchange="onToDateChange();" name="to-date" id="to-date">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <table class="table">
+                <thead>
+                    <th>Labour Name</th>
+                    <th><span id="day-1">Saturday</span></th>
+                    <th><span id="day-2">Sunday</span></th>
+                    <th><span id="day-3">Monday</span></th>
+                    <th><span id="day-4">Tuesday</span></th>
+                    <th><span id="day-5">Wednesday</span></th>
+                    <th><span id="day-6">Thurday</span></th>
+                    <th><span id="day-7">Sunday</span></th>
+                    <th><span id="total">Total</span></th>
+                </thead>
+                <tbody id="lp-body">
+                </tbody>
+            </table>
         </div>
     </div>
 </body>
