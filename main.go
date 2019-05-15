@@ -53,6 +53,7 @@ func main() {
 
 	//Labour Payment routes are defined
 	router.GET("/labourpayment", routes.GetLabourPayment)
+	router.POST("/labourpayment", routes.PostLabourPayment)
 
 	//Entry routes are defined
 	router.GET("/entry", routes.GetEntry)

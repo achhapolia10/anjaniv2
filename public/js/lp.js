@@ -1,4 +1,17 @@
 function onSubmitClick(){
+    to = document.getElementById("to-date").value
+    from = document.getElementById("from-date").value
+    if(from !=="" && to != ""){
+    $.ajax({
+        type: "POST",
+        url: "/labourpayment",
+        data: {from:from, to : to},
+        success: function (response) {
+            console.log(response)
+        }
+    }); } else {
+        window.alert("Pick From and to Date")
+    }
 }
 
 function onFromDateChange(){
