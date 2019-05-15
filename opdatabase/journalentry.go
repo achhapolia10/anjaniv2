@@ -80,3 +80,29 @@ func DeleteJournalEntry(productID int, id int) {
 		log.Println(err)
 	}
 }
+
+//SelectJournalEntryMap Selects all entries of a Pariticular Date
+func SelectJournalEntryMap(date string, productID int) (map[string]JournalEntry, bool) {
+	je := make(map[string]JournalEntry)
+	query := "SELECT * FROM " + strconv.Itoa(productID) + "journal WHERE date='" + date +
+		"' ORDER BY id DESC;"
+	r, err := db.Query(query)
+	if err != nil {
+		log.Println(err)
+		log.Println("Error in Selecting Journal Entries of Product ID:", productID)
+		return je, false
+	}
+	for r.Next() {
+		var e JournalEntry
+		err = r.Scan(&(e.ID), &(e.Labour), &(e.Date), &(e.Box), &(e.Packet))
+		if err != nil {
+			log.Println(err)
+			return je, false
+		}
+
+		e.ProductID = productID
+		je[e.Labour] = e
+	}
+
+	return je, true
+}

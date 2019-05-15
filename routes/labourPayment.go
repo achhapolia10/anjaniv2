@@ -25,8 +25,13 @@ func PostLabourPayment(w http.ResponseWriter, req *http.Request, _ httprouter.Pa
 	if err != nil {
 		log.Println("Error in PostLabourPayment: ", err)
 	}
-	fromDate := req.FormValue("from")
-	toDate := req.FormValue("to")
-	lp, _ := model.GetLabourPayment(fromDate, toDate)
+	day1 := req.FormValue("day1")
+	day2 := req.FormValue("day2")
+	day3 := req.FormValue("day3")
+	day4 := req.FormValue("day4")
+	day5 := req.FormValue("day5")
+	day6 := req.FormValue("day6")
+	day7 := req.FormValue("day7")
+	lp, _ := model.GetLabourPayment(day1, day2, day3, day4, day5, day6, day7)
 	io.WriteString(w, lp)
 }
