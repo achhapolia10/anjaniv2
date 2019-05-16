@@ -25,3 +25,5 @@ opdatabase  : Functions to perform CRUD on database
 routes      : Handling various routes
 views       : Views 
 public      : Static Files for views 
+
+Thinking of reducing operations and saving time in Labour Payment by introducing more variables

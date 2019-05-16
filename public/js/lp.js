@@ -40,6 +40,7 @@ function onToDateChange(){
         from.setDate(from.getDate()-1)
         }
     }
+    days= days.reverse()
     toDate = document.getElementById("from-date")
     toDate.value=from.toISOString().slice(0,10);
 }

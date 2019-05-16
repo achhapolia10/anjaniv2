@@ -85,6 +85,27 @@ func SelectProduct() ([]Product, bool) {
 	return p, true
 }
 
+//SelectProductMap get products from the database
+func SelectProductMap() (map[int]Product, bool) {
+	p := make(map[int]Product)
+	query := `SELECT * FROM product;`
+	r, err := db.Query(query)
+	if err != nil {
+		log.Println("Can't get the products from the product table")
+		log.Println(err)
+		return p, false
+	}
+	for r.Next() {
+		var (
+			product Product
+		)
+		r.Scan(&(product.ID), &(product.Name), &(product.Group), &(product.PacketQuantity), &(product.BoxQuantity),
+			&(product.Price), &(product.OpeningBox), &(product.OpeningPacket))
+		p[product.ID] = product
+	}
+	return p, true
+}
+
 //SelectProductID get a single product form the database
 func SelectProductID(id int) (Product, bool) {
 	var product Product
@@ -206,8 +227,6 @@ func CreateProductStock(id int64) bool {
 	query := "CREATE TABLE " + strconv.FormatInt(id, 10) + "stock(" +
 		`id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 		date VARCHAR(50) ,
-		boxIn INT NOT NULL,
-		packetIn INT NOT NULL,
 		boxOut INT NOT NULL,
 		packetOut INT NOT NULL);`
 	_, err := db.Exec(query)

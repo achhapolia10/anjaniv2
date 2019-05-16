@@ -1,7 +1,7 @@
 package model
 
 import (
-	"fmt"
+	"sort"
 	"strconv"
 	"strings"
 
@@ -10,9 +10,9 @@ import (
 
 //individualJournal stores the individual Journal For Each Day
 type individualJournal struct {
-	product opdatabase.Product
-	date    date
-	je      map[string]opdatabase.JournalEntry
+	productID int
+	date      date
+	je        map[string]opdatabase.JournalEntry
 }
 
 //LPEntry is a Structure for a Labour Payment Entry
@@ -41,7 +41,7 @@ type date struct {
 //GetLabourPayment returns the Labour Payment
 func GetLabourPayment(days ...string) (string, bool) {
 	var dates []date
-	products, err := opdatabase.SelectProduct()
+	products, err := opdatabase.SelectProductMap()
 	if !err {
 		return "", false
 	}
@@ -54,13 +54,13 @@ func GetLabourPayment(days ...string) (string, bool) {
 }
 
 //generateLabourPayment generates a labour payment
-func generateLabourPayment(d []date, p []opdatabase.Product) {
+func generateLabourPayment(d []date, p map[int]opdatabase.Product) {
 	var jes []individualJournal
 	for _, date := range d {
 		for _, product := range p {
 			je, _ := opdatabase.SelectJournalEntryMap(date.getString(), product.ID)
 			journal := individualJournal{
-				product,
+				product.ID,
 				date,
 				je,
 			}
@@ -70,8 +70,21 @@ func generateLabourPayment(d []date, p []opdatabase.Product) {
 	getLabourNames(&jes)
 }
 
-func getLabourNames(jes *[]individualJournal) {
-	fmt.Print((*jes)[0].je["QWE"])
+func getLabourNames(jes *[]individualJournal) []string {
+	var labours []string
+	fmap := make(map[string]struct {
+		present bool
+	})
+	for _, je := range *jes {
+		for k := range je.je {
+			if !fmap[k].present {
+				fmap[k] = struct{ present bool }{true}
+				labours = append(labours, k)
+			}
+		}
+	}
+	sort.Strings(labours)
+	return labours
 }
 
 /* Functions to perform Various tasks for Labour Payment
