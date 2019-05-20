@@ -9,7 +9,8 @@ function onSubmitClick(){
         url: "/labourpayment",
         data: {day1: days[0],day2: days[1],day3: days[2],day4: days[3],day5: days[4],day6: days[5],day7: days[6]},
         success: function (response) {
-            console.log(response)
+            res=JSON.parse(response)
+            createLabourPaymentTable(res.data)
         }
     }); } else {
         window.alert("Pick From and to Date")
@@ -43,4 +44,7 @@ function onToDateChange(){
     days= days.reverse()
     toDate = document.getElementById("from-date")
     toDate.value=from.toISOString().slice(0,10);
+}
+
+function createLabourPaymentTable(arr){
 }

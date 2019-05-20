@@ -26,4 +26,4 @@ routes      : Handling various routes
 views       : Views 
 public      : Static Files for views 
 
-Thinking of reducing operations and saving time in Labour Payment by introducing more variables
+Thinking of reducing operations and saving time in Labour Payment by introducing more custom types
