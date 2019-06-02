@@ -76,7 +76,7 @@ func GetEditProduct(w http.ResponseWriter, req *http.Request, p httprouter.Param
 			if !res {
 				fmt.Println("Error in Getting Product")
 			} else {
-				t := template.Must(template.ParseGlob("views/components/*.comp"))
+				t := template.Must(template.ParseGlob("views/components/navbar.comp"))
 				t.ParseFiles("views/editProduct.html")
 				t.Funcs(template.FuncMap{
 					"getGroupName": GetGroupName,
@@ -134,7 +134,7 @@ func PostEditProduct(w http.ResponseWriter, req *http.Request, params httprouter
 //GetNewProduct Handler for route / method GET
 func GetNewProduct(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
 
-	t := template.Must(template.ParseGlob("views/components/*.comp"))
+	t := template.Must(template.ParseGlob("views/components/navbar.comp"))
 	t.ParseFiles("views/newProduct.html")
 	g, _ := model.GetGroups()
 	t.ExecuteTemplate(w, "newProduct.html", g)

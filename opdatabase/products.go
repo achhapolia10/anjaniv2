@@ -227,6 +227,8 @@ func CreateProductStock(id int64) bool {
 	query := "CREATE TABLE " + strconv.FormatInt(id, 10) + "stock(" +
 		`id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 		date VARCHAR(50) ,
+		boxIn INT NOT NULL,
+		packetIn INT NOT NULL,
 		boxOut INT NOT NULL,
 		packetOut INT NOT NULL);`
 	_, err := db.Exec(query)
