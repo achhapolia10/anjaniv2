@@ -68,6 +68,7 @@ function updateTableDays(){
     
 }
 function getDay(date){
+    
     switch(date.getDay()){
         case 0:
             return "Sunday"

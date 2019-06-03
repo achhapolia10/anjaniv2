@@ -57,7 +57,7 @@ func GetDispatchEntries(w http.ResponseWriter, req *http.Request, _ httprouter.P
 	t := template.New("dispatch")
 	t.Funcs(template.FuncMap{
 		"getProductName": GetProductName,
-		"shouldPrint":    ShouldPrint,
+		"shouldPrint":    ShouldPrintD,
 	}).ParseFiles("views/components/dispatch.comp")
 	t.ExecuteTemplate(w, "dispatch.comp", s)
 }
@@ -94,8 +94,8 @@ func GetProductName(id int) string {
 	return products[id]
 }
 
-//ShouldPrint returns name true if a product need to be print
-func ShouldPrint(bo int, po int) bool {
+//ShouldPrintD returns name true if a product need to be print
+func ShouldPrintD(bo int, po int) bool {
 	if bo == 0 && po == 0 {
 		return false
 	}

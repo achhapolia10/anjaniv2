@@ -1,6 +1,7 @@
 package model
 
 import (
+	"math"
 	"sort"
 	"strconv"
 	"strings"
@@ -25,7 +26,30 @@ type LPEntry struct {
 	Day5   int     `json:"day5"`
 	Day6   int     `json:"day6"`
 	Day7   int     `json:"day7"`
+	TGlass int     `json:"tglass"`
 	Total  float64 `json:"total"`
+}
+
+//LPEntries wrapper for LPEntry Array
+type LPEntries []LPEntry
+
+//Len length
+func (l LPEntries) Len() int { return len(l) }
+
+//Swap swap
+func (l LPEntries) Swap(i, j int) { l[i], l[j] = l[j], l[i] }
+
+//Less less
+func (l LPEntries) Less(i, j int) bool { return l[i].Labour < l[j].Labour }
+
+//TotalAmmount total ammount
+func (l LPEntries) TotalAmmount() float64 {
+	var t float64
+	t = 0
+	for _, a := range l {
+		t += math.Round(a.Total)
+	}
+	return t
 }
 
 //date is a structure for date
@@ -36,7 +60,7 @@ type date struct {
 }
 
 //GetLabourPayment returns the Labour Payment
-func GetLabourPayment(days ...string) []LPEntry {
+func GetLabourPayment(days ...string) LPEntries {
 	var dates []date
 	products, err := opdatabase.SelectProductMap()
 	LPEntries := make([]LPEntry, 0)
@@ -59,7 +83,7 @@ func generateLabourPayment(d []date, p map[int]opdatabase.Product) map[string]LP
 	var jes []individualJournal
 
 	emptyJournal := opdatabase.JournalEntry{0, "", "", 0, 0, 0}
-	emptyLPEntry := LPEntry{"", 0, 0, 0, 0, 0, 0, 0, 0.0}
+	emptyLPEntry := LPEntry{"", 0, 0, 0, 0, 0, 0, 0, 0, 0.0}
 	LPEntries := make(map[string]LPEntry)
 	for _, date := range d {
 		for _, product := range p {
@@ -77,7 +101,7 @@ func generateLabourPayment(d []date, p map[int]opdatabase.Product) map[string]LP
 		for _, je := range jes {
 			if entry := je.je[labour]; entry != emptyJournal {
 				if LPEntries[labour] == emptyLPEntry {
-					tempLPEntry := LPEntry{labour, 0, 0, 0, 0, 0, 0, 0, 0.0}
+					tempLPEntry := LPEntry{labour, 0, 0, 0, 0, 0, 0, 0, 0, 0.0}
 					LPEntries[labour] = tempLPEntry
 				}
 				tempLPEntry := LPEntries[labour]
@@ -86,36 +110,43 @@ func generateLabourPayment(d []date, p map[int]opdatabase.Product) map[string]LP
 				case d[0]:
 					glasses := ((entry.Box * product.BoxQuantity) + entry.Packet) * product.PacketQuantity
 					tempLPEntry.Day1 += glasses
+					tempLPEntry.TGlass += glasses
 					tempLPEntry.Total += float64(glasses) * product.Price / 1000.0
 					break
 				case d[1]:
 					glasses := ((entry.Box * product.BoxQuantity) + entry.Packet) * product.PacketQuantity
 					tempLPEntry.Day2 += glasses
+					tempLPEntry.TGlass += glasses
 					tempLPEntry.Total += float64(glasses) * product.Price / 1000.0
 					break
 				case d[2]:
 					glasses := ((entry.Box * product.BoxQuantity) + entry.Packet) * product.PacketQuantity
 					tempLPEntry.Day3 += glasses
+					tempLPEntry.TGlass += glasses
 					tempLPEntry.Total += float64(glasses) * product.Price / 1000.0
 					break
 				case d[3]:
 					glasses := ((entry.Box * product.BoxQuantity) + entry.Packet) * product.PacketQuantity
 					tempLPEntry.Day4 += glasses
+					tempLPEntry.TGlass += glasses
 					tempLPEntry.Total += float64(glasses) * product.Price / 1000.0
 					break
 				case d[4]:
 					glasses := ((entry.Box * product.BoxQuantity) + entry.Packet) * product.PacketQuantity
 					tempLPEntry.Day5 += glasses
+					tempLPEntry.TGlass += glasses
 					tempLPEntry.Total += float64(glasses) * product.Price / 1000.0
 					break
 				case d[5]:
 					glasses := ((entry.Box * product.BoxQuantity) + entry.Packet) * product.PacketQuantity
 					tempLPEntry.Day6 += glasses
+					tempLPEntry.TGlass += glasses
 					tempLPEntry.Total += float64(glasses) * product.Price / 1000.0
 					break
 				case d[6]:
 					glasses := ((entry.Box * product.BoxQuantity) + entry.Packet) * product.PacketQuantity
 					tempLPEntry.Day7 += glasses
+					tempLPEntry.TGlass += glasses
 					tempLPEntry.Total += float64(glasses) * product.Price / 1000.0
 					break
 				}

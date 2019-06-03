@@ -1,0 +1,30 @@
+body{
+    text-align: center
+}
+.heading{
+    width: 295mm
+}
+table{
+    border-collapse: collapse
+}
+
+#lp-table tr th{
+    border: 1px solid black;
+
+}
+#lp-table tr td{
+    border: 1px solid black;
+}
+
+.signature{
+    width: 307px;
+    height: 86px;
+}
+
+.main-table{
+    margin : 20px 10px 0 15px;
+}
+
+.name-col{
+    width:200px
+}
