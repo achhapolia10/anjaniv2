@@ -35,7 +35,7 @@ func PostDispatchNew(w http.ResponseWriter, req *http.Request, _ httprouter.Para
 	packet, _ := strconv.Atoi(req.FormValue("packet"))
 	date := req.FormValue("date")
 	se := opdatabase.StockEntry{
-		0, date, 0, 0, box, packet, productID,
+		ID: 0, Date: date, BoxIn: 0, PacketIn: 0, BoxOut: box, PacketOut: packet, ProductID: productID,
 	}
 	res := model.NewDispatchEntry(se)
 	if res {

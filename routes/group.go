@@ -30,7 +30,7 @@ func PostGroupNew(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	gn := r.FormValue("group-name-form")
 	if gn != "" {
 		g := opdatabase.Group{
-			0, gn,
+			Id: 0, Name: gn,
 		}
 		model.NewGroup(g)
 	} else {
@@ -43,7 +43,7 @@ func PostGroupNew(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 func PostGroupDelete(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	id, _ := strconv.Atoi(params.ByName("id"))
 	g := opdatabase.Group{
-		id, "er",
+		Id: id, Name: "er",
 	}
 	model.DeleteGroup(g)
 	http.Redirect(w, r, "/groups", 301)
@@ -59,7 +59,7 @@ func PostGroupEdit(w http.ResponseWriter, r *http.Request, params httprouter.Par
 	gn := r.FormValue("group-name-form")
 	if gn != "" {
 		g := opdatabase.Group{
-			id, gn,
+			Id: id, Name: gn,
 		}
 		model.EditGroup(g)
 	} else {

@@ -1,3 +1,4 @@
+//Package routes For Products
 package routes
 
 import (
@@ -116,7 +117,7 @@ func PostEditProduct(w http.ResponseWriter, req *http.Request, params httprouter
 			ob, err = strconv.Atoi(req.FormValue("obox"))
 			pr, err = strconv.ParseFloat(req.FormValue("price"), 32)
 			product := opdatabase.Product{
-				i, n, p, b, pr, ob, op, 0, //Need to be done
+				ID: i, Name: n, PacketQuantity: p, BoxQuantity: b, Price: pr, OpeningBox: ob, OpeningPacket: op, Group: 0,
 			}
 			result := opdatabase.EditProduct(i, product)
 			if result {
@@ -157,7 +158,8 @@ func PostNewProduct(w http.ResponseWriter, req *http.Request, _ httprouter.Param
 	pr, err = strconv.ParseFloat(req.FormValue("price"), 32)
 	g, err = strconv.Atoi(req.FormValue("product-group"))
 	product := opdatabase.Product{
-		0, n, p, b, pr, ob, op, g, //need to be done
+		ID: 0, Name: n, PacketQuantity: p,
+		BoxQuantity: b, Price: pr, OpeningBox: ob, OpeningPacket: op, Group: g,
 	}
 	opdatabase.AddProduct(product)
 	http.Redirect(w, req, "/products", 301)

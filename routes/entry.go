@@ -40,12 +40,12 @@ func PostEntryNew(w http.ResponseWriter, req *http.Request, _ httprouter.Params)
 	packet, _ := strconv.Atoi(q["packet"][0])
 	id, _ := strconv.Atoi(q["product"][0])
 	je := opdatabase.JournalEntry{
-		0,
-		q["labour"][0],
-		q["date"][0],
-		box,
-		packet,
-		id,
+		ID:        0,
+		Labour:    q["labour"][0],
+		Date:      q["date"][0],
+		Box:       box,
+		Packet:    packet,
+		ProductID: id,
 	}
 	model.CreateJournalEntry(je)
 	res := Response{
