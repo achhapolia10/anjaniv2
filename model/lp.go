@@ -82,7 +82,7 @@ func GetLabourPayment(days ...string) LPEntries {
 func generateLabourPayment(d []date, p map[int]opdatabase.Product) map[string]LPEntry {
 	var jes []individualJournal
 
-	emptyJournal := opdatabase.JournalEntry{0, "", "", 0, 0, 0}
+	emptyJournal := opdatabase.JournalEntry{ID: 0, Labour: "", Date: "", Box: 0, Packet: 0, ProductID: 0}
 	emptyLPEntry := LPEntry{"", 0, 0, 0, 0, 0, 0, 0, 0, 0.0}
 	LPEntries := make(map[string]LPEntry)
 	for _, date := range d {
