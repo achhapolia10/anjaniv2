@@ -5,6 +5,7 @@
     <script src="http://localhost:4001/public/js/jquery-3.4.1.min.js"></script>
     <script src="http://localhost:4001/public/js/bootstrap.min.js"></script>
     <script src="http://localhost:4001/public/js/tooltip.min.js"></script>
+    <script src="http://localhost:4001/public/js/stock.js"></script>
     <link rel="stylesheet" href="http://localhost:4001/public/css/bootstrap.min.css">
 
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -15,8 +16,22 @@
     {{template "navbar"}}
     <div class="container">
         <div class= "row">
-            <div class="col">
-                Hey there This is the stock
+            <div class="col-md-5">
+                <div class="form-group">
+                    <label for="from-date" >From Date:</label>
+                    <input type="date" onchange="onFromDateChange(event);" id="from-date" class="form-control" >
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="form-group">
+                    <label for="to-date">To Date:</label>
+                    <input type="date"  onchange="onToDateChange(event);"id="to-date" class="form-control" >
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <button class="btn btn-primary" onclick="onSubmitClick();" id = "submit">Submit</button>
+                </div>
             </div>
         </div>
     </div>

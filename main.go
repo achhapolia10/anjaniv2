@@ -50,6 +50,7 @@ func main() {
 
 	//Stock routes are defined
 	router.GET("/stock", routes.GetStock)
+	router.POST("/stock", routes.PostStock)
 
 	//Labour Payment routes are defined
 	router.GET("/labourpayment", routes.GetLabourPayment)
