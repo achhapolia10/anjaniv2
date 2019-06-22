@@ -58,7 +58,8 @@ func AddProduct(p Product) {
 		log.Printf("Added product at index: %v", id)
 		r1 := CreateProductJournal(id)
 		r2 := CreateProductStock(id)
-		if !(r1 && r2) {
+		r3 := CreateProductMonth(id)
+		if !(r1 && r2 && r3) {
 			DeleteProduct(int(id))
 		}
 	}
@@ -177,6 +178,7 @@ func DeleteProduct(productID int) bool {
 	fmt.Println("Delted Product from id ", productID)
 	DeleteProductJournal(productID)
 	DeleteProductStock(productID)
+	DeleteProductMonth(productID)
 	return true
 
 }
@@ -251,5 +253,37 @@ func DeleteProductStock(id int) bool {
 		return false
 	}
 	log.Println("Deleted a Stock Table for the product with id:", id)
+	return true
+}
+
+//CreateProductMonth creates a Stock Table for each product [id]stock
+func CreateProductMonth(id int64) bool {
+	query := "CREATE TABLE " + strconv.FormatInt(id, 10) + "month(" +
+		`id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+		date VARCHAR(50) ,
+		boxIn INT NOT NULL,
+		packetIn INT NOT NULL,
+		boxOut INT NOT NULL,
+		packetOut INT NOT NULL);`
+	_, err := db.Exec(query)
+	if err != nil {
+		log.Println(err)
+		log.Println("Error creating Month Table for the product with id:", id)
+		return false
+	}
+	log.Println("Created a Month Table for the product with id:", id)
+	return true
+}
+
+//DeleteProductMonth deletes a Stock Table for each product [id]stock
+func DeleteProductMonth(id int) bool {
+	query := "DROP TABLE " + strconv.Itoa(id) + "month;"
+	_, err := db.Exec(query)
+	if err != nil {
+		log.Println(err)
+		log.Println("Error in Month Stock Table for the product with id:", id)
+		return false
+	}
+	log.Println("Deleted Month Table for the product with id:", id)
 	return true
 }

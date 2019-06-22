@@ -27,16 +27,27 @@ Calculating the stocks for  a particular date
 **/
 
 //ProductStock retruns the data about the stock
-func ProductStock(fDate, tdate, fiscal time.Time, product opdatabase.Product) {
+func ProductStock(fDate, tDate, start time.Time, product opdatabase.Product) {
 	obox, opacket := product.OpeningBox, product.OpeningPacket
-
 	// Calculation of the opening boxes from the fiscal to fDate
-
+	for start.Before(fDate) {
+		f := parseTime(start)
+		se, _ := opdatabase.SelectStockEntryDate(f.getString(), product.ID)
+		obox += se.BoxIn - se.BoxOut
+		opacket += se.PacketIn - se.PacketOut
+		start = start.AddDate(0, 0, 1)
+	}
+	cbox, cpacket := obox, opacket
 	//Calculation of the stock from fdate to tdate
+	for start.Before(tDate) {
+		f := parseTime(start)
+		se, _ := opdatabase.SelectStockEntryDate(f.getString(), product.ID)
+		cbox += se.BoxIn - se.BoxOut
+		cpacket += se.PacketIn - se.PacketOut
+		start = start.AddDate(0, 0, 1)
+	}
 
-	//Calculation of the final stock
-
-	fmt.Println(obox, opacket, fiscal)
+	fmt.Println(obox, opacket, start)
 
 }
 
@@ -69,5 +80,4 @@ func getFiscal(t time.Time) time.Time {
 		return time.Date(t.Year()-1, time.April, 1, 0, 0, 0, 0, location)
 	}
 	return time.Date(t.Year(), time.April, 1, 0, 0, 0, 0, location)
-
 }

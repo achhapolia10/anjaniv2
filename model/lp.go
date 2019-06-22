@@ -238,7 +238,6 @@ func (d *date) getMonth() time.Month {
 		return time.January
 
 	}
-	return time.January
 }
 
 //pad and add a 0 in number if less than 10

@@ -14,6 +14,7 @@ func DeleteJournalEntry(id int, productID int) {
 	if res {
 		opdatabase.DeleteJournalEntry(productID, id)
 		JournalDeleteStock(je)
+		JournalDeleteMonth(je)
 	}
 }
 
@@ -21,4 +22,5 @@ func DeleteJournalEntry(id int, productID int) {
 func CreateJournalEntry(je opdatabase.JournalEntry) {
 	opdatabase.NewJournalEntry(je)
 	JournalAddStock(je)
+	JournalAddMonth(je)
 }
