@@ -1,7 +1,9 @@
 package routes
 
 import (
+	"encoding/json"
 	"html/template"
+	"log"
 	"net/http"
 
 	"github.com/achhapolia10/anjaniv2/model"
@@ -22,5 +24,10 @@ func PostStock(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
 	fromDate := req.FormValue("fdate")
 	toDate := req.FormValue("tdate")
 	stockData := model.AllStock(fromDate, toDate)
-	w.Write([]byte(stockData))
+	b, err := json.Marshal(stockData)
+	if err != nil {
+		log.Printf("Error in Marshalling stock data: %v", err)
+		return
+	}
+	w.Write(b)
 }

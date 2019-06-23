@@ -3,7 +3,6 @@
 package model
 
 import (
-	"fmt"
 	"log"
 	"time"
 
@@ -12,10 +11,15 @@ import (
 
 //Stock struct for the stock data
 type Stock struct {
-	OBox    int
-	OPacket int
-	CBox    int
-	CPacket int
+	OBox      int                `json:"obox"`
+	OPacket   int                `json:"opacket"`
+	InBox     int                `json:"inbox"`
+	OutBox    int                `json:"outbox"`
+	InPacket  int                `json:"inpacket"`
+	OutPacket int                `json:"outpackate"`
+	CBox      int                `json:"cbox"`
+	CPacket   int                `json:"cpacket"`
+	Product   opdatabase.Product `json:"product"`
 }
 
 /**
@@ -27,32 +31,84 @@ Calculating the stocks for  a particular date
 **/
 
 //ProductStock retruns the data about the stock
-func ProductStock(fDate, tDate, start time.Time, product opdatabase.Product) {
-	obox, opacket := product.OpeningBox, product.OpeningPacket
-	// Calculation of the opening boxes from the fiscal to fDate
-	for start.Before(fDate) {
-		f := parseTime(start)
-		se, _ := opdatabase.SelectStockEntryDate(f.getString(), product.ID)
-		obox += se.BoxIn - se.BoxOut
-		opacket += se.PacketIn - se.PacketOut
-		start = start.AddDate(0, 0, 1)
+func ProductStock(fDate, tDate, start time.Time, product opdatabase.Product) Stock {
+
+	s := Stock{
+		OBox:      0,
+		OPacket:   0,
+		InBox:     0,
+		OutBox:    0,
+		CBox:      0,
+		CPacket:   0,
+		InPacket:  0,
+		OutPacket: 0,
+		Product:   product,
 	}
-	cbox, cpacket := obox, opacket
+
+	// Calculation of the opening boxes from the fiscal to fDate
+	flag := true //Flag is for the Month Check
+	for start.Before(fDate) {
+		var temp time.Time
+		if flag {
+			temp = start.AddDate(0, 1, -1)
+
+			if temp.Before(fDate) {
+				d := parseTime(start)
+				me, _ := opdatabase.SelectMonthEntryDate(d.getString(), product.ID)
+				s.OBox = s.OBox + me.BoxIn - me.BoxOut
+				s.OPacket = s.OPacket + me.PacketIn - me.PacketOut
+				start = temp.AddDate(0, 0, 1)
+			} else {
+				flag = false
+			}
+		} else {
+			d := parseTime(start)
+			se, _ := opdatabase.SelectStockEntryDate(d.getString(), product.ID)
+			s.OBox = s.OBox + se.BoxIn - se.BoxOut
+			s.OPacket = s.OPacket + se.PacketIn - se.PacketOut
+			start = start.AddDate(0, 0, 1)
+		}
+	}
+
 	//Calculation of the stock from fdate to tdate
 	for start.Before(tDate) {
-		f := parseTime(start)
-		se, _ := opdatabase.SelectStockEntryDate(f.getString(), product.ID)
-		cbox += se.BoxIn - se.BoxOut
-		cpacket += se.PacketIn - se.PacketOut
-		start = start.AddDate(0, 0, 1)
+		var temp time.Time
+		if flag {
+			temp = start.AddDate(0, 1, -1)
+
+			if temp.Before(tDate) {
+				d := parseTime(start)
+				me, _ := opdatabase.SelectMonthEntryDate(d.getString(), product.ID)
+				s.InBox = s.InBox + me.BoxIn
+				s.OutBox = s.OutBox + me.BoxOut
+				s.InPacket = s.OutBox + me.BoxOut
+				s.OutPacket = s.OutPacket + me.PacketOut
+				start = temp.AddDate(0, 0, 1)
+			} else {
+				flag = false
+			}
+		} else {
+			d := parseTime(start)
+			se, _ := opdatabase.SelectStockEntryDate(d.getString(), product.ID)
+			s.InBox = s.InBox + se.BoxIn
+			s.OutBox = s.OutBox + se.BoxOut
+			s.InPacket = s.OutBox + se.BoxOut
+			s.OutPacket = s.OutPacket + se.PacketOut
+			start = start.AddDate(0, 0, 1)
+			if start.Day() == 1 {
+				flag = true
+			}
+		}
+		s.CBox = s.OBox + s.InBox - s.OutBox
+		s.CPacket = s.OPacket + s.InPacket - s.OutPacket
 	}
-
-	fmt.Println(obox, opacket, start)
-
+	return s
 }
 
 //AllStock Returns the data for all products
-func AllStock(f, t string) string {
+func AllStock(f, t string) map[int]Stock {
+
+	stocks := make(map[int]Stock)
 
 	//Product List
 	products, res := opdatabase.SelectProduct()
@@ -64,20 +120,10 @@ func AllStock(f, t string) string {
 	from, to := parseDate(f), parseDate(t)
 	fromDate := time.Date(from.year, from.getMonth(), from.day, 0, 0, 0, 0, time.Now().Location())
 	toDate := time.Date(to.year, to.getMonth(), to.day, 0, 0, 0, 0, time.Now().Location())
-	fiscal := getFiscal(fromDate)
+	fiscal := time.Date(2019, time.April, 1, 0, 0, 0, 0, time.Now().Location())
 
 	for _, product := range products {
-		ProductStock(fromDate, toDate, fiscal, product)
+		stocks[product.ID] = ProductStock(fromDate, toDate, fiscal, product)
 	}
-	return fmt.Sprintln(from, to)
-}
-
-//getFiscal returns the date the fical year starts for the date
-func getFiscal(t time.Time) time.Time {
-	location := time.Now().Location()
-	month := int(t.Month())
-	if month < 4 {
-		return time.Date(t.Year()-1, time.April, 1, 0, 0, 0, 0, location)
-	}
-	return time.Date(t.Year(), time.April, 1, 0, 0, 0, 0, location)
+	return stocks
 }
