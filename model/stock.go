@@ -16,7 +16,7 @@ type Stock struct {
 	InBox     int                `json:"inbox"`
 	OutBox    int                `json:"outbox"`
 	InPacket  int                `json:"inpacket"`
-	OutPacket int                `json:"outpackate"`
+	OutPacket int                `json:"outpacket"`
 	CBox      int                `json:"cbox"`
 	CPacket   int                `json:"cpacket"`
 	Product   opdatabase.Product `json:"product"`
@@ -34,8 +34,8 @@ Calculating the stocks for  a particular date
 func ProductStock(fDate, tDate, start time.Time, product opdatabase.Product) Stock {
 
 	s := Stock{
-		OBox:      0,
-		OPacket:   0,
+		OBox:      product.OpeningBox,
+		OPacket:   product.OpeningPacket,
 		InBox:     0,
 		OutBox:    0,
 		CBox:      0,
@@ -123,7 +123,29 @@ func AllStock(f, t string) map[int]Stock {
 	fiscal := time.Date(2019, time.April, 1, 0, 0, 0, 0, time.Now().Location())
 
 	for _, product := range products {
-		stocks[product.ID] = ProductStock(fromDate, toDate, fiscal, product)
+		s := ProductStock(fromDate, toDate, fiscal, product)
+		s.Balance()
+		stocks[product.ID] = s
 	}
 	return stocks
+}
+
+//Balance Balances the stock details
+func (s *Stock) Balance() {
+	s.OPacket += s.OBox * s.Product.BoxQuantity
+	s.OBox = s.OPacket / s.Product.BoxQuantity
+	s.OPacket = s.OPacket % s.Product.BoxQuantity
+
+	s.InPacket += s.InBox * s.Product.BoxQuantity
+	s.InBox = s.InPacket / s.Product.BoxQuantity
+	s.InPacket = s.InPacket % s.Product.BoxQuantity
+
+	s.OutPacket += s.OutPacket * s.Product.BoxQuantity
+	s.OutPacket = s.OutPacket / s.Product.BoxQuantity
+	s.OutPacket = s.OutPacket % s.Product.BoxQuantity
+
+	s.CPacket += s.CPacket * s.Product.BoxQuantity
+	s.CPacket = s.CPacket / s.Product.BoxQuantity
+	s.CPacket = s.CPacket % s.Product.BoxQuantity
+
 }

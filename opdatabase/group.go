@@ -53,6 +53,7 @@ func SelectGroup() ([]Group, bool) {
 		}
 		g = append(g, group)
 	}
+	r.Close()
 	return g, true
 }
 

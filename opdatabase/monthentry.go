@@ -21,6 +21,7 @@ func SelectMonthEntry(productID int) ([]MonthEntry, bool) {
 	var s []MonthEntry
 	query := `SELECT * FROM ` + strconv.Itoa(productID) + `month;`
 	R, err := db.Query(query)
+	defer R.Close()
 	if err != nil {
 		log.Println("Error in retrieving data from month tabke of product:", productID)
 		log.Println(err)
@@ -44,6 +45,7 @@ func SelectMonthEntryDate(date string, productID int) (MonthEntry, bool) {
 	query := `SELECT * FROM ` + strconv.Itoa(productID) + `month WHERE date=?;`
 	var se MonthEntry
 	R, err := db.Query(query, date)
+	defer R.Close()
 	if err != nil {
 		log.Println("Error in retrieving data from month tabke of product:", productID)
 		log.Println(err)

@@ -70,6 +70,7 @@ func SelectProduct() ([]Product, bool) {
 	var p []Product
 	query := `SELECT * FROM product;`
 	r, err := db.Query(query)
+	defer r.Close()
 	if err != nil {
 		fmt.Println("Can't get the products from the product table")
 		log.Println(err)
@@ -91,6 +92,7 @@ func SelectProductMap() (map[int]Product, bool) {
 	p := make(map[int]Product)
 	query := `SELECT * FROM product;`
 	r, err := db.Query(query)
+	defer r.Close()
 	if err != nil {
 		log.Println("Can't get the products from the product table")
 		log.Println(err)
@@ -112,6 +114,7 @@ func SelectProductID(id int) (Product, bool) {
 	var product Product
 	query := `SELECT * FROM product WHERE productID=?;`
 	r, err := db.Query(query, id)
+	defer r.Close()
 	if err != nil {
 		fmt.Println("Can't get the products from the product table")
 		log.Println(err)
@@ -129,6 +132,7 @@ func SelectProductByGroup(g Group) []Product {
 	var products []Product
 	query := `SELECT * FROM product WHERE groupid=?;`
 	r, err := db.Query(query, g.Id)
+	defer r.Close()
 	if err != nil {
 		fmt.Println("Can't get the products from the product table")
 		log.Println(err)

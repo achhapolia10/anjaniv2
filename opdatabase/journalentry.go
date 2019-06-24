@@ -33,6 +33,7 @@ func SelectJournalEntry(date string, productID int) ([]JournalEntry, bool) {
 	query := "SELECT * FROM " + strconv.Itoa(productID) + "journal WHERE date='" + date +
 		"' ORDER BY id DESC;"
 	r, err := db.Query(query)
+	defer r.Close()
 	if err != nil {
 		log.Println(err)
 		log.Println("Error in Selecting Journal Entries of Product ID:", productID)
@@ -56,6 +57,7 @@ func SelectJournalEntryByID(id int, productID int) (JournalEntry, bool) {
 	query := "SELECT * FROM " + strconv.Itoa(productID) + "journal WHERE id=?;"
 	var je JournalEntry
 	r, err := db.Query(query, id)
+	defer r.Close()
 	if err != nil {
 		log.Println(err)
 		log.Println("Error in Selecting Journal Entry id")
@@ -87,6 +89,7 @@ func SelectJournalEntryMap(date string, productID int) (map[string]JournalEntry,
 	query := "SELECT * FROM " + strconv.Itoa(productID) + "journal WHERE date='" + date +
 		"' ORDER BY id DESC;"
 	r, err := db.Query(query)
+	defer r.Close()
 	if err != nil {
 		log.Println(err)
 		log.Println("Error in Selecting Journal Entries of Product ID:", productID)

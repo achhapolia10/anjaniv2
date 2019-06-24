@@ -21,6 +21,7 @@ func SelectStockEntry(productID int) ([]StockEntry, bool) {
 	var s []StockEntry
 	query := `SELECT * FROM ` + strconv.Itoa(productID) + `stock;`
 	R, err := db.Query(query)
+	defer R.Close()
 	if err != nil {
 		log.Println("Error in retrieving data from stock tabke of product:", productID)
 		log.Println(err)
@@ -44,6 +45,7 @@ func SelectStockEntryDate(date string, productID int) (StockEntry, bool) {
 	query := `SELECT * FROM ` + strconv.Itoa(productID) + `stock WHERE date=?;`
 	var se StockEntry
 	R, err := db.Query(query, date)
+	defer R.Close()
 	if err != nil {
 		log.Println("Error in retrieving data from stock tabke of product:", productID)
 		log.Println(err)

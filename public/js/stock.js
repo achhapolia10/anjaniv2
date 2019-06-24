@@ -19,17 +19,48 @@ function onSubmitClick(event){
         url: "/stock",
         data: {fdate:fromDate.value,tdate:toDate.value},
         success: function (response) {
-            console.log("hi")
+            stocks = JSON.parse(response)
+            createStockTable(stocks)
         }
     })
         
     } else {
         window.alert("Enter the dates first")
     }
+}
 
+function createStockTable(stocks){
+    clearStockTable()
+    table = document.getElementById("stock-table-body")    
+    keys = Object.keys(stocks)
+    keys.sort((a,b)=>{
+        p1=stocks[a].product.name
+        p2=stocks[b].product.name
+        if(p1>p2){
+            return 1
+        }   else if(p1 <p2){
+            return -1
+        } else return 0
+    })
+    var i=1
+    keys.forEach((s)=>{
+        $("#stock-table-body").append(
+           "<tr>"
+            +       "<td>"+i+".</td>"
+            +       "<td>"+stocks[s].product.name+"</td>"
+            +       "<td>"+stocks[s].obox +" box "+stocks[s].opacket+" packet"+"</td>"
+            +       "<td>"+stocks[s].inbox +" box "+stocks[s].inpacket+" packet"+"</td>"
+            +       "<td>"+stocks[s].outbox +" box "+stocks[s].outpacket+" packet"+"</td>"
+            +       "<td>"+stocks[s].cbox +" box "+stocks[s].cpacket+" packet"+"</td>"
+            +   "</tr>"
+ 
+        )
+        i++
+    })
 
 }
 
-$(document).ready(function(){
-    
-})
+function clearStockTable(){
+    table = document.getElementById("stock-table-body")
+    table.innerHTML= ""
+}
