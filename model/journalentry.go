@@ -1,15 +1,12 @@
 package model
 
 import (
-	"fmt"
-
 	"github.com/achhapolia10/anjaniv2/opdatabase"
 )
 
 //GetAllJournalEntry Gets all Journal entry for a productID and and date
 func GetAllJournalEntry(date string, productID int) ([]opdatabase.JournalEntry, int, int, bool) {
 	je, box, packet, res := opdatabase.SelectJournalEntry(date, productID)
-	fmt.Println(box, packet)
 	box, packet = balanceJournalEntries(box, packet, productID)
 
 	return je, box, packet, res

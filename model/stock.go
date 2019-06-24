@@ -53,8 +53,8 @@ func ProductStock(fDate, tDate, start time.Time, product opdatabase.Product) Sto
 			temp = start.AddDate(0, 1, -1)
 
 			if temp.Before(fDate) {
-				d := parseTime(start)
-				me, _ := opdatabase.SelectMonthEntryDate(d.getString(), product.ID)
+				d := ParseTime(start)
+				me, _ := opdatabase.SelectMonthEntryDate(d.GetString(), product.ID)
 				s.OBox = s.OBox + me.BoxIn - me.BoxOut
 				s.OPacket = s.OPacket + me.PacketIn - me.PacketOut
 				start = temp.AddDate(0, 0, 1)
@@ -62,8 +62,8 @@ func ProductStock(fDate, tDate, start time.Time, product opdatabase.Product) Sto
 				flag = false
 			}
 		} else {
-			d := parseTime(start)
-			se, _ := opdatabase.SelectStockEntryDate(d.getString(), product.ID)
+			d := ParseTime(start)
+			se, _ := opdatabase.SelectStockEntryDate(d.GetString(), product.ID)
 			s.OBox = s.OBox + se.BoxIn - se.BoxOut
 			s.OPacket = s.OPacket + se.PacketIn - se.PacketOut
 			start = start.AddDate(0, 0, 1)
@@ -77,8 +77,8 @@ func ProductStock(fDate, tDate, start time.Time, product opdatabase.Product) Sto
 			temp = start.AddDate(0, 1, -1)
 
 			if temp.Before(tDate) {
-				d := parseTime(start)
-				me, _ := opdatabase.SelectMonthEntryDate(d.getString(), product.ID)
+				d := ParseTime(start)
+				me, _ := opdatabase.SelectMonthEntryDate(d.GetString(), product.ID)
 				s.InBox = s.InBox + me.BoxIn
 				s.OutBox = s.OutBox + me.BoxOut
 				s.InPacket = s.OutBox + me.BoxOut
@@ -88,8 +88,8 @@ func ProductStock(fDate, tDate, start time.Time, product opdatabase.Product) Sto
 				flag = false
 			}
 		} else {
-			d := parseTime(start)
-			se, _ := opdatabase.SelectStockEntryDate(d.getString(), product.ID)
+			d := ParseTime(start)
+			se, _ := opdatabase.SelectStockEntryDate(d.GetString(), product.ID)
 			s.InBox = s.InBox + se.BoxIn
 			s.OutBox = s.OutBox + se.BoxOut
 			s.InPacket = s.OutBox + se.BoxOut
@@ -117,9 +117,9 @@ func AllStock(f, t string) map[int]Stock {
 	}
 
 	//Dates parsing and whatever the fuck is here
-	from, to := parseDate(f), parseDate(t)
-	fromDate := time.Date(from.year, from.getMonth(), from.day, 0, 0, 0, 0, time.Now().Location())
-	toDate := time.Date(to.year, to.getMonth(), to.day, 0, 0, 0, 0, time.Now().Location())
+	from, to := ParseDate(f), ParseDate(t)
+	fromDate := time.Date(from.Year, from.GetMonth(), from.Day, 0, 0, 0, 0, time.Now().Location())
+	toDate := time.Date(to.Year, to.GetMonth(), to.Day, 0, 0, 0, 0, time.Now().Location())
 	fiscal := time.Date(2019, time.April, 1, 0, 0, 0, 0, time.Now().Location())
 
 	for _, product := range products {

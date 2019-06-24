@@ -8,6 +8,12 @@ func GetAllProduct() ([]opdatabase.Product, bool) {
 	return p, res
 }
 
+//GetProduct returns product with id
+func GetProduct(id int) opdatabase.Product {
+	p, _ := opdatabase.SelectProductID(id)
+	return p
+}
+
 //CreateProduct Creates A new Product
 func CreateProduct(product opdatabase.Product) {
 	opdatabase.AddProduct(product)
