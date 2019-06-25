@@ -1,0 +1,14 @@
+.product-anchor{
+    color: black;
+    
+}
+
+.product-anchor:hover{
+    color:black;
+    text-emphasis: none;
+    text-decoration: none;
+}
+
+.product-anchor:visited{
+    color: black
+}

@@ -50,7 +50,7 @@ function createStockTable(stocks){
         $("#stock-table-body").append(
            "<tr>"
             +       "<td>"+i+".</td>"
-            +       "<td>"+"<a href=\"/stock/product?from="+fromDate.value+"&to="+toDate.value+"&id="+stocks[s].product.id+"\">"+stocks[s].product.name+"</a></td>"
+            +       "<td>"+"<a class=\"product-anchor\" href=\"/stock/product?from="+fromDate.value+"&to="+toDate.value+"&id="+stocks[s].product.id+"\">"+stocks[s].product.name+"</a></td>"
             +       "<td>"+stocks[s].obox +" box "+stocks[s].opacket+" packet"+"</td>"
             +       "<td>"+stocks[s].inbox +" box "+stocks[s].inpacket+" packet"+"</td>"
             +       "<td>"+stocks[s].outbox +" box "+stocks[s].outpacket+" packet"+"</td>"

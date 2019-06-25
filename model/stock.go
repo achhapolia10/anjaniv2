@@ -3,7 +3,6 @@
 package model
 
 import (
-	"fmt"
 	"log"
 	"time"
 
@@ -131,9 +130,7 @@ func AllStock(f, t string) map[int]Stock {
 
 	for _, product := range products {
 		s := ProductStock(fromDate, toDate, fiscal, product)
-		fmt.Println(s)
 		s.Balance()
-		fmt.Println(s)
 		stocks[product.ID] = s
 	}
 	return stocks

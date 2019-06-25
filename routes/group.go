@@ -37,6 +37,7 @@ func PostGroupNew(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		log.Printf("No Group Name Provided")
 	}
 	http.Redirect(w, r, "/groups", 301)
+
 }
 
 //PostGroupDelete Handler for roue /new method :POST
