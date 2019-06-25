@@ -149,7 +149,7 @@ func PostNewProduct(w http.ResponseWriter, req *http.Request, _ httprouter.Param
 	}
 	var n string
 	var p, b, op, ob, g int
-	var pr float64
+	var pr, we float64
 	n = req.FormValue("product")
 	p, err = strconv.Atoi(req.FormValue("box"))
 	b, err = strconv.Atoi(req.FormValue("packet"))
@@ -157,9 +157,11 @@ func PostNewProduct(w http.ResponseWriter, req *http.Request, _ httprouter.Param
 	ob, err = strconv.Atoi(req.FormValue("obox"))
 	pr, err = strconv.ParseFloat(req.FormValue("price"), 32)
 	g, err = strconv.Atoi(req.FormValue("product-group"))
+	we, err = strconv.ParseFloat(req.FormValue("weight"), 32)
+
 	product := opdatabase.Product{
 		ID: 0, Name: n, PacketQuantity: p,
-		BoxQuantity: b, Price: pr, OpeningBox: ob, OpeningPacket: op, Group: g,
+		BoxQuantity: b, Price: pr, OpeningBox: ob, OpeningPacket: op, Group: g, Weight: we,
 	}
 	opdatabase.AddProduct(product)
 	http.Redirect(w, req, "/products", 301)

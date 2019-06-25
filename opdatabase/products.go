@@ -15,6 +15,7 @@ type Product struct {
 	PacketQuantity int     `json:"packet"`
 	BoxQuantity    int     `json:"box"`
 	Price          float64 `json:"price"`
+	Weight         float64 `json:"weight"`
 	OpeningBox     int     `json:"oboxes"`
 	OpeningPacket  int     `json:"opackets"`
 	Group          int     `json:"group"`
@@ -32,7 +33,8 @@ func CreateProductTable() {
 		boxQuantity SMALLINT NOT NULL,
 		price DECIMAL(4,2) NOT NULL,
 		oboxes INT NOT NULL,
-		opackets INT NOT NULL);`
+		opackets INT NOT NULL,
+		weight DECIMAL(4,3) NOT NULL);`
 
 	fmt.Println("Creating Product Table : ")
 	_, err := db.Exec(query)
@@ -48,9 +50,9 @@ func CreateProductTable() {
 func AddProduct(p Product) {
 	p.Name = strings.ToUpper(p.Name)
 	query := "insert into product " +
-		"(name,packetQuantity,boxQuantity,price,oboxes,opackets,groupid)" +
-		"values	(?,?,?,?,?,?,?);"
-	r, err := db.Exec(query, p.Name, p.PacketQuantity, p.BoxQuantity, p.Price, p.OpeningBox, p.OpeningPacket, p.Group)
+		"(name,packetQuantity,boxQuantity,price,oboxes,opackets,groupid,weight)" +
+		"values	(?,?,?,?,?,?,?,?);"
+	r, err := db.Exec(query, p.Name, p.PacketQuantity, p.BoxQuantity, p.Price, p.OpeningBox, p.OpeningPacket, p.Group, p.Weight)
 	if err != nil {
 		log.Println(err)
 	} else {
@@ -81,7 +83,7 @@ func SelectProduct() ([]Product, bool) {
 			product Product
 		)
 		r.Scan(&(product.ID), &(product.Name), &(product.Group), &(product.PacketQuantity), &(product.BoxQuantity),
-			&(product.Price), &(product.OpeningBox), &(product.OpeningPacket))
+			&(product.Price), &(product.OpeningBox), &(product.OpeningPacket), &(product.Weight))
 		p = append(p, product)
 	}
 	return p, true
@@ -103,7 +105,7 @@ func SelectProductMap() (map[int]Product, bool) {
 			product Product
 		)
 		r.Scan(&(product.ID), &(product.Name), &(product.Group), &(product.PacketQuantity), &(product.BoxQuantity),
-			&(product.Price), &(product.OpeningBox), &(product.OpeningPacket))
+			&(product.Price), &(product.OpeningBox), &(product.OpeningPacket), &(product.Weight))
 		p[product.ID] = product
 	}
 	return p, true
@@ -122,7 +124,7 @@ func SelectProductID(id int) (Product, bool) {
 	}
 	if r.Next() {
 		r.Scan(&(product.ID), &(product.Name), &(product.Group), &(product.PacketQuantity), &(product.BoxQuantity),
-			&(product.Price), &(product.OpeningBox), &(product.OpeningPacket))
+			&(product.Price), &(product.OpeningBox), &(product.OpeningPacket), &(product.Weight))
 	}
 	return product, true
 }
@@ -140,7 +142,7 @@ func SelectProductByGroup(g Group) []Product {
 	for r.Next() {
 		var product Product
 		r.Scan(&(product.ID), &(product.Name), &(product.Group), &(product.PacketQuantity), &(product.BoxQuantity),
-			&(product.Price), &(product.OpeningBox), &(product.OpeningPacket))
+			&(product.Price), &(product.OpeningBox), &(product.OpeningPacket), &(product.Weight))
 		products = append(products, product)
 	}
 	return products

@@ -1,17 +1,17 @@
-function onFromDateChange(event) {
+function onFromDateChange() {
     fromDate= document.getElementById("from-date")
     toDate  = document.getElementById("to-date")
     toDate.min=fromDate.value
 }
 
 let q =0
-function onToDateChange(event)  {
+function onToDateChange()  {
     fromDate= document.getElementById("from-date")
     toDate= document.getElementById("to-date")
     fromDate.max=toDate.value
 }
 
-function onSubmitClick(event){
+function onSubmitClick(){
     fromDate= document.getElementById("from-date")
     toDate= document.getElementById("to-date")
     product = document.getElementById("product")
@@ -81,5 +81,8 @@ function parseQuery(queryString) {
 }
 
 function parseDate(date) {
-    return date
+   year = date.substring(0,4) 
+   month = date.substring(5,7) 
+   day = date.substring(8,10) 
+   return day+"/"+month+"/"+year
 }
