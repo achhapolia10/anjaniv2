@@ -3,6 +3,7 @@
 package model
 
 import (
+	"fmt"
 	"log"
 	"time"
 
@@ -20,6 +21,12 @@ type Stock struct {
 	CBox      int                `json:"cbox"`
 	CPacket   int                `json:"cpacket"`
 	Product   opdatabase.Product `json:"product"`
+}
+
+//StockDetails Struct for the stock details and entries
+type StockDetails struct {
+	Stock   Stock                   `json:"stock"`
+	Entries []opdatabase.StockEntry `json:"entries"`
 }
 
 /**
@@ -81,7 +88,7 @@ func ProductStock(fDate, tDate, start time.Time, product opdatabase.Product) Sto
 				me, _ := opdatabase.SelectMonthEntryDate(d.GetString(), product.ID)
 				s.InBox = s.InBox + me.BoxIn
 				s.OutBox = s.OutBox + me.BoxOut
-				s.InPacket = s.OutBox + me.BoxOut
+				s.InPacket = s.InPacket + me.PacketIn
 				s.OutPacket = s.OutPacket + me.PacketOut
 				start = temp.AddDate(0, 0, 1)
 			} else {
@@ -92,7 +99,7 @@ func ProductStock(fDate, tDate, start time.Time, product opdatabase.Product) Sto
 			se, _ := opdatabase.SelectStockEntryDate(d.GetString(), product.ID)
 			s.InBox = s.InBox + se.BoxIn
 			s.OutBox = s.OutBox + se.BoxOut
-			s.InPacket = s.OutBox + se.BoxOut
+			s.InPacket = s.InPacket + se.PacketIn
 			s.OutPacket = s.OutPacket + se.PacketOut
 			start = start.AddDate(0, 0, 1)
 			if start.Day() == 1 {
@@ -124,10 +131,40 @@ func AllStock(f, t string) map[int]Stock {
 
 	for _, product := range products {
 		s := ProductStock(fromDate, toDate, fiscal, product)
+		fmt.Println(s)
 		s.Balance()
+		fmt.Println(s)
 		stocks[product.ID] = s
 	}
 	return stocks
+}
+
+//ProductStockDetails returns the details of the stock
+func ProductStockDetails(f, t string, id int) StockDetails {
+	var entries []opdatabase.StockEntry
+	product, _ := opdatabase.SelectProductID(id)
+	from, to := ParseDate(f), ParseDate(t)
+	fromDate := time.Date(from.Year, from.GetMonth(), from.Day, 0, 0, 0, 0, time.Now().Location())
+	toDate := time.Date(to.Year, to.GetMonth(), to.Day, 0, 0, 0, 0, time.Now().Location())
+	fiscal := time.Date(2019, time.April, 1, 0, 0, 0, 0, time.Now().Location())
+
+	stock := ProductStock(fromDate, toDate, fiscal, product)
+	stock.Balance()
+
+	for fromDate.Before(toDate) || fromDate.Equal(toDate) {
+		d := ParseTime(fromDate)
+		entry, _ := opdatabase.SelectStockEntryDate(d.GetString(), product.ID)
+		if !(entry.BoxIn == 0 && entry.BoxOut == 0 && entry.PacketIn == 0 && entry.PacketOut == 0) {
+			BalanceStockEntries(&entry)
+			entries = append(entries, entry)
+		}
+		fromDate = fromDate.AddDate(0, 0, 1)
+	}
+	return StockDetails{
+		Stock:   stock,
+		Entries: entries,
+	}
+
 }
 
 //Balance Balances the stock details
@@ -140,12 +177,11 @@ func (s *Stock) Balance() {
 	s.InBox = s.InPacket / s.Product.BoxQuantity
 	s.InPacket = s.InPacket % s.Product.BoxQuantity
 
-	s.OutPacket += s.OutPacket * s.Product.BoxQuantity
-	s.OutPacket = s.OutPacket / s.Product.BoxQuantity
+	s.OutPacket += s.OutBox * s.Product.BoxQuantity
+	s.OutBox = s.OutPacket / s.Product.BoxQuantity
 	s.OutPacket = s.OutPacket % s.Product.BoxQuantity
 
-	s.CPacket += s.CPacket * s.Product.BoxQuantity
-	s.CPacket = s.CPacket / s.Product.BoxQuantity
+	s.CPacket += s.CBox * s.Product.BoxQuantity
+	s.CBox = s.CPacket / s.Product.BoxQuantity
 	s.CPacket = s.CPacket % s.Product.BoxQuantity
-
 }

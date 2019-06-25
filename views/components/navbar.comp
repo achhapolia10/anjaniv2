@@ -50,6 +50,7 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" href="/stock">Stocks</a>
+          <a class="dropdown-item" href="/stock/product">Product Stock</a>
           <a class="dropdown-item" href="/labourPayment">Labour Payment</a>
         </div>
       </li>

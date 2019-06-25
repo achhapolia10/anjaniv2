@@ -43,16 +43,29 @@ func PostStock(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
 	w.Write(b)
 }
 
-//GetProductStock for route /:id method GET
-func GetProductStock(w http.ResponseWriter, req *http.Request, params httprouter.Params) {
-	ids := params.ByName("id")
-	id, err := strconv.Atoi(ids)
-	if err != nil {
-		log.Println(err)
-	}
-
+//GetProductStock for route /product method GET
+func GetProductStock(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
+	products, _ := model.GetAllProduct()
 	t := template.Must(template.ParseGlob("views/components/navbar.comp"))
 	t.ParseFiles("views/productstock.html")
+	t.ExecuteTemplate(w, "productstock.html", products)
+}
 
-	t.ExecuteTemplate(w, "productstock.html", id)
+//PostProductStock for route /product method POST
+func PostProductStock(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
+	from := req.URL.Query().Get("fdate")
+	to := req.URL.Query().Get("tdate")
+	i := req.URL.Query().Get("id")
+	id, err := strconv.Atoi(i)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	details := model.ProductStockDetails(from, to, id)
+	res, e := json.Marshal(details)
+	if e != nil {
+		log.Println(e)
+		return
+	}
+	w.Write(res)
 }
