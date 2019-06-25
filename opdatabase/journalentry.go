@@ -28,8 +28,10 @@ func NewJournalEntry(je JournalEntry) {
 }
 
 //SelectJournalEntry Selects all entries of a Pariticular Date
-func SelectJournalEntry(date string, productID int) ([]JournalEntry, bool) {
+func SelectJournalEntry(date string, productID int) ([]JournalEntry, int, int, bool) {
 	var je []JournalEntry
+	var box, packet int
+	box, packet = 0, 0
 	query := "SELECT * FROM " + strconv.Itoa(productID) + "journal WHERE date='" + date +
 		"' ORDER BY id DESC;"
 	r, err := db.Query(query)
@@ -37,19 +39,21 @@ func SelectJournalEntry(date string, productID int) ([]JournalEntry, bool) {
 	if err != nil {
 		log.Println(err)
 		log.Println("Error in Selecting Journal Entries of Product ID:", productID)
-		return je, false
+		return je, 0, 0, false
 	}
 	for r.Next() {
 		var e JournalEntry
 		err = r.Scan(&(e.ID), &(e.Labour), &(e.Date), &(e.Box), &(e.Packet))
 		if err != nil {
 			log.Println(err)
-			return je, false
+			return je, 0, 0, false
 		}
+		box = box + e.Box
+		packet = packet + e.Packet
 		e.ProductID = productID
 		je = append(je, e)
 	}
-	return je, true
+	return je, box, packet, true
 }
 
 //SelectJournalEntryByID Selects a journal entry by id

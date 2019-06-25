@@ -1,11 +1,15 @@
 package model
 
-import "github.com/achhapolia10/anjaniv2/opdatabase"
+import (
+	"github.com/achhapolia10/anjaniv2/opdatabase"
+)
 
 //GetAllJournalEntry Gets all Journal entry for a productID and and date
-func GetAllJournalEntry(date string, productID int) ([]opdatabase.JournalEntry, bool) {
-	je, res := opdatabase.SelectJournalEntry(date, productID)
-	return je, res
+func GetAllJournalEntry(date string, productID int) ([]opdatabase.JournalEntry, int, int, bool) {
+	je, box, packet, res := opdatabase.SelectJournalEntry(date, productID)
+	box, packet = balanceJournalEntries(box, packet, productID)
+
+	return je, box, packet, res
 }
 
 //DeleteJournalEntry Deletes a Journal Entry of an productID with a particuar id
@@ -23,4 +27,12 @@ func CreateJournalEntry(je opdatabase.JournalEntry) {
 	opdatabase.NewJournalEntry(je)
 	JournalAddStock(je)
 	JournalAddMonth(je)
+}
+
+func balanceJournalEntries(b, p, i int) (int, int) {
+	pr, _ := opdatabase.SelectProductID(i)
+	p += b * pr.BoxQuantity
+	b = p / pr.BoxQuantity
+	p = p % pr.BoxQuantity
+	return b, p
 }

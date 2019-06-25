@@ -21,6 +21,13 @@ type Response struct {
 	Data   interface{} `json:"data"`
 }
 
+//JournalResponse struct for json Response
+type JournalResponse struct {
+	JournalEntries []opdatabase.JournalEntry `json:"entries"`
+	Box            int                       `json:"tbox"`
+	Packet         int                       `json:"tpacket"`
+}
+
 //GetEntry Handler for route / method GET
 func GetEntry(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
 	p, res := model.GetAllProduct()
@@ -70,9 +77,14 @@ func GetJournalEntriesAll(w http.ResponseWriter, req *http.Request, _ httprouter
 		log.Println("Error in GETJournal Entries all")
 		log.Println(err)
 	}
-	je, res := model.GetAllJournalEntry(date, productID)
+	je, box, packet, res := model.GetAllJournalEntry(date, productID)
+	result := JournalResponse{
+		JournalEntries: je,
+		Box:            box,
+		Packet:         packet,
+	}
 	if res {
-		p, err := json.Marshal(je)
+		p, err := json.Marshal(result)
 		if err != nil {
 			log.Println("Error in GetJournalEntries all in Marshalling")
 			log.Println(err)

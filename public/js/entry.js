@@ -77,7 +77,8 @@ function createEntryTable() {
     url: "/entry/getall?date=" + date + "&id=" + product,
     success: function(p) {
       labours = [];
-      let entries = JSON.parse(p);
+      let response = JSON.parse(p);
+      entries = response.entries
       if (entries)
         entries.forEach(entry => {
           $("#journal-table").append(
@@ -97,6 +98,14 @@ function createEntryTable() {
           );
           labours = labours.concat(entry.labour);
         });
+        totalmark = document.getElementById("total-entries")
+        let box = response.tbox;
+        let packet= response.tpacket
+        if (box ==0 && packet == 0){
+          totalmark.innerHTML = ""
+        } else {
+          totalmark.innerHTML = "Total: "+ box +" Boxes "+ packet+" Packets"
+        }
     },
     error: function() {
       console.log("error in getiing jounral data");

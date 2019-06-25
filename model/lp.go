@@ -10,7 +10,7 @@ import (
 //individualJournal stores the individual Journal For Each Day
 type individualJournal struct {
 	productID int
-	date      date
+	date      Date
 	je        map[string]opdatabase.JournalEntry
 }
 
@@ -52,14 +52,14 @@ func (l LPEntries) TotalAmmount() float64 {
 
 //GetLabourPayment returns the Labour Payment
 func GetLabourPayment(days ...string) LPEntries {
-	var dates []date
+	var dates []Date
 	products, err := opdatabase.SelectProductMap()
 	LPEntries := make([]LPEntry, 0)
 	if !err {
 		return LPEntries
 	}
 	for _, d := range days {
-		date := parseDate(d)
+		date := ParseDate(d)
 		dates = append(dates, date)
 	}
 	lpe := generateLabourPayment(dates, products)
@@ -70,7 +70,7 @@ func GetLabourPayment(days ...string) LPEntries {
 }
 
 //generateLabourPayment generates a labour payment
-func generateLabourPayment(d []date, p map[int]opdatabase.Product) map[string]LPEntry {
+func generateLabourPayment(d []Date, p map[int]opdatabase.Product) map[string]LPEntry {
 	var jes []individualJournal
 
 	emptyJournal := opdatabase.JournalEntry{ID: 0, Labour: "", Date: "", Box: 0, Packet: 0, ProductID: 0}
@@ -78,7 +78,7 @@ func generateLabourPayment(d []date, p map[int]opdatabase.Product) map[string]LP
 	LPEntries := make(map[string]LPEntry)
 	for _, date := range d {
 		for _, product := range p {
-			je, _ := opdatabase.SelectJournalEntryMap(date.getString(), product.ID)
+			je, _ := opdatabase.SelectJournalEntryMap(date.GetString(), product.ID)
 			journal := individualJournal{
 				product.ID,
 				date,

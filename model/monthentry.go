@@ -8,9 +8,9 @@ import (
 
 //JournalAddMonth Add to Month For a Journal Entry
 func JournalAddMonth(je opdatabase.JournalEntry) bool {
-	date := parseDate(je.Date)
-	date.day = 1
-	s, res := opdatabase.SelectMonthEntryDate(date.getString(), je.ProductID)
+	date := ParseDate(je.Date)
+	date.Day = 1
+	s, res := opdatabase.SelectMonthEntryDate(date.GetString(), je.ProductID)
 	if !res {
 		log.Printf("Error in reading Month Entry in JournalAddMonth()")
 		return res
@@ -23,9 +23,9 @@ func JournalAddMonth(je opdatabase.JournalEntry) bool {
 
 //JournalDeleteMonth Reflects Changes in Month for Deleting a Jounal ENtry
 func JournalDeleteMonth(je opdatabase.JournalEntry) bool {
-	date := parseDate(je.Date)
-	date.day = 1
-	s, res := opdatabase.SelectMonthEntryDate(date.getString(), je.ProductID)
+	date := ParseDate(je.Date)
+	date.Day = 1
+	s, res := opdatabase.SelectMonthEntryDate(date.GetString(), je.ProductID)
 	if !res {
 		log.Println("Error in reading Month Entry in JournalDeleteMonth() on Date: ", je.Date)
 		return false
@@ -38,9 +38,9 @@ func JournalDeleteMonth(je opdatabase.JournalEntry) bool {
 
 //DispatchAddMonth Reflects Changes in Month for Adding a DispatchEntry
 func DispatchAddMonth(se opdatabase.StockEntry) bool {
-	date := parseDate(se.Date)
-	date.day = 1
-	s, res := opdatabase.SelectMonthEntryDate(date.getString(), se.ProductID)
+	date := ParseDate(se.Date)
+	date.Day = 1
+	s, res := opdatabase.SelectMonthEntryDate(date.GetString(), se.ProductID)
 	if !res {
 		log.Println("Error in reading Month Entry in DispachAddMonth() on Date: ", se.Date)
 		return false
@@ -53,9 +53,9 @@ func DispatchAddMonth(se opdatabase.StockEntry) bool {
 
 //DispatchDeleteMonth Reflsects Changes in Month for Deleting a DispatchEntry
 func DispatchDeleteMonth(se opdatabase.StockEntry) bool {
-	date := parseDate(se.Date)
-	date.day = 1
-	s, res := opdatabase.SelectMonthEntryDate(date.getString(), se.ProductID)
+	date := ParseDate(se.Date)
+	date.Day = 1
+	s, res := opdatabase.SelectMonthEntryDate(date.GetString(), se.ProductID)
 	if !res {
 		log.Println("Error in reading Month Entry in DispachAddMonth() on Date: ", se.Date)
 		return false

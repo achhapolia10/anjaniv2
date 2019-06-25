@@ -6,11 +6,11 @@ import (
 	"time"
 )
 
-//date is a structure for date
-type date struct {
-	day   int
-	month int
-	year  int
+//Date is a structure for date
+type Date struct {
+	Day   int
+	Month int
+	Year  int
 }
 
 //getFiscal returns the date the fical year starts for the date
@@ -23,36 +23,37 @@ func getFiscal(t time.Time) time.Time {
 	return time.Date(t.Year(), time.April, 1, 0, 0, 0, 0, location)
 }
 
-//parseDate parses time and returns in Format of dd,MM,YYYY in int
-func parseDate(s string) date {
+//ParseDate parses time and returns in Format of dd,MM,YYYY in int
+func ParseDate(s string) Date {
 	d := strings.Split(s, "-")
 	if len(d) != 3 {
-		return date{0, 0, 0}
+		return Date{0, 0, 0}
 	}
 	day, _ := strconv.Atoi(d[2])
 	month, _ := strconv.Atoi(d[1])
 	year, _ := strconv.Atoi(d[0])
-	return date{day, month, year}
+	return Date{day, month, year}
 }
 
-func parseTime(t time.Time) date {
-	d := date{
-		day: t.Day(), month: int(t.Month()), year: t.Year(),
+//ParseTime for the Time object
+func ParseTime(t time.Time) Date {
+	d := Date{
+		Day: t.Day(), Month: int(t.Month()), Year: t.Year(),
 	}
 	return d
 }
 
-//Returns a String for a Date
-func (d *date) getString() string {
-	day := padDate(d.day)
-	month := padDate(d.month)
-	year := padDate(d.year)
+//GetString Returns a String for a Date
+func (d *Date) GetString() string {
+	day := padDate(d.Day)
+	month := padDate(d.Month)
+	year := padDate(d.Year)
 	return year + "-" + month + "-" + day
 }
 
-//getMonth returns the month in type time.Month
-func (d *date) getMonth() time.Month {
-	switch d.month {
+//GetMonth returns the month in type time.Month
+func (d *Date) GetMonth() time.Month {
+	switch d.Month {
 	case 1:
 		return time.January
 	case 2:

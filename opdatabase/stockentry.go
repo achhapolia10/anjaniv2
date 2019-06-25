@@ -10,8 +10,8 @@ type StockEntry struct {
 	ID        int    `json:"id"`
 	Date      string `json:"date"`
 	BoxIn     int    `json:"boxin"`
-	PacketIn  int    `json:"packetsin"`
-	BoxOut    int    `json:"boxesout"`
+	PacketIn  int    `json:"packetin"`
+	BoxOut    int    `json:"boxout"`
 	PacketOut int    `json:"packetout"`
 	ProductID int    `json:"productid"`
 }
