@@ -48,6 +48,10 @@ func main() {
 	router.GET("/products/edit/:id", routes.GetEditProduct)
 	router.POST("/products/edit/:id", routes.PostEditProduct)
 
+	//Daily Report routes are defined
+	router.GET("/report", routes.GetDailyReport)
+	router.POST("/report", routes.PostDailyReport)
+
 	//Stock routes are defined
 	router.GET("/stock", routes.GetStock)
 	router.POST("/stock", routes.PostStock)
