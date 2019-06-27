@@ -27,13 +27,13 @@ func main() {
 	opdatabase.ConnectDatabase()
 	opdatabase.CreateGroupTable()
 	opdatabase.CreateProductTable()
+	opdatabase.CreateUserTable()
 	router.ServeFiles("/public/*filepath", publicDir)
 
-	router.GET("/", routes.GetIndex)
 	//Login routes are defined
-	router.GET("/login", routes.GetLogin)
-	router.POST("/login", routes.PostLogin)
-	router.GET("/logout", routes.GetLogin)
+	router.GET("/", routes.GetLogin)
+	router.POST("/", routes.PostLogin)
+	router.GET("/logout", routes.GetLogout)
 
 	//Groupds reoutes are  defined
 	router.GET("/groups", routes.GetGroup)
