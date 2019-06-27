@@ -5,7 +5,7 @@ package model
 import (
 	"log"
 	"time"
-
+	
 	"github.com/achhapolia10/anjaniv2/opdatabase"
 )
 
@@ -77,7 +77,7 @@ func ProductStock(fDate, tDate, start time.Time, product opdatabase.Product) Sto
 	}
 
 	//Calculation of the stock from fdate to tdate
-	for start.Before(tDate) {
+	for start.Before(tDate) || start.Equal(tDate) {
 		var temp time.Time
 		if flag {
 			temp = start.AddDate(0, 1, -1)
