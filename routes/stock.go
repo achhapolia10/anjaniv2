@@ -23,49 +23,60 @@ type TemplateData struct {
 
 //GetStock Handler for route / method GET
 func GetStock(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
-
-	t := template.Must(template.ParseGlob("views/components/navbar.comp"))
-	t.ParseFiles("views/stock.html")
-
-	t.ExecuteTemplate(w, "stock.html", "")
+	if isLoggedIn(w, req) {
+		t := template.Must(template.ParseGlob("views/components/navbar.comp"))
+		t.ParseFiles("views/stock.html")
+		data := struct{ U User }{currentUser}
+		t.ExecuteTemplate(w, "stock.html", data)
+	}
 }
 
 //PostStock Handler for route / method POST query: fdate,tdate
 func PostStock(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
-	fromDate := req.FormValue("fdate")
-	toDate := req.FormValue("tdate")
-	stockData := model.AllStock(fromDate, toDate)
-	b, err := json.Marshal(stockData)
-	if err != nil {
-		log.Printf("Error in Marshalling stock data: %v", err)
-		return
+	if isLoggedIn(w, req) {
+		fromDate := req.FormValue("fdate")
+		toDate := req.FormValue("tdate")
+		stockData := model.AllStock(fromDate, toDate)
+		b, err := json.Marshal(stockData)
+		if err != nil {
+			log.Printf("Error in Marshalling stock data: %v", err)
+			return
+		}
+		w.Write(b)
 	}
-	w.Write(b)
 }
 
 //GetProductStock for route /product method GET
 func GetProductStock(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
-	products, _ := model.GetAllProduct()
-	t := template.Must(template.ParseGlob("views/components/navbar.comp"))
-	t.ParseFiles("views/productstock.html")
-	t.ExecuteTemplate(w, "productstock.html", products)
+	if isLoggedIn(w, req) {
+		products, _ := model.GetAllProduct()
+		data := struct {
+			Products []opdatabase.Product
+			U        User
+		}{products, currentUser}
+		t := template.Must(template.ParseGlob("views/components/navbar.comp"))
+		t.ParseFiles("views/productstock.html")
+		t.ExecuteTemplate(w, "productstock.html", data)
+	}
 }
 
 //PostProductStock for route /product method POST
 func PostProductStock(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
-	from := req.URL.Query().Get("fdate")
-	to := req.URL.Query().Get("tdate")
-	i := req.URL.Query().Get("id")
-	id, err := strconv.Atoi(i)
-	if err != nil {
-		log.Println(err)
-		return
+	if isLoggedIn(w, req) {
+		from := req.URL.Query().Get("fdate")
+		to := req.URL.Query().Get("tdate")
+		i := req.URL.Query().Get("id")
+		id, err := strconv.Atoi(i)
+		if err != nil {
+			log.Println(err)
+			return
+		}
+		details := model.ProductStockDetails(from, to, id)
+		res, e := json.Marshal(details)
+		if e != nil {
+			log.Println(e)
+			return
+		}
+		w.Write(res)
 	}
-	details := model.ProductStockDetails(from, to, id)
-	res, e := json.Marshal(details)
-	if e != nil {
-		log.Println(e)
-		return
-	}
-	w.Write(res)
 }

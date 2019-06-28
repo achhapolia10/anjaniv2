@@ -12,7 +12,7 @@
 </head>
 <body>
     
-    {{template "navbar"}}
+    {{template "navbar" .}}
     <div class="container">
         <form name="pickerForm" method=GET>
             <div class ="row">
@@ -27,7 +27,7 @@
                     <div class = "form-group">
                         <label for="product" class="rm">Product</label>
                         <select size="1" name="product" onchange="onProductChange();" id="product-picker" class="form-control">
-                            {{range .}}
+                            {{range .Products}}
                             <option value={{.ID}}>{{.Name}}</option>
                             {{end}}
                         </select>

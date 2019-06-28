@@ -1,7 +1,6 @@
 package routes
 
 import (
-	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -22,7 +21,6 @@ var currentUser User
 
 //GetLogin Handler for route /login method Get
 func GetLogin(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
-	fmt.Print(currentUser)
 	if !currentUser.IsLoggedIn {
 		t, err := template.ParseFiles("views/login.html")
 		if err != nil {
@@ -49,9 +47,9 @@ func PostLogin(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
 			}
 			http.Redirect(w, req, "/stock", http.StatusFound)
 			return
-		} else {
-			currentUser.IsLoggedIn = false
 		}
+		currentUser.IsLoggedIn = false
+
 	}
 	http.Redirect(w, req, "/", http.StatusFound)
 }

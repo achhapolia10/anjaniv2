@@ -34,6 +34,7 @@ func main() {
 	router.GET("/", routes.GetLogin)
 	router.POST("/", routes.PostLogin)
 	router.GET("/logout", routes.GetLogout)
+	router.GET("/users", routes.GetUsers)
 
 	//Groupds reoutes are  defined
 	router.GET("/groups", routes.GetGroup)

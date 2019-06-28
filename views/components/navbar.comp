@@ -31,6 +31,9 @@
           <a class="dropdown-item" href="/groups">Groups</a>
           <a class="dropdown-item" href="/products">Products</a>
           <div class="dropdown-divider"></div>
+          {{if eq .U.Admin 1}}
+          <a class="dropdown-item" href="/users">Manage Users</a>
+          {{end}}
           <a class="dropdown-item" href="/logout">Logout</a>
         </div>
       </li>

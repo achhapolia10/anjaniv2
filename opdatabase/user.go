@@ -2,6 +2,15 @@ package opdatabase
 
 import "log"
 
+//User Defines the User Type
+type User struct {
+	ID         int
+	Username   string
+	Admin      int
+	IsLoggedIn bool
+	Password   string
+}
+
 //CreateUserTable creates the user table
 func CreateUserTable() {
 	query := `CREATE TABLE user(
@@ -44,7 +53,28 @@ func GetUser(uname string) (string, int, error) {
 			log.Printf("Error in reading user table: %v", err)
 		}
 	}
+	r.Close()
 	return p, admin, nil
+}
+
+//SelectUsers gets the Users
+func SelectUsers() []User {
+	query := `SELECT * FROM user;`
+	var users []User
+	r, err := db.Query(query)
+	if err != nil {
+		log.Printf("Error in reading user table: %v", err)
+	}
+	for r.Next() {
+		var user User
+		err := r.Scan(&(user.ID), &(user.Username), &(user.Password), &(user.Admin))
+		if err != nil {
+			log.Printf("Error in reading user table: %v", err)
+			break
+		}
+		users = append(users, user)
+	}
+	return users
 }
 
 //UpdateUser Updates the password

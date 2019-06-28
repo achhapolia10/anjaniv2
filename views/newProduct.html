@@ -12,7 +12,7 @@
 </head>
 <body>
     
-    {{template "navbar"}}
+    {{template "navbar" .}}
     <div class="container">
         
         <form name="newProductForm" method="POST">
@@ -23,7 +23,7 @@
             <div class="form-group">
                 <label for="group">Group</label>
                 <select class="form-control  col-md-6" id="product-group" required name="product-group" size="1">
-                    {{range .}}
+                    {{range .Groups}}
                     <option value="{{.Id}}">{{.Name}}</option>
                     {{end}}
                 </select>

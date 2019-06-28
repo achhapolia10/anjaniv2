@@ -30,83 +30,97 @@ type JournalResponse struct {
 
 //GetEntry Handler for route / method GET
 func GetEntry(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
-	p, res := model.GetAllProduct()
-	if !res {
-		log.Println("Error in querying all products in Entries")
-	} else {
-		t := template.Must(template.ParseGlob("views/components/navbar.comp"))
-		t.ParseFiles("views/entry.html")
-		t.ExecuteTemplate(w, "entry.html", p)
+	if isLoggedIn(w, req) {
+		p, res := model.GetAllProduct()
+		if !res {
+			log.Println("Error in querying all products in Entries")
+		} else {
+			data := struct {
+				Products []opdatabase.Product
+				U        User
+			}{
+				p, currentUser,
+			}
+			t := template.Must(template.ParseGlob("views/components/navbar.comp"))
+			t.ParseFiles("views/entry.html")
+			t.ExecuteTemplate(w, "entry.html", data)
+		}
 	}
 }
 
 //PostEntryNew Handler for route /new method POST
 func PostEntryNew(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
-	q := req.URL.Query()
-	box, _ := strconv.Atoi(q["box"][0])
-	packet, _ := strconv.Atoi(q["packet"][0])
-	id, _ := strconv.Atoi(q["product"][0])
-	je := opdatabase.JournalEntry{
-		ID:        0,
-		Labour:    q["labour"][0],
-		Date:      q["date"][0],
-		Box:       box,
-		Packet:    packet,
-		ProductID: id,
-	}
-	model.CreateJournalEntry(je)
-	res := Response{
-		301,
-		Response{20, ", "},
-	}
-	p, err := json.Marshal(res)
-	if err != nil {
-		log.Println(err)
-	}
-	io.WriteString(w, string(p))
+	if isLoggedIn(w, req) {
+		q := req.URL.Query()
+		box, _ := strconv.Atoi(q["box"][0])
+		packet, _ := strconv.Atoi(q["packet"][0])
+		id, _ := strconv.Atoi(q["product"][0])
+		je := opdatabase.JournalEntry{
+			ID:        0,
+			Labour:    q["labour"][0],
+			Date:      q["date"][0],
+			Box:       box,
+			Packet:    packet,
+			ProductID: id,
+		}
+		model.CreateJournalEntry(je)
+		res := Response{
+			301,
+			Response{20, ", "},
+		}
+		p, err := json.Marshal(res)
+		if err != nil {
+			log.Println(err)
+		}
+		io.WriteString(w, string(p))
 
+	}
 }
 
 //GetJournalEntriesAll Gets Journal Entry for a Product on a particular Date and Send Response
 //Route /getall method GET
 func GetJournalEntriesAll(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
-	q := req.URL.Query()
-	date := q["date"][0]
-	productID, err := strconv.Atoi(q["id"][0])
-	if err != nil {
-		log.Println("Error in GETJournal Entries all")
-		log.Println(err)
-	}
-	je, box, packet, res := model.GetAllJournalEntry(date, productID)
-	result := JournalResponse{
-		JournalEntries: je,
-		Box:            box,
-		Packet:         packet,
-	}
-	if res {
-		p, err := json.Marshal(result)
+	if isLoggedIn(w, req) {
+		q := req.URL.Query()
+		date := q["date"][0]
+		productID, err := strconv.Atoi(q["id"][0])
 		if err != nil {
-			log.Println("Error in GetJournalEntries all in Marshalling")
+			log.Println("Error in GETJournal Entries all")
 			log.Println(err)
 		}
-		io.WriteString(w, string(p))
+		je, box, packet, res := model.GetAllJournalEntry(date, productID)
+		result := JournalResponse{
+			JournalEntries: je,
+			Box:            box,
+			Packet:         packet,
+		}
+		if res {
+			p, err := json.Marshal(result)
+			if err != nil {
+				log.Println("Error in GetJournalEntries all in Marshalling")
+				log.Println(err)
+			}
+			io.WriteString(w, string(p))
+		}
 	}
 }
 
 //PostDeleteJournalEntry Deletes a Journal Entry
 // route /entry/delete?id=?&productID=? method POST
 func PostDeleteJournalEntry(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
-	q := req.URL.Query()
-	id, _ := strconv.Atoi(q["id"][0])
-	productID, _ := strconv.Atoi(q["productID"][0])
-	model.DeleteJournalEntry(id, productID)
-	res := Response{
-		301,
-		Response{20, ", "},
+	if isLoggedIn(w, req) {
+		q := req.URL.Query()
+		id, _ := strconv.Atoi(q["id"][0])
+		productID, _ := strconv.Atoi(q["productID"][0])
+		model.DeleteJournalEntry(id, productID)
+		res := Response{
+			301,
+			Response{20, ", "},
+		}
+		p, err := json.Marshal(res)
+		if err != nil {
+			log.Println(err)
+		}
+		io.WriteString(w, string(p))
 	}
-	p, err := json.Marshal(res)
-	if err != nil {
-		log.Println(err)
-	}
-	io.WriteString(w, string(p))
 }

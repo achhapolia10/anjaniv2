@@ -13,7 +13,7 @@
 </head>
 <body>
     
-    {{template "navbar"}}
+    {{template "navbar" .}}
     <div class="container">
         <div class= "row">
             <div class="col-md-3">
@@ -32,7 +32,7 @@
                 <div class="form-group">
 					<label for="product">Product</label>
 					<select name="product" class="form-control" id="product" size="1">
-						{{range .}}
+						{{range .Products}}
                             <option value="{{.ID}}">{{.Name}}</option>
                         {{end}}
 					</select>

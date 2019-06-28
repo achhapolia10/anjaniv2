@@ -13,7 +13,7 @@
 </head>
 <body>
     
-    {{template "navbar"}}
+    {{template "navbar" .}}
     <div class="container">
         
         <div class= "row">
@@ -37,10 +37,13 @@
                 <th>Box</th>
                 <th>Packet</th>
                 <th>Edit</th>
+                {{if eq .U.Admin  1}}
                 <th>Remove</th>
+                {{end}}
             </thead>
             <tbody>
-                {{range .}}
+              {{$admin:= .U.Admin}}
+                {{range .Products}}
                     <tr>
                         <td>{{.Name}}</td>
                         <td>{{getGroupName .Group}}</td>
@@ -54,10 +57,12 @@
                             </button>
                         </td>
                         <td>
+                            {{if eq $admin  1}}
                             <button class="btn btn-danger" type="button" data-toggle="modal"
                             data-target="#deleteModal" data-id={{.ID}} data-name="{{.Name}}">
-                                Delete
+                                Delete 
                             </button>
+                            {{end}}
                         </td>
                     </tr>
                 {{end}}

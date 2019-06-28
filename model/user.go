@@ -14,6 +14,12 @@ func CreateUser(uname, p string, admin int) {
 	opdatabase.CreateUser(uname, p, admin)
 }
 
+//GetUsers Return all users
+func GetUsers() []opdatabase.User {
+	u := opdatabase.SelectUsers()
+	return u
+}
+
 //CheckUser checks a user
 func CheckUser(uname, p string) (int, bool) {
 	if uname != "" && p != "" {

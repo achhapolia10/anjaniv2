@@ -14,7 +14,7 @@
 </head>
 <body>
     
-    {{template "navbar"}}
+    {{template "navbar" .}}
     <div class="container">
         
         <div class= "row">
@@ -34,10 +34,13 @@
                 <td>S no.</td>
                 <td>Group</td>
                 <td>Edit</td>
+                {{if eq .U.Admin 1}}
                 <td>Remove</td>
+                {{end}}
             </thead>
+            {{$admin := .U.Admin}}
             <tbody>
-                {{range .}}
+                {{range .Groups}}
                     <tr>
                         <td>{{.Id}}</td>
                         <td>{{.Name}}</td>
@@ -47,12 +50,14 @@
                                 Edit
                             </button>
                         </td>
+                        {{if eq $admin 1}}
                         <td>
                             <button class="btn btn-danger" type="button" data-toggle="modal"
                             data-target="#deleteModal" data-id={{.Id}} data-name="{{.Name}}">
                                 Delete
                             </button>
                         </td>
+                        {{end}}
                     </tr>
                 {{end}}
             </tbody>

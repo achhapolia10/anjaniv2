@@ -15,38 +15,48 @@ import (
 
 //GetLabourPayment Handler for route / method GET
 func GetLabourPayment(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
+	if isLoggedIn(w, req) {
 
-	t := template.Must(template.ParseGlob("views/components/navbar.comp"))
-	t.ParseFiles("views/lp.html")
+		t := template.Must(template.ParseGlob("views/components/navbar.comp"))
+		t.ParseFiles("views/lp.html")
 
-	t.ExecuteTemplate(w, "lp.html", "")
+		data := struct {
+			U User
+		}{
+			currentUser,
+		}
+
+		t.ExecuteTemplate(w, "lp.html", data)
+	}
 }
 
 //PostLabourPayment Handler for route / method Post
 func PostLabourPayment(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
-	err := req.ParseForm()
-	if err != nil {
-		log.Println("Error in PostLabourPayment: ", err)
+	if isLoggedIn(w, req) {
+		err := req.ParseForm()
+		if err != nil {
+			log.Println("Error in PostLabourPayment: ", err)
+		}
+		day1 := req.FormValue("day1")
+		day2 := req.FormValue("day2")
+		day3 := req.FormValue("day3")
+		day4 := req.FormValue("day4")
+		day5 := req.FormValue("day5")
+		day6 := req.FormValue("day6")
+		day7 := req.FormValue("day7")
+		lp := model.GetLabourPayment(day1, day2, day3, day4, day5, day6, day7)
+		var response Response
+		if len(lp) == 0 {
+			response = Response{501, lp}
+		} else {
+			response = Response{301, lp}
+		}
+		p, e := json.Marshal(response)
+		if e != nil {
+			log.Println(e)
+		}
+		io.WriteString(w, string(p))
 	}
-	day1 := req.FormValue("day1")
-	day2 := req.FormValue("day2")
-	day3 := req.FormValue("day3")
-	day4 := req.FormValue("day4")
-	day5 := req.FormValue("day5")
-	day6 := req.FormValue("day6")
-	day7 := req.FormValue("day7")
-	lp := model.GetLabourPayment(day1, day2, day3, day4, day5, day6, day7)
-	var response Response
-	if len(lp) == 0 {
-		response = Response{501, lp}
-	} else {
-		response = Response{301, lp}
-	}
-	p, e := json.Marshal(response)
-	if e != nil {
-		log.Println(e)
-	}
-	io.WriteString(w, string(p))
 }
 
 //S f
@@ -58,27 +68,29 @@ type S struct {
 
 //GetPrintLabourPayment handler form route /print method Post
 func GetPrintLabourPayment(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
-	url := req.URL
-	q := url.Query()
-	day1 := q.Get("day1")
-	day2 := q.Get("day2")
-	day3 := q.Get("day3")
-	day4 := q.Get("day4")
-	day5 := q.Get("day5")
-	day6 := q.Get("day6")
-	day7 := q.Get("day7")
-	lp := model.GetLabourPayment(day1, day2, day3, day4, day5, day6, day7)
-	t := template.Must(template.ParseGlob("views/components/navbar.comp"))
-	t.Funcs(template.FuncMap{
-		"shouldPrint": ShouldPrintL,
-		"countDays":   CountDays,
-		"roundMoney":  RoundMoney,
-	}).ParseFiles("views/lpPrint.html")
-	sort.Sort(lp)
-	err := t.ExecuteTemplate(w, "lpPrint.html", S{Lps: lp, Days: []string{day1, day2, day3, day4, day5, day6, day7}, TotalAmmount: lp.TotalAmmount()})
-	if err != nil {
+	if isLoggedIn(w, req) {
+		url := req.URL
+		q := url.Query()
+		day1 := q.Get("day1")
+		day2 := q.Get("day2")
+		day3 := q.Get("day3")
+		day4 := q.Get("day4")
+		day5 := q.Get("day5")
+		day6 := q.Get("day6")
+		day7 := q.Get("day7")
+		lp := model.GetLabourPayment(day1, day2, day3, day4, day5, day6, day7)
+		t := template.Must(template.ParseGlob("views/components/navbar.comp"))
+		t.Funcs(template.FuncMap{
+			"shouldPrint": ShouldPrintL,
+			"countDays":   CountDays,
+			"roundMoney":  RoundMoney,
+		}).ParseFiles("views/lpPrint.html")
+		sort.Sort(lp)
+		err := t.ExecuteTemplate(w, "lpPrint.html", S{Lps: lp, Days: []string{day1, day2, day3, day4, day5, day6, day7}, TotalAmmount: lp.TotalAmmount()})
+		if err != nil {
 
-		log.Printf("Error in Printining Labour Payment: %v", err)
+			log.Printf("Error in Printining Labour Payment: %v", err)
+		}
 	}
 }
 
