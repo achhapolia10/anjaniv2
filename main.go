@@ -35,6 +35,11 @@ func main() {
 	router.POST("/", routes.PostLogin)
 	router.GET("/logout", routes.GetLogout)
 	router.GET("/users", routes.GetUsers)
+	router.GET("/users/new", routes.GetNewUser)
+	router.POST("/users/new", routes.PostNewUser)
+	router.GET("/users/edit", routes.GetChange)
+	router.POST("/users/edit", routes.PostChange)
+	router.GET("/users/delete", routes.PostDelete)
 
 	//Groupds reoutes are  defined
 	router.GET("/groups", routes.GetGroup)

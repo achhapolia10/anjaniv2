@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    <script src="http://localhost:4001/public/js/jquery-3.4.1.min.js"></script>
+    <script src="http://localhost:4001/public/js/bootstrap.min.js"></script>
+    <script src="http://localhost:4001/public/js/tooltip.min.js"></script>
+    <script src="http://localhost:4001/public/js/users.js"></script>
+    <link rel="stylesheet" href="http://localhost:4001/public/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://localhost:4001/public/css/stock.css">
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Stock</title>
+</head>
+<body>
+    
+    {{template "navbar" .}}
+    <div class="container">
+       <div class="row">
+			New Password for {{.Users}}:
+
+				<div class="col-md-4">
+					<div class="form-group">
+						<label for="new-password">New Password</label>
+						<input type="text" name="new-password" id="new-password" class="form-control">
+                    </div>
+					<button class="btn btn-primary" onclick="onChangePassword({{.Users}});">Submit</button>
+                </div>
+        </div>
+     </div>
+
+</body>

@@ -164,7 +164,7 @@ func EditProduct(id int, p Product) bool {
 			opackets=?,
 			weight=? 
 			WHERE productID=?;`
-	_, err := db.Exec(query, p.Name, p.PacketQuantity, p.BoxQuantity, p.Price, id, p.OpeningBox, p.OpeningPacket, p.Weight)
+	_, err := db.Exec(query, p.Name, p.PacketQuantity, p.BoxQuantity, p.Price, p.OpeningBox, p.OpeningPacket, p.Weight, id)
 	if err != nil {
 		fmt.Println("Error in edititng product ")
 		log.Println(err)

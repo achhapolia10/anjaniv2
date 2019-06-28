@@ -43,7 +43,7 @@
             <div class="form-group">
                 <label for="obox">Opening Boxes</label>
                 <input 
-                {{if eq .U.Admin 1}}
+                {{if ne .U.Admin 1}}
                 disabled
                 {{end}}
                  name="obox" value="{{.Product.OpeningBox}}" placeholder="Opening Boxes" type="number" class="form-control col-md-6">
@@ -52,7 +52,7 @@
             <div class="form-group">
                 <label for="opacket">Opening Packets</label>
                 <input 
-                {{if eq .U.Admin 1}}
+                {{if ne .U.Admin 1}}
                 disabled
                 {{end}}
                 name="opacket" value="{{.Product.OpeningPacket}}" placeholder="Opening Packets" type="number" class="form-control col-md-6"/>
