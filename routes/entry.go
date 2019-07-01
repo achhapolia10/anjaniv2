@@ -24,12 +24,17 @@ type Response struct {
 //JournalResponse struct for json Response
 type JournalResponse struct {
 	JournalEntries []opdatabase.JournalEntry `json:"entries"`
+	Labours        map[string]bool           `json:"labours"`
 	Box            int                       `json:"tbox"`
 	Packet         int                       `json:"tpacket"`
 }
 
+var labours map[string]bool
+
 //GetEntry Handler for route / method GET
 func GetEntry(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
+	labours = make(map[string]bool)
+
 	if isLoggedIn(w, req) {
 		p, res := model.GetAllProduct()
 		if !res {
@@ -63,6 +68,7 @@ func PostEntryNew(w http.ResponseWriter, req *http.Request, _ httprouter.Params)
 			Packet:    packet,
 			ProductID: id,
 		}
+		go model.UpdateLabourNames(je.Labour, je.Date, labours)
 		model.CreateJournalEntry(je)
 		res := Response{
 			301,
@@ -82,6 +88,10 @@ func PostEntryNew(w http.ResponseWriter, req *http.Request, _ httprouter.Params)
 func GetJournalEntriesAll(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
 	if isLoggedIn(w, req) {
 		q := req.URL.Query()
+
+		ch := make(chan map[string]bool)
+		go model.GetLabourNames(ch)
+
 		date := q["date"][0]
 		productID, err := strconv.Atoi(q["id"][0])
 		if err != nil {
@@ -89,10 +99,14 @@ func GetJournalEntriesAll(w http.ResponseWriter, req *http.Request, _ httprouter
 			log.Println(err)
 		}
 		je, box, packet, res := model.GetAllJournalEntry(date, productID)
+
+		labours = <-ch
+
 		result := JournalResponse{
 			JournalEntries: je,
 			Box:            box,
 			Packet:         packet,
+			Labours:        labours,
 		}
 		if res {
 			p, err := json.Marshal(result)

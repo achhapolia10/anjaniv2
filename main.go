@@ -8,6 +8,7 @@ import (
 
 	"github.com/achhapolia10/anjaniv2/opdatabase"
 
+	"github.com/achhapolia10/anjaniv2/model"
 	"github.com/achhapolia10/anjaniv2/routes"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/julienschmidt/httprouter"
@@ -28,6 +29,10 @@ func main() {
 	opdatabase.CreateGroupTable()
 	opdatabase.CreateProductTable()
 	opdatabase.CreateUserTable()
+
+	opdatabase.CreateLabourTable()
+	model.DeleteLabours()
+
 	router.ServeFiles("/public/*filepath", publicDir)
 
 	//Login routes are defined
