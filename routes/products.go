@@ -176,8 +176,8 @@ func PostNewProduct(w http.ResponseWriter, req *http.Request, _ httprouter.Param
 		var p, b, op, ob, g int
 		var pr, we float64
 		n = req.FormValue("product")
-		p, err = strconv.Atoi(req.FormValue("box"))
-		b, err = strconv.Atoi(req.FormValue("packet"))
+		b, err = strconv.Atoi(req.FormValue("box"))
+		p, err = strconv.Atoi(req.FormValue("packet"))
 		op, err = strconv.Atoi(req.FormValue("opacket"))
 		ob, err = strconv.Atoi(req.FormValue("obox"))
 		pr, err = strconv.ParseFloat(req.FormValue("price"), 32)
