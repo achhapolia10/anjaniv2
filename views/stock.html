@@ -18,13 +18,13 @@
     {{template "navbar" .}}
     <div class="container">
         <div class= "row">
-            <div class="col-md-5">
+            <div class="col-md-4">
                 <div class="form-group">
                     <label for="from-date" >From Date:</label>
                     <input type="date" onchange="onFromDateChange(event);" id="from-date" class="form-control" >
                 </div>
             </div>
-            <div class="col-md-5">
+            <div class="col-md-4">
                 <div class="form-group">
                     <label for="to-date">To Date:</label>
                     <input type="date"  onchange="onToDateChange(event);"id="to-date" class="form-control" >
@@ -35,6 +35,13 @@
                     <button class="btn btn-primary" onclick="onSubmitClick();" id = "submit">Submit</button>
                 </div>
             </div>
+             <div class="col-md-2">
+                <div class="form-group">
+                    <a id="print-anchor" target="blank"><button class="btn btn-success" id = "print">Print</button></a>
+                </div>
+            </div>
+
+
         </div>
     <div class= row>
         <table class="table">

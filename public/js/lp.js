@@ -111,7 +111,7 @@ function createLabourPaymentTable(arr){
                         "<td>"+l.day5+"</td>"+
                         "<td>"+l.day6+"</td>"+
                         "<td>"+l.day7+"</td>"+
-                        "<td>"+l.total+"</td>"+
+                        "<td>"+l.total.toFixed(2)+"</td>"+
                             "</tr>")
     });
 }

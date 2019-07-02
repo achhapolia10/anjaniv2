@@ -1,0 +1,34 @@
+body{
+    text-align: center
+}
+.heading{
+    width: 210mm
+}
+table{
+    border-collapse: collapse
+}
+
+#stock-table tr th{
+    border: 1px solid black;
+
+}
+#stock-table tr td{
+    border: 1px solid black;
+}
+
+
+.main-table{
+    margin : 20px 10px 0 15px;
+}
+
+.name-col{
+    width:300px;
+}
+
+.data.name-col{
+   font-size: 0.85em 
+}
+
+.data.data-col{
+    width:35mm
+}

@@ -51,6 +51,14 @@ func (d *Date) GetString() string {
 	return year + "-" + month + "-" + day
 }
 
+//GetReadable returns a string for a date
+func (d *Date) GetReadable() string {
+	day := padDate(d.Day)
+	month := padDate(d.Month)
+	year := padDate(d.Year)
+	return day + "-" + month + "-" + year
+}
+
 //GetMonth returns the month in type time.Month
 func (d *Date) GetMonth() time.Month {
 	switch d.Month {

@@ -80,3 +80,28 @@ func PostProductStock(w http.ResponseWriter, req *http.Request, _ httprouter.Par
 		w.Write(res)
 	}
 }
+
+//GetStockPrint for route /stock/print method get
+func GetStockPrint(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
+	if isLoggedIn(w, req) {
+		from := req.URL.Query().Get("fdate")
+		to := req.URL.Query().Get("tdate")
+		f := model.ParseDate(from)
+		td := model.ParseDate(to)
+		stockData := model.AllStock(from, to)
+		data := struct {
+			Stock map[int]model.Stock
+			From  string
+			To    string
+		}{
+			stockData, f.GetReadable(), td.GetReadable(),
+		}
+		t := template.Must(template.ParseGlob("views/components/navbar.comp"))
+		t.ParseFiles("views/stockprint.html")
+		err := t.ExecuteTemplate(w, "stockprint.html", data)
+		if err != nil {
+			log.Println(err)
+		}
+
+	}
+}

@@ -68,6 +68,7 @@ func main() {
 	router.POST("/stock", routes.PostStock)
 	router.GET("/stock/product", routes.GetProductStock)
 	router.POST("/stock/product", routes.PostProductStock)
+	router.GET("/stock/print", routes.GetStockPrint)
 
 	//Labour Payment routes are defined
 	router.GET("/labourpayment", routes.GetLabourPayment)

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    <script src="http://localhost:4001/public/js/jquery-3.4.1.min.js"></script>
+    <script src="http://localhost:4001/public/js/stockPrint.js"></script>
+    <link href= "http://localhost:4001/public/css/stockPrint.css" type="text/css" rel="stylesheet">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Stocks</title>
+</head>
+<body>
+    <table class="main-table">
+        <tr><td class="heading" colspan="4"><h2>Stocks</h2></td></tr>
+        <tr><td class="dateLabel">From:</td><td><span id="from-date">{{.From}}</span></td>
+            <td class="dateLabel">To:</td><td><span id="to-date">{{.To}}</span></td></tr>
+        <tr>
+            <td colspan="4">
+                <table id="stock-table">
+                    <tr class="thead">
+                    <th class='label name-col'>Product Name</th>
+                    <th class='label data-col'>Opening Stock</th>
+                    <th class='label data-col'>Recieved</th>
+                    <th class='label data-col'>Dispatched</th>
+                    <th class='label data-col'>Closing Stock</th>
+                    </tr>
+                    <tbody>
+                        {{range $key,$value := .Stock}}
+                        <tr>
+                    <td class='data name-col'>{{$value.Product.Name}}</th>
+                    <td class='data data-col'>{{$value.OBox}} B {{$value.OPacket}} P</th>
+                    <td class='data data-col'>{{$value.InBox}} B {{$value.InPacket}} P</th>
+                    <td class='data data-col'>{{$value.OutBox}} B {{$value.OutPacket}} P</th>
+                    <td class='data data-col'>{{$value.CBox}} B {{$value.CPacket}} P</th>
+                       
+                        </tr>
+                        {{end}}
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>

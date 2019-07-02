@@ -21,6 +21,7 @@ function onSubmitClick(event){
         success: function (response) {
             stocks = JSON.parse(response)
             createStockTable(stocks)
+            document.getElementById("print-anchor").setAttribute('href','/stock/print?fdate='+fromDate.value+'&tdate='+toDate.value)
         }
     })
         
