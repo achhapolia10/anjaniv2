@@ -52,7 +52,7 @@ func DispatchAddMonth(se opdatabase.StockEntry) bool {
 }
 
 //DispatchDeleteMonth Reflsects Changes in Month for Deleting a DispatchEntry
-func DispatchDeleteMonth(se opdatabase.StockEntry) bool {
+func DispatchDeleteMonth(se opdatabase.StockEntry) bool { //Deprecate this
 	date := ParseDate(se.Date)
 	date.Day = 1
 	s, res := opdatabase.SelectMonthEntryDate(date.GetString(), se.ProductID)

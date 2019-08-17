@@ -1,11 +1,12 @@
-// model file - contains the buisiness logic for calculation of the stock
+// model file - contains the business logic for calculation of the stock
 
 package model
 
 import (
+	"fmt"
 	"log"
 	"time"
-	
+
 	"github.com/achhapolia10/anjaniv2/opdatabase"
 )
 
@@ -36,7 +37,7 @@ Getting the product Details
 Calculating the stocks for  a particular date
 **/
 
-//ProductStock retruns the data about the stock
+//ProductStock returns the data about the stock
 func ProductStock(fDate, tDate, start time.Time, product opdatabase.Product) Stock {
 
 	s := Stock{
@@ -64,6 +65,7 @@ func ProductStock(fDate, tDate, start time.Time, product opdatabase.Product) Sto
 				s.OBox = s.OBox + me.BoxIn - me.BoxOut
 				s.OPacket = s.OPacket + me.PacketIn - me.PacketOut
 				start = temp.AddDate(0, 0, 1)
+				fmt.Println(start)
 			} else {
 				flag = false
 			}
@@ -90,6 +92,7 @@ func ProductStock(fDate, tDate, start time.Time, product opdatabase.Product) Sto
 				s.InPacket = s.InPacket + me.PacketIn
 				s.OutPacket = s.OutPacket + me.PacketOut
 				start = temp.AddDate(0, 0, 1)
+				fmt.Println(start)
 			} else {
 				flag = false
 			}
@@ -101,6 +104,7 @@ func ProductStock(fDate, tDate, start time.Time, product opdatabase.Product) Sto
 			s.InPacket = s.InPacket + se.PacketIn
 			s.OutPacket = s.OutPacket + se.PacketOut
 			start = start.AddDate(0, 0, 1)
+			fmt.Println(start)
 			if start.Day() == 1 {
 				flag = true
 			}

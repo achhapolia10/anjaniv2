@@ -31,8 +31,10 @@ func NewDispatchEntry(se opdatabase.StockEntry) bool {
 
 //DeleteDispatchEntry deletes a dispatch Entry
 func DeleteDispatchEntry(date string, productID int) bool {
+	date1 := ParseDate(date)
 	s, res := opdatabase.SelectStockEntryDate(date, productID)
-	m, res2 := opdatabase.SelectMonthEntryDate(date, productID)
+	date1.Day=1
+	m, res2 := opdatabase.SelectMonthEntryDate(date1.GetString(), productID)
 
 	if res2 {
 		m.BoxOut = m.BoxOut - s.BoxOut
