@@ -126,8 +126,8 @@ func PostEditProduct(w http.ResponseWriter, req *http.Request, params httprouter
 				var p, b, op, ob int
 				var pr, weight float64
 				n = req.FormValue("product")
-				p, err = strconv.Atoi(req.FormValue("box"))
-				b, err = strconv.Atoi(req.FormValue("packet"))
+				b, err = strconv.Atoi(req.FormValue("box"))
+				p, err = strconv.Atoi(req.FormValue("packet"))
 				op, err = strconv.Atoi(req.FormValue("opacket"))
 				ob, err = strconv.Atoi(req.FormValue("obox"))
 				weight, err = strconv.ParseFloat(req.FormValue("weight"), 32)
