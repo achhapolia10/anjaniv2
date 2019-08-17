@@ -130,7 +130,7 @@ func PostEditProduct(w http.ResponseWriter, req *http.Request, params httprouter
 				b, err = strconv.Atoi(req.FormValue("packet"))
 				op, err = strconv.Atoi(req.FormValue("opacket"))
 				ob, err = strconv.Atoi(req.FormValue("obox"))
-				weight, err = strconv.ParseFloat(req.FormValue("weight"))
+				weight, err = strconv.ParseFloat(req.FormValue("weight"), 32)
 				pr, err = strconv.ParseFloat(req.FormValue("price"), 32)
 				product := opdatabase.Product{
 					ID: i, Name: n, PacketQuantity: p, BoxQuantity: b, Price: pr, OpeningBox: ob, OpeningPacket: op, Group: 0, Weight: weight,
