@@ -3,7 +3,7 @@ package model
 import (
 	"time"
 
-	"github.com/achhapolia10/anjaniv2/opdatabase"
+	"github.com/achhapolia10/inventory-manager/opdatabase"
 )
 
 //GetLabourNames gets all the unique usernames

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    <script src="http://localhost:4001/public/js/jquery-3.4.1.min.js"></script>
+    <script src="http://localhost:4001/public/js/bootstrap.min.js"></script>
+    <script src="http://localhost:4001/public/js/tooltip.min.js"></script>
+    <script src="http://localhost:4001/public/js/stock.js"></script>
+    <link rel="stylesheet" href="http://localhost:4001/public/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://localhost:4001/public/css/stock.css">
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Stock</title>
+</head>
+<body>
+    
+    {{template "navbar"}}
+    <div class="container">
+        <div class= "row">
+            <div class="col-md-5">
+                <div class="form-group">
+                    <label for="from-date" >From Date:</label>
+                    <input type="date" onchange="onFromDateChange(event);" id="from-date" class="form-control" >
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="form-group">
+                    <label for="to-date">To Date:</label>
+                    <input type="date"  onchange="onToDateChange(event);"id="to-date" class="form-control" >
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <button class="btn btn-primary" onclick="onSubmitClick();" id = "submit">Submit</button>
+                </div>
+            </div>
+        </div>
+    <div class= row>
+        <table class="table">
+           <thead >
+               <tr>
+                   <th scope="col">S.No.</th>
+                   <th scope="col">Product Name</th>
+                   <th scope="col">Opening Stock</th>
+                   <th scope="col">Incoming</th>
+                   <th scope="col">Dispatch</th>
+                   <th scope="col">Closing Stock</th>
+               </tr>
+           </thead> 
+           <tbody id="stock-table-body">
+               <tr>
+                   <td></td>
+                   <td></td>
+                   <td></td>
+                   <td></td>
+                   <td></td>
+                   <td></td>
+               </tr>
+           </tbody>
+
+        </table>
+    </div>
+    </div>
+</body>

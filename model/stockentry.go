@@ -3,7 +3,7 @@ package model
 import (
 	"log"
 
-	"github.com/achhapolia10/anjaniv2/opdatabase"
+	"github.com/achhapolia10/inventory-manager/opdatabase"
 )
 
 //JournalAddStock Add to Stock For a Journal Entry

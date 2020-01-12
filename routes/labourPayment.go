@@ -9,7 +9,7 @@ import (
 	"net/http"
 	"sort"
 
-	"github.com/achhapolia10/anjaniv2/model"
+	"github.com/achhapolia10/inventory-manager/model"
 	"github.com/julienschmidt/httprouter"
 )
 
@@ -78,6 +78,8 @@ func GetPrintLabourPayment(w http.ResponseWriter, req *http.Request, _ httproute
 		day5 := q.Get("day5")
 		day6 := q.Get("day6")
 		day7 := q.Get("day7")
+
+
 		lp := model.GetLabourPayment(day1, day2, day3, day4, day5, day6, day7)
 		t := template.Must(template.ParseGlob("views/components/navbar.comp"))
 		t.Funcs(template.FuncMap{
@@ -86,6 +88,8 @@ func GetPrintLabourPayment(w http.ResponseWriter, req *http.Request, _ httproute
 			"roundMoney":  RoundMoney,
 		}).ParseFiles("views/lpPrint.html")
 		sort.Sort(lp)
+
+
 		err := t.ExecuteTemplate(w, "lpPrint.html", S{Lps: lp, Days: []string{day1, day2, day3, day4, day5, day6, day7}, TotalAmmount: lp.TotalAmmount()})
 		if err != nil {
 

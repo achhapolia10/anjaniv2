@@ -3,7 +3,7 @@ package model
 import (
 	"log"
 
-	"github.com/achhapolia10/anjaniv2/opdatabase"
+	"github.com/achhapolia10/inventory-manager/opdatabase"
 )
 
 //GetDispatchEntriesByDate returns all the Dispatch entries for a date

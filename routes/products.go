@@ -8,8 +8,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/achhapolia10/anjaniv2/model"
-	"github.com/achhapolia10/anjaniv2/opdatabase"
+	"github.com/achhapolia10/inventory-manager/model"
+	"github.com/achhapolia10/inventory-manager/opdatabase"
 
 	"github.com/julienschmidt/httprouter"
 )

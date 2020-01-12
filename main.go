@@ -6,10 +6,10 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/achhapolia10/anjaniv2/opdatabase"
+	"github.com/achhapolia10/inventory-manager/opdatabase"
 
-	"github.com/achhapolia10/anjaniv2/model"
-	"github.com/achhapolia10/anjaniv2/routes"
+	"github.com/achhapolia10/inventory-manager/model"
+	"github.com/achhapolia10/inventory-manager/routes"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/julienschmidt/httprouter"
 )

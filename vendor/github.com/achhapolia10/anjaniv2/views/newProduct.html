@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    <script src="http://localhost:4001/public/js/jquery-3.4.1.min.js"></script>
+    <script src="http://localhost:4001/public/js/bootstrap.min.js"></script>
+    <script src="http://localhost:4001/public/js/tooltip.min.js"></script>
+    <link rel="stylesheet" href="http://localhost:4001/public/css/bootstrap.min.css">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>New Product</title>
+</head>
+<body>
+    
+    {{template "navbar"}}
+    <div class="container">
+        
+        <form name="newProductForm" method="POST">
+            <div class="form-group">
+                <label for="product">Name</label>
+                <input id="productName" required name="product" placeholder="Product Name" type="text" class="form-control col-md-6"/>
+            </div>
+            <div class="form-group">
+                <label for="group">Group</label>
+                <select class="form-control  col-md-6" id="product-group" required name="product-group" size="1">
+                    {{range .}}
+                    <option value="{{.Id}}">{{.Name}}</option>
+                    {{end}}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="box">Box Quantity</label>
+                <input name="box" required placeholder="Box Quantity" type="number" class="form-control col-md-6"/>
+            </div>
+
+            <div class="form-group">
+                <label for="packet">Packet Quantity</label>
+                <input name="packet" required placeholder="Packet Quantity" type="number" class="form-control col-md-6"/>
+            </div>
+ 
+            <div class="form-group">
+                <label for="price">Price</label>
+                <input name="price" required placeholder="Price" type="number" step=".01" class="form-control col-md-6">
+        
+            </div>
+            <div class="form-group">
+                <label for="weight">Weight</label>
+                <input name="weight" required placeholder="Weight" type="number" step=".01" class="form-control col-md-6">
+        
+            </div>
+            <div class="form-group">
+            <div class="form-group">
+                <label for="obox">Opening Boxes</label>
+                <input name="obox" required placeholder="Opening Boxes" type="number" class="form-control col-md-6">
+            </div>
+            <div class="form-group">
+                <label for="opacket">Opening Packets</label>
+                <input name="opacket" required placeholder="Opening Packets" type="number" class="form-control col-md-6"/>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+    <script>
+        document.getElementById("productName").focus()
+    </script>
+</body>

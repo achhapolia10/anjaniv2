@@ -1,6 +1,6 @@
 package model
 
-import "github.com/achhapolia10/anjaniv2/opdatabase"
+import "github.com/achhapolia10/inventory-manager/opdatabase"
 
 //GetAllProduct returns all products
 func GetAllProduct() ([]opdatabase.Product, bool) {

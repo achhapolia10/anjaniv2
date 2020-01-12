@@ -4,7 +4,7 @@ import (
 	"math"
 	"sort"
 
-	"github.com/achhapolia10/anjaniv2/opdatabase"
+	"github.com/achhapolia10/inventory-manager/opdatabase"
 )
 
 //individualJournal stores the individual Journal For Each Day

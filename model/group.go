@@ -1,7 +1,7 @@
 package model
 
 import (
-	"github.com/achhapolia10/anjaniv2/opdatabase"
+	"github.com/achhapolia10/inventory-manager/opdatabase"
 )
 
 //NewGroup create a new Group

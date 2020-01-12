@@ -1,0 +1,10 @@
+{{range .}}
+{{if shouldPrint .BoxOut .PacketOut}}
+<tr>
+    <td>{{getProductName .ProductID}}</td>
+    <td>{{.BoxOut}}</td>
+    <td>{{.PacketOut}}</td>
+    <td><button class="btn btn-warning" onclick="onRemoveClick({{.ProductID}},{{.Date}});">Remove</button></td>
+</tr>
+{{end}}
+{{end}}

@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/achhapolia10/anjaniv2/model"
+	"github.com/achhapolia10/inventory-manager/model"
 
 	"github.com/julienschmidt/httprouter"
 )

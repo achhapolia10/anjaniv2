@@ -4,7 +4,7 @@ import (
 	"math"
 	"time"
 
-	"github.com/achhapolia10/anjaniv2/opdatabase"
+	"github.com/achhapolia10/inventory-manager/opdatabase"
 )
 
 //Report is a struct for daily Report
