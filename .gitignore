@@ -9,6 +9,9 @@
 *.db
 # Test binary, built with `go test -c`
 *.test
+inventory-manager
+imanager64
+imanager32
 
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out

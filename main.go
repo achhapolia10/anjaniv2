@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"io"
 	"log"
@@ -20,12 +21,16 @@ func Index(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
 }
 
 func main() {
+
+	var db = flag.String("database","./default.db","select database")
+	flag.Parse()
+
 	var publicDir http.Dir
 	publicDir = "./public/"
 
 	router := httprouter.New()
 
-	opdatabase.ConnectDatabase()
+	opdatabase.ConnectDatabase(*db)
 	opdatabase.CreateGroupTable()
 	opdatabase.CreateProductTable()
 	opdatabase.CreateUserTable()
