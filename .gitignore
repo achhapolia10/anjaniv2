@@ -12,6 +12,7 @@
 inventory-manager
 imanager64
 imanager32
+.idea/
 
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
