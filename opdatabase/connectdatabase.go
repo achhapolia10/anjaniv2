@@ -10,7 +10,7 @@ import (
 func ConnectDatabase() {
 	fmt.Println("Connecting to the SQL server")
 	var err error
-	db, err = sql.Open("mysql", "root:ilijksms1999@/anjani_test")
+	db, err = sql.Open("sqlite3", "./test.db")
 	err1 := db.Ping()
 	if err1 != nil {
 		log.Println(err)

@@ -10,8 +10,8 @@ import (
 
 	"github.com/achhapolia10/inventory-manager/model"
 	"github.com/achhapolia10/inventory-manager/routes"
-	_ "github.com/go-sql-driver/mysql"
 	"github.com/julienschmidt/httprouter"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 //Index Handler Method GET

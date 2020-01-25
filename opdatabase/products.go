@@ -26,14 +26,14 @@ var db *sql.DB
 //CreateProductTable creates a product table if it's not already created
 func CreateProductTable() {
 	query := `create table product(
-		productID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+		productID INTEGER PRIMARY KEY AUTOINCREMENT,
 		name VARCHAR(50) NOT NULL, 
-		groupid INT NOT NULL,
-		packetQuantity SMALLINT NOT NULL,
-		boxQuantity SMALLINT NOT NULL,
+		groupid INTEGER NOT NULL,
+		packetQuantity INTEGER NOT NULL,
+		boxQuantity INTEGER NOT NULL,
 		price DECIMAL(4,2) NOT NULL,
-		oboxes INT NOT NULL,
-		opackets INT NOT NULL,
+		oboxes INTEGER NOT NULL,
+		opackets INTEGER NOT NULL,
 		weight DECIMAL(4,3) NOT NULL);`
 
 	fmt.Println("Creating Product Table : ")
@@ -204,8 +204,8 @@ func DeleteProductByGroup(g Group) {
 
 //CreateProductJournal creates a journal Table for each product [id]journal
 func CreateProductJournal(id int64) bool {
-	query := "CREATE TABLE " + strconv.FormatInt(id, 10) + "journal(" +
-		`id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	query := "CREATE TABLE _" + strconv.FormatInt(id, 10) + "journal(" +
+		`id INTEGER  PRIMARY KEY AUTOINCREMENT,
 			labour VARCHAR(50) NOT NULL DEFAULT 'ANSHU',
 			date VARCHAR(50) NOT NULL DEFAULT '10/01/1999',
 			 box INT NOT NULL,
@@ -222,7 +222,7 @@ func CreateProductJournal(id int64) bool {
 
 //DeleteProductJournal deletes a journal Table for each product [id]journal
 func DeleteProductJournal(id int) bool {
-	query := "DROP TABLE " + strconv.Itoa(id) + "journal;"
+	query := "DROP TABLE _" + strconv.Itoa(id) + "journal;"
 	_, err := db.Exec(query)
 	if err != nil {
 		log.Println(err)
@@ -235,8 +235,8 @@ func DeleteProductJournal(id int) bool {
 
 //CreateProductStock creates a Stock Table for each product [id]stock
 func CreateProductStock(id int64) bool {
-	query := "CREATE TABLE " + strconv.FormatInt(id, 10) + "stock(" +
-		`id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	query := "CREATE TABLE _" + strconv.FormatInt(id, 10) + "stock(" +
+		`id INTEGER PRIMARY KEY AUTOINCREMENT, 
 		date VARCHAR(50) ,
 		boxIn INT NOT NULL,
 		packetIn INT NOT NULL,
@@ -254,7 +254,7 @@ func CreateProductStock(id int64) bool {
 
 //DeleteProductStock deletes a Stock Table for each product [id]stock
 func DeleteProductStock(id int) bool {
-	query := "DROP TABLE " + strconv.Itoa(id) + "stock;"
+	query := "DROP TABLE _" + strconv.Itoa(id) + "stock;"
 	_, err := db.Exec(query)
 	if err != nil {
 		log.Println(err)
@@ -267,8 +267,8 @@ func DeleteProductStock(id int) bool {
 
 //CreateProductMonth creates a Stock Table for each product [id]stock
 func CreateProductMonth(id int64) bool {
-	query := "CREATE TABLE " + strconv.FormatInt(id, 10) + "month(" +
-		`id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	query := "CREATE TABLE _" + strconv.FormatInt(id, 10) + "month(" +
+		`id INTEGER PRIMARY KEY AUTOINCREMENT ,
 		date VARCHAR(50) ,
 		boxIn INT NOT NULL,
 		packetIn INT NOT NULL,
@@ -286,7 +286,7 @@ func CreateProductMonth(id int64) bool {
 
 //DeleteProductMonth deletes a Stock Table for each product [id]stock
 func DeleteProductMonth(id int) bool {
-	query := "DROP TABLE " + strconv.Itoa(id) + "month;"
+	query := "DROP TABLE _" + strconv.Itoa(id) + "month;"
 	_, err := db.Exec(query)
 	if err != nil {
 		log.Println(err)

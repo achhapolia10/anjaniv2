@@ -19,7 +19,7 @@ type MonthEntry struct {
 //SelectMonthEntry select all monthentries for a given database
 func SelectMonthEntry(productID int) ([]MonthEntry, bool) {
 	var s []MonthEntry
-	query := `SELECT * FROM ` + strconv.Itoa(productID) + `month;`
+	query := `SELECT * FROM _` + strconv.Itoa(productID) + `month;`
 	R, err := db.Query(query)
 	defer R.Close()
 	if err != nil {
@@ -42,7 +42,7 @@ func SelectMonthEntry(productID int) ([]MonthEntry, bool) {
 
 //SelectMonthEntryDate selects a monthentry of a given date
 func SelectMonthEntryDate(date string, productID int) (MonthEntry, bool) {
-	query := `SELECT * FROM ` + strconv.Itoa(productID) + `month WHERE date=?;`
+	query := `SELECT * FROM _` + strconv.Itoa(productID) + `month WHERE date=?;`
 	var se MonthEntry
 	R, err := db.Query(query, date)
 	defer R.Close()
@@ -72,7 +72,7 @@ func SelectMonthEntryDate(date string, productID int) (MonthEntry, bool) {
 //AddMonthEntryDate Creates a month entry at a given date for a productID
 //Returns the last insert id and a bool
 func AddMonthEntryDate(date string, productID int) (int, bool) {
-	query := `INSERT INTO ` + strconv.Itoa(productID) + "month (date,boxIn,packetIn,boxOut,packetOut) VALUES( ? , 0,0,0,0);"
+	query := `INSERT INTO _` + strconv.Itoa(productID) + "month (date,boxIn,packetIn,boxOut,packetOut) VALUES( ? , 0,0,0,0);"
 	qr, err := db.Exec(query, date)
 	if err != nil {
 		log.Println("Error in Creating a Month entry of Product:", productID)
@@ -87,7 +87,7 @@ func AddMonthEntryDate(date string, productID int) (int, bool) {
 //UpdateMonthEntry Updates the month entry at a particular date for a productID
 //Returns a bool
 func UpdateMonthEntry(productID int, se MonthEntry) bool {
-	query := "UPDATE " + strconv.Itoa(productID) + "month SET boxIn= ? ,packetIn= ? , boxOut= ? , packetOut= ? WHERE date= ? ;"
+	query := "UPDATE _" + strconv.Itoa(productID) + "month SET boxIn= ? ,packetIn= ? , boxOut= ? , packetOut= ? WHERE date= ? ;"
 	_, err := db.Exec(query, se.BoxIn, se.PacketIn, se.BoxOut, se.PacketOut, se.Date)
 	if err != nil {
 		log.Println("Error in creating a month entry of Product: ", productID)

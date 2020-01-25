@@ -14,10 +14,10 @@ type User struct {
 //CreateUserTable creates the user table
 func CreateUserTable() {
 	query := `CREATE TABLE user(
-		id 	INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+		id 	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 		username VARCHAR(50),
 		password VARCHAR(50),
-		admin	INT);`
+		admin	INTEGER );`
 	_, err := db.Exec(query)
 	if err != nil {
 		log.Printf("Error in Creating User Table: %v", err)

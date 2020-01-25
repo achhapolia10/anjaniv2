@@ -16,7 +16,7 @@ type Group struct {
 //CreateGroupTable creates a new Group table
 func CreateGroupTable() {
 	query := `CREATE TABLE gtable(
-		id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+		id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 		name VARCHAR(50) NOT NULL);`
 	_, err := db.Exec(query)
 	if err != nil {

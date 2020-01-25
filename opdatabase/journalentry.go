@@ -18,7 +18,7 @@ type JournalEntry struct {
 //NewJournalEntry Creates a new Entry in the given products Journal
 func NewJournalEntry(je JournalEntry) {
 	id := strconv.Itoa(je.ProductID)
-	query := "INSERT INTO " + id + "journal (labour,date,box,packet) VALUES(?,?,?,?);"
+	query := "INSERT INTO _" + id + "journal (labour,date,box,packet) VALUES(?,?,?,?);"
 	_, err := db.Exec(query, je.Labour, je.Date, je.Box, je.Packet)
 	if err != nil {
 		log.Println("Error inserting in journal of Product id:", id)
@@ -32,7 +32,7 @@ func SelectJournalEntry(date string, productID int) ([]JournalEntry, int, int, b
 	var je []JournalEntry
 	var box, packet int
 	box, packet = 0, 0
-	query := "SELECT * FROM " + strconv.Itoa(productID) + "journal WHERE date='" + date +
+	query := "SELECT * FROM _" + strconv.Itoa(productID) + "journal WHERE date='" + date +
 		"' ORDER BY id DESC;"
 	r, err := db.Query(query)
 	defer r.Close()
@@ -58,7 +58,7 @@ func SelectJournalEntry(date string, productID int) ([]JournalEntry, int, int, b
 
 //SelectJournalEntryByID Selects a journal entry by id
 func SelectJournalEntryByID(id int, productID int) (JournalEntry, bool) {
-	query := "SELECT * FROM " + strconv.Itoa(productID) + "journal WHERE id=?;"
+	query := "SELECT * FROM _" + strconv.Itoa(productID) + "journal WHERE id=?;"
 	var je JournalEntry
 	r, err := db.Query(query, id)
 	defer r.Close()
@@ -80,7 +80,7 @@ func SelectJournalEntryByID(id int, productID int) (JournalEntry, bool) {
 
 //DeleteJournalEntry Deletes a Journal entry
 func DeleteJournalEntry(productID int, id int) {
-	query := "DELETE FROM " + strconv.Itoa(productID) + "journal where id=?;"
+	query := "DELETE FROM _" + strconv.Itoa(productID) + "journal where id=?;"
 	_, err := db.Exec(query, id)
 	if err != nil {
 		log.Println(err)
@@ -90,7 +90,7 @@ func DeleteJournalEntry(productID int, id int) {
 //SelectJournalEntryMap Selects all entries of a Pariticular Date
 func SelectJournalEntryMap(date string, productID int) (map[string]JournalEntry, bool) {
 	je := make(map[string]JournalEntry)
-	query := "SELECT * FROM " + strconv.Itoa(productID) + "journal WHERE date='" + date +
+	query := "SELECT * FROM _" + strconv.Itoa(productID) + "journal WHERE date='" + date +
 		"' ORDER BY id DESC;"
 	r, err := db.Query(query)
 	defer r.Close()
