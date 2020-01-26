@@ -6,6 +6,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/achhapolia10/inventory-manager/opdatabase"
 
@@ -21,8 +22,16 @@ func Index(w http.ResponseWriter, req *http.Request, _ httprouter.Params) {
 }
 
 func main() {
+	lf, fileError := os.OpenFile("./inv.log", os.O_RDWR, os.ModePerm)
+	if fileError != nil {
+		log.Println("Error in opening logging file: auth.log:",fileError)
+	}
 
-	var db = flag.String("database","./default.db","select database")
+	w:= io.MultiWriter(os.Stdout,lf)
+
+	log.SetOutput(w)
+
+	var db = flag.String("database","./default.imdb","select database")
 	flag.Parse()
 
 	var publicDir http.Dir

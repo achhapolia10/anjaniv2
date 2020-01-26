@@ -1,5 +1,9 @@
 # Created by .ignore support plugin (hsz.mobi)
 ### Go template
+
+#Log file
+*.log
+
 # Binaries for programs and plugins
 *.exe
 *.exe~
@@ -7,6 +11,7 @@
 *.so
 *.dylib
 *.db
+*.imdb
 # Test binary, built with `go test -c`
 *.test
 inventory-manager
