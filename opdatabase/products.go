@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-//Product Model for the Products in Database
+// Product Model for the Products in Database
 type Product struct {
 	ID             int     `json:"id"`
 	Name           string  `json:"name"`
@@ -23,11 +23,11 @@ type Product struct {
 
 var db *sql.DB
 
-//CreateProductTable creates a product table if it's not already created
+// CreateProductTable creates a product table if it's not already created
 func CreateProductTable() {
 	query := `create table product(
 		productID INTEGER PRIMARY KEY AUTOINCREMENT,
-		name VARCHAR(50) NOT NULL, 
+		name VARCHAR(50) NOT NULL,
 		groupid INTEGER NOT NULL,
 		packetQuantity INTEGER NOT NULL,
 		boxQuantity INTEGER NOT NULL,
@@ -40,13 +40,12 @@ func CreateProductTable() {
 	_, err := db.Exec(query)
 	if err != nil {
 		fmt.Println("Product Table already exists")
-
 	} else {
 		fmt.Println("Product Table Created")
 	}
 }
 
-//AddProduct adds a new Product to table products
+// AddProduct adds a new Product to table products
 func AddProduct(p Product) {
 	p.Name = strings.ToUpper(p.Name)
 	query := "insert into product " +
@@ -67,10 +66,10 @@ func AddProduct(p Product) {
 	}
 }
 
-//SelectProduct get products from the database
+// SelectProduct get products from the database
 func SelectProduct() ([]Product, bool) {
 	var p []Product
-	query := `SELECT * FROM product;`
+	query := `SELECT * FROM product order by name ASC;`
 	r, err := db.Query(query)
 	defer r.Close()
 	if err != nil {
@@ -79,9 +78,7 @@ func SelectProduct() ([]Product, bool) {
 		return p, false
 	}
 	for r.Next() {
-		var (
-			product Product
-		)
+		var product Product
 		r.Scan(&(product.ID), &(product.Name), &(product.Group), &(product.PacketQuantity), &(product.BoxQuantity),
 			&(product.Price), &(product.OpeningBox), &(product.OpeningPacket), &(product.Weight))
 		p = append(p, product)
@@ -89,7 +86,7 @@ func SelectProduct() ([]Product, bool) {
 	return p, true
 }
 
-//SelectProductMap get products from the database
+// SelectProductMap get products from the database
 func SelectProductMap() (map[int]Product, bool) {
 	p := make(map[int]Product)
 	query := `SELECT * FROM product;`
@@ -101,9 +98,7 @@ func SelectProductMap() (map[int]Product, bool) {
 		return p, false
 	}
 	for r.Next() {
-		var (
-			product Product
-		)
+		var product Product
 		r.Scan(&(product.ID), &(product.Name), &(product.Group), &(product.PacketQuantity), &(product.BoxQuantity),
 			&(product.Price), &(product.OpeningBox), &(product.OpeningPacket), &(product.Weight))
 		p[product.ID] = product
@@ -111,7 +106,7 @@ func SelectProductMap() (map[int]Product, bool) {
 	return p, true
 }
 
-//SelectProductID get a single product form the database
+// SelectProductID get a single product form the database
 func SelectProductID(id int) (Product, bool) {
 	var product Product
 	query := `SELECT * FROM product WHERE productID=?;`
@@ -129,7 +124,7 @@ func SelectProductID(id int) (Product, bool) {
 	return product, true
 }
 
-//SelectProductByGroup Selects all Product of a particular Group
+// SelectProductByGroup Selects all Product of a particular Group
 func SelectProductByGroup(g Group) []Product {
 	var products []Product
 	query := `SELECT * FROM product WHERE groupid=?;`
@@ -148,7 +143,7 @@ func SelectProductByGroup(g Group) []Product {
 	return products
 }
 
-//EditProduct eidt the produt at a given id
+// EditProduct eidt the produt at a given id
 func EditProduct(id int, p Product) bool {
 	if id != p.ID {
 		fmt.Println("Illegal Edit Product Operation")
@@ -162,7 +157,7 @@ func EditProduct(id int, p Product) bool {
 			price=?,
 			oboxes=?,
 			opackets=?,
-			weight=? 
+			weight=?
 			WHERE productID=?;`
 	_, err := db.Exec(query, p.Name, p.PacketQuantity, p.BoxQuantity, p.Price, p.OpeningBox, p.OpeningPacket, p.Weight, id)
 	if err != nil {
@@ -174,7 +169,7 @@ func EditProduct(id int, p Product) bool {
 	return true
 }
 
-//DeleteProduct deletes the product of the given id from table products
+// DeleteProduct deletes the product of the given id from table products
 func DeleteProduct(productID int) bool {
 	query := `DELETE FROM product
 				WHERE productID= ?;`
@@ -189,10 +184,9 @@ func DeleteProduct(productID int) bool {
 	DeleteProductStock(productID)
 	DeleteProductMonth(productID)
 	return true
-
 }
 
-//DeleteProductByGroup Deletes a Product by a group
+// DeleteProductByGroup Deletes a Product by a group
 func DeleteProductByGroup(g Group) {
 	p := SelectProductByGroup(g)
 	if len(p) > 0 {
@@ -202,7 +196,7 @@ func DeleteProductByGroup(g Group) {
 	}
 }
 
-//CreateProductJournal creates a journal Table for each product [id]journal
+// CreateProductJournal creates a journal Table for each product [id]journal
 func CreateProductJournal(id int64) bool {
 	query := "CREATE TABLE _" + strconv.FormatInt(id, 10) + "journal(" +
 		`id INTEGER  PRIMARY KEY AUTOINCREMENT,
@@ -220,7 +214,7 @@ func CreateProductJournal(id int64) bool {
 	return true
 }
 
-//DeleteProductJournal deletes a journal Table for each product [id]journal
+// DeleteProductJournal deletes a journal Table for each product [id]journal
 func DeleteProductJournal(id int) bool {
 	query := "DROP TABLE _" + strconv.Itoa(id) + "journal;"
 	_, err := db.Exec(query)
@@ -233,10 +227,10 @@ func DeleteProductJournal(id int) bool {
 	return true
 }
 
-//CreateProductStock creates a Stock Table for each product [id]stock
+// CreateProductStock creates a Stock Table for each product [id]stock
 func CreateProductStock(id int64) bool {
 	query := "CREATE TABLE _" + strconv.FormatInt(id, 10) + "stock(" +
-		`id INTEGER PRIMARY KEY AUTOINCREMENT, 
+		`id INTEGER PRIMARY KEY AUTOINCREMENT,
 		date VARCHAR(50) ,
 		boxIn INT NOT NULL,
 		packetIn INT NOT NULL,
@@ -252,7 +246,7 @@ func CreateProductStock(id int64) bool {
 	return true
 }
 
-//DeleteProductStock deletes a Stock Table for each product [id]stock
+// DeleteProductStock deletes a Stock Table for each product [id]stock
 func DeleteProductStock(id int) bool {
 	query := "DROP TABLE _" + strconv.Itoa(id) + "stock;"
 	_, err := db.Exec(query)
@@ -265,7 +259,7 @@ func DeleteProductStock(id int) bool {
 	return true
 }
 
-//CreateProductMonth creates a Stock Table for each product [id]stock
+// CreateProductMonth creates a Stock Table for each product [id]stock
 func CreateProductMonth(id int64) bool {
 	query := "CREATE TABLE _" + strconv.FormatInt(id, 10) + "month(" +
 		`id INTEGER PRIMARY KEY AUTOINCREMENT ,
@@ -284,7 +278,7 @@ func CreateProductMonth(id int64) bool {
 	return true
 }
 
-//DeleteProductMonth deletes a Stock Table for each product [id]stock
+// DeleteProductMonth deletes a Stock Table for each product [id]stock
 func DeleteProductMonth(id int) bool {
 	query := "DROP TABLE _" + strconv.Itoa(id) + "month;"
 	_, err := db.Exec(query)

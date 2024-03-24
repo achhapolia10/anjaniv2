@@ -10,7 +10,7 @@ import (
 	"github.com/achhapolia10/inventory-manager/opdatabase"
 )
 
-//Stock struct for the stock data
+// Stock struct for the stock data
 type Stock struct {
 	OBox      int                `json:"obox"`
 	OPacket   int                `json:"opacket"`
@@ -23,7 +23,7 @@ type Stock struct {
 	Product   opdatabase.Product `json:"product"`
 }
 
-//StockDetails Struct for the stock details and entries
+// StockDetails Struct for the stock details and entries
 type StockDetails struct {
 	Stock   Stock                   `json:"stock"`
 	Entries []opdatabase.StockEntry `json:"entries"`
@@ -37,8 +37,9 @@ Getting the product Details
 Calculating the stocks for  a particular date
 **/
 
-//ProductStock returns the data about the stock
+// ProductStock returns the data about the stock
 func ProductStock(fDate, tDate, start time.Time, product opdatabase.Product) Stock {
+	fmt.Println(fDate, tDate, start, product)
 
 	s := Stock{
 		OBox:      product.OpeningBox,
@@ -53,7 +54,7 @@ func ProductStock(fDate, tDate, start time.Time, product opdatabase.Product) Sto
 	}
 
 	// Calculation of the opening boxes from the fiscal to fDate
-	flag := true //Flag is for the Month Check
+	flag := true // Flag is for the Month Check
 	for start.Before(fDate) {
 		var temp time.Time
 		if flag {
@@ -78,7 +79,7 @@ func ProductStock(fDate, tDate, start time.Time, product opdatabase.Product) Sto
 		}
 	}
 
-	//Calculation of the stock from fdate to tdate
+	// Calculation of the stock from fdate to tdate
 	for start.Before(tDate) || start.Equal(tDate) {
 		var temp time.Time
 		if flag {
@@ -115,22 +116,21 @@ func ProductStock(fDate, tDate, start time.Time, product opdatabase.Product) Sto
 	return s
 }
 
-//AllStock Returns the data for all products
+// AllStock Returns the data for all products
 func AllStock(f, t string) map[int]Stock {
-
 	stocks := make(map[int]Stock)
 
-	//Product List
+	// Product List
 	products, res := opdatabase.SelectProduct()
 	if !res {
 		log.Printf("Error in Getting products from the database")
 	}
 
-	//Dates parsing and whatever the fuck is here
+	// Dates parsing and whatever the fuck is here
 	from, to := ParseDate(f), ParseDate(t)
 	fromDate := time.Date(from.Year, from.GetMonth(), from.Day, 0, 0, 0, 0, time.Now().Location())
 	toDate := time.Date(to.Year, to.GetMonth(), to.Day, 0, 0, 0, 0, time.Now().Location())
-	fiscal := time.Date(2019, time.April, 1, 0, 0, 0, 0, time.Now().Location())
+	fiscal := time.Date(2022, time.April, 1, 0, 0, 0, 0, time.Now().Location())
 
 	for _, product := range products {
 		s := ProductStock(fromDate, toDate, fiscal, product)
@@ -140,14 +140,14 @@ func AllStock(f, t string) map[int]Stock {
 	return stocks
 }
 
-//ProductStockDetails returns the details of the stock
+// ProductStockDetails returns the details of the stock
 func ProductStockDetails(f, t string, id int) StockDetails {
 	var entries []opdatabase.StockEntry
 	product, _ := opdatabase.SelectProductID(id)
 	from, to := ParseDate(f), ParseDate(t)
 	fromDate := time.Date(from.Year, from.GetMonth(), from.Day, 0, 0, 0, 0, time.Now().Location())
 	toDate := time.Date(to.Year, to.GetMonth(), to.Day, 0, 0, 0, 0, time.Now().Location())
-	fiscal := time.Date(2019, time.April, 1, 0, 0, 0, 0, time.Now().Location())
+	fiscal := time.Date(2022, time.April, 1, 0, 0, 0, 0, time.Now().Location())
 
 	stock := ProductStock(fromDate, toDate, fiscal, product)
 	stock.Balance()
@@ -165,10 +165,9 @@ func ProductStockDetails(f, t string, id int) StockDetails {
 		Stock:   stock,
 		Entries: entries,
 	}
-
 }
 
-//Balance Balances the stock details
+// Balance Balances the stock details
 func (s *Stock) Balance() {
 	s.OPacket += s.OBox * s.Product.BoxQuantity
 	s.OBox = s.OPacket / s.Product.BoxQuantity
